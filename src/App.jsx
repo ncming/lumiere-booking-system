@@ -3,7 +3,7 @@ import TabBar from './components/TabBar';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import Booking from './pages/Booking';
-// Import các trang khác...
+import Cart from './pages/Cart';
 
 function App() {
   // Quản lý trạng thái tab hiện tại. Mặc định là 'home'
@@ -24,8 +24,8 @@ function App() {
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {activeTab === 'home' && <Home setActiveTab={setActiveTab} />}
         {activeTab === 'explore' && <Explore />}
-        {/* {activeTab === 'booking' && <Booking />} */}
-        {/* {activeTab === 'cart' && <Cart />} */}
+        {activeTab === 'booking' && <Booking />}
+        {activeTab === 'cart' && <Cart setActiveTab={setActiveTab} />}
         {/* {activeTab === 'admin' && <Admin />} */}
       </div>
 
