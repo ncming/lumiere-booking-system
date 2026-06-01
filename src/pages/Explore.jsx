@@ -9,5 +9,4 @@ const Explore = () => {
   );
 };
 
-// ĐÂY CHÍNH LÀ DÒNG BẠN ĐANG THIẾU ĐỂ SỬA LỖI
 export default Explore;
