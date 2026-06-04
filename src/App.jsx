@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import TabBar from './components/TabBar';
+import TabBar from './components/NavBar';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import Booking from './pages/Booking';
