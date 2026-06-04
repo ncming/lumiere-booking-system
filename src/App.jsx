@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TabBar from './components/TabBar';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
@@ -6,27 +6,34 @@ import Booking from './pages/Booking';
 import Cart from './pages/Cart';
 
 function App() {
-  // Quản lý trạng thái tab hiện tại. Mặc định là 'home'
-  const [activeTab, setActiveTab] = useState('home');
+  const [currentPath, setCurrentPath] = useState('/');
+
+  const renderPage = () => {
+    switch(currentPath) {
+      case '/':
+        return <Home setActiveTab={setCurrentPath} />;
+      case '/explore':
+        return <Explore setActiveTab={setCurrentPath} />;
+      case '/booking':
+        return <Booking setActiveTab={setCurrentPath} />;
+      case '/cart':
+        return <Cart setActiveTab={setCurrentPath} />;
+      default:
+        return <Home setActiveTab={setCurrentPath} />;
+    }
+  };
 
   return (
-    <div style={{ maxWidth: '414px', margin: '0 auto', border: '1px solid #ccc', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FDFBF7' }}>
       
-      {/* Cảnh báo UI */}
-      <div style={{ fontSize: '11px', color: 'var(--color-text-tertiary)', padding: '8px 14px', background: 'var(--color-background-secondary)', borderBottom: '0.5px solid var(--color-border-tertiary)' }}>
-        Mockup tương tác — React Version
+      <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', padding: '10px 16px', background: '#F5EBE0', borderBottom: '1px solid var(--color-border-tertiary)', fontWeight: '500', letterSpacing: '0.5px' }}>
+        Lumière Booking System — React
       </div>
 
-      {/* Render thanh TabBar */}
-      <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <TabBar currentPath={currentPath} setCurrentPath={setCurrentPath} />
 
-      {/* Render nội dung màn hình dựa trên state */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
-        {activeTab === 'home' && <Home setActiveTab={setActiveTab} />}
-        {activeTab === 'explore' && <Explore />}
-        {activeTab === 'booking' && <Booking />}
-        {activeTab === 'cart' && <Cart setActiveTab={setActiveTab} />}
-        {/* {activeTab === 'admin' && <Admin />} */}
+      <div style={{ flex: 1, overflowY: 'auto', width: '100%' }}>
+        {renderPage()}
       </div>
 
     </div>
