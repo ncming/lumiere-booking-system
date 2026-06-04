@@ -30,7 +30,7 @@ const Cart = ({ setActiveTab }) => {
         <div className="card" style={{ marginBottom: '10px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', background: 'linear-gradient(135deg, #B8855D 0%, #A0714D 100%)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600', color: '#fff', fontSize: '11px', flexShrink: 0 }}>SERUM</div>
+              <div style={{ width: '44px', height: '44px', background: 'linear-gradient(#F2F2F2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600', color: '#fff', fontSize: '11px', flexShrink: 0 }}>SERUM</div>
               <div>
                 <div style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>HA+ Serum</div>
                 <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>x1</div>
@@ -46,7 +46,7 @@ const Cart = ({ setActiveTab }) => {
         <div className="card" style={{ marginBottom: '10px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', background: 'linear-gradient(135deg, #F5EBE0 0%, #E8D5C0 100%)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600', color: '#B8855D', fontSize: '11px', flexShrink: 0 }}>SPF50</div>
+              <div style={{ width: '44px', height: '44px', background: 'linear-gradient(#F2F2F2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600', color: '#B8855D', fontSize: '11px', flexShrink: 0 }}>SPF50</div>
               <div>
                 <div style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>Sunscreen SPF 50</div>
                 <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>x1</div>
