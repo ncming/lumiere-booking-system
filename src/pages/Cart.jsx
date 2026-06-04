@@ -6,85 +6,89 @@ const Cart = ({ setActiveTab }) => {
 
   return (
     <div className="screen active" style={{ paddingBottom: '80px', width: '100%' }}>
-      <div className="nav">
-        <span style={{ fontSize: '14px', fontWeight: '600' }}>Your Cart</span>
-        <span className="chip chip-orange">3 items</span>
+      
+      <div style={{ padding: '20px', textAlign: 'center', borderBottom: '1px solid #EEEEEE' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: '400', letterSpacing: '2px' }}>SHOPPING BAG</h2>
       </div>
       
-      <div style={{ padding: '16px 20px' }}>
+      <div style={{ padding: '24px 20px' }}>
+        
+        {/* Lịch hẹn */}
         <div className="section-title">Appointment</div>
-        <div className="card" style={{ marginBottom: '10px', borderLeft: '3px solid var(--accent)' }}>
+        <div style={{ border: '1px solid #000', padding: '16px', marginBottom: '32px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>RF Microneedling</div>
-              <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '3px' }}>Fri, Jun 05 · 11:30 · Lan Anh</div>
+              <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>RF Microneedling</div>
+              <div style={{ fontSize: '11px', color: '#757575', marginTop: '6px' }}>Fri, Jun 05 · 11:30 · Lan Anh</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>680,000₫</div>
-              <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '2px' }}>Locked</div>
+              <div style={{ fontSize: '12px', fontWeight: '600' }}>680,000₫</div>
+              <div style={{ fontSize: '9px', color: '#BDBDBD', marginTop: '4px', textTransform: 'uppercase' }}>Reserved</div>
             </div>
           </div>
         </div>
 
-        <div className="section-title" style={{ marginTop: '16px' }}>Add-on Products</div>
-        <div className="card" style={{ marginBottom: '10px' }}>
+        {/* Sản phẩm đi kèm */}
+        <div className="section-title">Boutique Items</div>
+        
+        <div style={{ borderBottom: '1px solid #EEEEEE', paddingBottom: '16px', marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', background: 'linear-gradient(#F2F2F2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600', color: '#fff', fontSize: '11px', flexShrink: 0 }}>SERUM</div>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{ width: '60px', height: '80px', backgroundColor: '#F2F2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', letterSpacing: '1px', color: '#000' }}>SERUM</div>
               <div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>HA+ Serum</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>x1</div>
+                <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>HA+ Serum</div>
+                <div style={{ fontSize: '11px', color: '#757575', marginTop: '4px' }}>Qty: 1</div>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>320,000₫</span>
-              <span style={{ cursor: 'pointer', color: 'var(--color-text-danger)', fontSize: '18px', fontWeight: '300', width: '24px', textAlign: 'center' }}>−</span>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <span style={{ fontSize: '12px', fontWeight: '600' }}>320,000₫</span>
+              <span style={{ cursor: 'pointer', color: '#000', fontSize: '16px' }}>✕</span>
             </div>
           </div>
         </div>
 
-        <div className="card" style={{ marginBottom: '10px' }}>
+        <div style={{ borderBottom: '1px solid #000', paddingBottom: '16px', marginBottom: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ width: '44px', height: '44px', background: 'linear-gradient(#F2F2F2)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600', color: '#B8855D', fontSize: '11px', flexShrink: 0 }}>SPF50</div>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{ width: '60px', height: '80px', backgroundColor: '#F2F2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', letterSpacing: '1px', color: '#000' }}>SPF50</div>
               <div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>Sunscreen SPF 50</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>x1</div>
+                <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Sunscreen SPF 50</div>
+                <div style={{ fontSize: '11px', color: '#757575', marginTop: '4px' }}>Qty: 1</div>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span style={{ fontSize: '13px', fontWeight: '600', color: '#1A1410' }}>250,000₫</span>
-              <span style={{ cursor: 'pointer', color: 'var(--color-text-danger)', fontSize: '18px', fontWeight: '300', width: '24px', textAlign: 'center' }}>−</span>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <span style={{ fontSize: '12px', fontWeight: '600' }}>250,000₫</span>
+              <span style={{ cursor: 'pointer', color: '#000', fontSize: '16px' }}>✕</span>
             </div>
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--color-border-tertiary)', paddingTop: '14px', marginTop: '14px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
-            <span>Service</span>
+        {/* Tổng kết thanh toán */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#757575', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            <span>Services</span>
             <span>680,000₫</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#757575', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '1px' }}>
             <span>Products</span>
             <span>570,000₫</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: '600', marginBottom: '16px' }}>
-            <span>Total</span>
-            <span style={{ color: 'var(--accent)' }}>1,250,000₫</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: '600', marginBottom: '32px', letterSpacing: '1px' }}>
+            <span>TOTAL</span>
+            <span>1,250,000₫</span>
           </div>
           
-          <div style={{ background: 'var(--color-background-secondary)', borderRadius: 'var(--border-radius-md)', padding: '12px', fontSize: '12px', marginBottom: '14px' }}>
-            <div style={{ fontWeight: '600', marginBottom: '8px', color: '#1A1410' }}>Confirm Details</div>
-            <div style={{ color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-              Address: Nguyễn Văn A · 0912 345 678
-            </div>
-            <div style={{ color: 'var(--text-secondary)' }}>
-              Email: nguyenvana@gmail.com
+          <div style={{ backgroundColor: '#F9F9F9', padding: '16px', fontSize: '11px', marginBottom: '24px', border: '1px solid #EEEEEE' }}>
+            <div style={{ fontWeight: '600', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Client Details</div>
+            <div style={{ color: '#757575', lineHeight: '1.6' }}>
+              Nguyễn Văn A<br/>
+              0912 345 678<br/>
+              nguyenvana@gmail.com
             </div>
           </div>
           
-          <button className="btn-primary" style={{ width: '100%', padding: '12px' }} onClick={handleCheckout}>
-            Proceed to Payment · 1,250,000₫
+          <button className="btn-primary" style={{ width: '100%', padding: '16px' }} onClick={handleCheckout}>
+            COMPLETE PURCHASE
           </button>
         </div>
       </div>
