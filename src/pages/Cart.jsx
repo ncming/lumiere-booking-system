@@ -3,7 +3,7 @@ import React from 'react';
 const Cart = ({ setActiveTab }) => {
   // Hàm mô phỏng thanh toán
   const handleCheckout = () => {
-    alert('✅ Thanh toán thành công! Lịch hẹn đã được xác nhận.');
+    alert('Thanh toán thành công! Lịch hẹn đã được xác nhận.');
     // Thanh toán xong thì quay về trang chủ
     setActiveTab('home');
   };
