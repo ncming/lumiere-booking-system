@@ -1,16 +1,14 @@
 import React from 'react';
 
 const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
-  if (!isOpen) return null;
-
   const menuItems = [
     { id: '/explore', label: "Gifts" },
-    { id: '/explore', label: "What's New" },
     { id: '/explore', label: "Women's Fashion" },
     { id: '/explore', label: "Men's Fashion" },
     { id: '/explore', label: "Bags" },
-    { id: '/explore', label: "Jewelry & Timepieces" },
-    { id: '/explore', label: "Kids & Baby" },
+    { id: '/explore', label: "Fragrance" },
+    { id: '/explore', label: "Makeup" },
+    { id: '/explore', label: "Skincare" },
     { id: '/explore', label: "Haute Couture" },
   ];
 
@@ -22,17 +20,23 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: '#EEEEEE', /* Màu xám đặc trưng của menu Dior */
+      backgroundColor: '#EEEEEE',
       zIndex: 100,
       display: 'flex', flexDirection: 'column',
-      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      /* Hiệu ứng trượt mượt mà từ trái sang */
+      transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+      opacity: isOpen ? 1 : 0,
+      visibility: isOpen ? 'visible' : 'hidden',
+      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
     }}>
       
-      {/* Nút Đóng (Close) */}
+      {/* Nút Đóng (Thay X bằng 2 gạch) */}
       <div style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }} onClick={onClose}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ width: '22px', height: '1.5px', backgroundColor: '#000' }}></div>
+          <div style={{ width: '22px', height: '1.5px', backgroundColor: '#000' }}></div>
+        </div>
         <span style={{ fontSize: '18px', fontWeight: '300' }}>Close</span>
       </div>
 
