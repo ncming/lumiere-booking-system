@@ -5,13 +5,13 @@ const Cart = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="screen active" style={{ paddingBottom: '80px' }}>
+    <div className="screen active" style={{ paddingBottom: '80px', width: '100%' }}>
       <div className="nav">
         <span style={{ fontSize: '14px', fontWeight: '600' }}>Your Cart</span>
         <span className="chip chip-orange">3 items</span>
       </div>
       
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: '16px 20px' }}>
         <div className="section-title">Appointment</div>
         <div className="card" style={{ marginBottom: '10px', borderLeft: '3px solid var(--accent)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

@@ -17,7 +17,7 @@ const Explore = ({ setActiveTab }) => {
   );
 
   return (
-    <div className="screen active" style={{ paddingBottom: '80px' }}>
+    <div className="screen active" style={{ paddingBottom: '80px', width: '100%' }}>
       <div className="nav">
         <span className="nav-brand">Services</span>
         <input 
@@ -29,9 +29,9 @@ const Explore = ({ setActiveTab }) => {
         />
       </div>
 
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: '18px 20px' }}>
         <div className="section-title">All Services</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
           {filteredServices.map((service) => (
             <div 
               key={service.id} 

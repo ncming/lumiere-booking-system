@@ -161,7 +161,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 14px 20px;
   background: var(--bg-primary);
   border-bottom: 0.5px solid var(--color-border-tertiary);
 }
@@ -304,5 +304,5 @@ input:focus, select:focus {
   text-transform: uppercase;
   letter-spacing: 0.6px;
   color: var(--text-secondary);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }

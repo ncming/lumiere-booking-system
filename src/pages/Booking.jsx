@@ -43,7 +43,7 @@ const Booking = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="screen active" style={{ padding: '14px', paddingBottom: '80px' }}>
+    <div className="screen active" style={{ padding: '18px 20px', paddingBottom: '80px', width: '100%' }}>
       <div className="section-title" style={{ fontSize: '12px', fontWeight: '600', color: 'var(--color-text-secondary)', marginBottom: '12px' }}>
         Select Therapist
       </div>
