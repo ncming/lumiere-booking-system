@@ -2,7 +2,6 @@ import { useState } from 'react';
 import NavBar from './components/NavBar';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
-import Booking from './pages/Booking';
 import Cart from './pages/Cart';
 
 function App() {
@@ -12,7 +11,6 @@ function App() {
     switch(currentPath) {
       case '/': return <Home setActiveTab={setCurrentPath} />;
       case '/explore': return <Explore setActiveTab={setCurrentPath} />;
-      case '/booking': return <Booking setActiveTab={setCurrentPath} />;
       case '/cart': return <Cart setActiveTab={setCurrentPath} />;
       default: return <Home setActiveTab={setCurrentPath} />;
     }

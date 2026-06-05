@@ -1,6 +1,6 @@
 const Cart = ({ setActiveTab }) => {
   const handleCheckout = () => {
-    alert('Purchase successful! Your boutique reservation and items are confirmed.');
+    alert('Purchase successful! Your items are confirmed.');
     setActiveTab('/');
   };
 
@@ -13,20 +13,7 @@ const Cart = ({ setActiveTab }) => {
       
       <div style={{ padding: '24px 20px' }}>
         
-        {/* Lịch hẹn thử đồ */}
-        <div className="section-title">Boutique Appointment</div>
-        <div style={{ border: '1px solid #000', padding: '16px', marginBottom: '32px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Personal Styling Session</div>
-              <div style={{ fontSize: '11px', color: '#757575', marginTop: '6px' }}>Fri, Jun 05 · 11:30 · Flagship Store</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '12px', fontWeight: '600' }}>Complimentary</div>
-              <div style={{ fontSize: '9px', color: '#BDBDBD', marginTop: '4px', textTransform: 'uppercase' }}>Reserved</div>
-            </div>
-          </div>
-        </div>
+        {/* Boutique appointment section removed for shop-only flow */}
 
         {/* Sản phẩm */}
         <div className="section-title">Boutique Items</div>

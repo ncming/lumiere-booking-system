@@ -39,7 +39,7 @@ const Explore = ({ setActiveTab }) => {
           {filteredProducts.map((product) => (
             <div 
               key={product.id} 
-              onClick={() => setActiveTab('/booking')}
+              onClick={() => setActiveTab('/cart')}
               style={{ display: 'flex', alignItems: 'center', padding: '16px', border: '1px solid #EEEEEE', cursor: 'pointer', transition: 'border-color 0.2s' }}
             >
               <div style={{ width: '60px', height: '60px', backgroundColor: '#F2F2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', color: '#000' }}>
