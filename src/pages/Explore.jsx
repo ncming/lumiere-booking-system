@@ -20,6 +20,15 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
     filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
   }
 
+  // 3. Nhóm các sản phẩm theo danh mục để hiển thị thành các khối riêng gọn gàng
+  const groupedProducts = filtered.reduce((acc, product) => {
+    if (!acc[product.category]) {
+      acc[product.category] = [];
+    }
+    acc[product.category].push(product);
+    return acc;
+  }, {});
+
   // Khi bấm vào 1 card -> Mở Modal thay vì nhảy sang Cart
   const handleOpenQuickView = (product) => {
     setActiveModalProduct(product);
@@ -50,38 +59,45 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
 
       {/* Lưới sản phẩm */}
       <div style={{ padding: '30px 20px' }}>
-        {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: '#757575', fontSize: '11px', letterSpacing: '1px' }}>NO PRODUCTS FOUND IN THIS CATEGORY.</div>
+        {Object.keys(groupedProducts).length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px 0', color: '#757575', fontSize: '11px', letterSpacing: '1px' }}>NO PRODUCTS FOUND.</div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '2px', backgroundColor: '#EEEEEE', border: '1px solid #EEEEEE' }}>
-            {filtered.map((product) => (
-              <div 
-                key={product.id} 
-                onClick={() => handleOpenQuickView(product)} /* BẤM VÀO MỞ MODAL */
-                style={{ backgroundColor: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-              >
-                <div style={{ width: '100%', aspectRatio: '1', backgroundColor: '#F9F9F9', overflow: 'hidden' }}>
-                  <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div style={{ padding: '16px 12px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '11px', fontWeight: '400', color: '#000', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>{product.name}</div>
-                  <div style={{ fontSize: '11px', color: '#757575' }}>{product.price}</div>
-                </div>
+          Object.keys(groupedProducts).map((catName) => (
+            <div key={catName} style={{ marginBottom: '40px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', borderBottom: '1px solid #000', paddingBottom: '8px', display: 'inline-block' }}>
+                {catName}
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '16px' }}>
+                {groupedProducts[catName].map((product) => (
+                  <div 
+                    key={product.id} 
+                    onClick={() => handleOpenQuickView(product)} /* BẤM VÀO MỞ MODAL */
+                    style={{ backgroundColor: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #EEEEEE', padding: '8px', paddingBottom: '16px', transition: 'border-color 0.2s' }}
+                  >
+                    <div style={{ width: '100%', aspectRatio: '1', backgroundColor: '#F9F9F9', overflow: 'hidden', marginBottom: '12px' }}>
+                      <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ textAlign: 'center', padding: '0 8px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '400', color: '#000', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px', lineHeight: '1.4' }}>{product.name}</div>
+                      <div style={{ fontSize: '11px', color: '#757575' }}>{product.price}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))
         )}
       </div>
 
-      {/* ================= MODAL XEM CHI TIẾT SẢN PHẨM (BƯỚC 1) ================= */}
+      {/* ================= MODAL XEM CHI TIẾT SẢN PHẨM ================= */}
       {activeModalProduct && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 200, display: 'flex', justifyContent: 'center', alignItems: 'flex-end', backdropFilter: 'blur(2px)' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(3px)' }}>
           
-          {/* Khối nội dung trượt từ dưới lên */}
-          <div style={{ width: '100%', maxWidth: '600px', maxHeight: '90vh', backgroundColor: '#FFFFFF', overflowY: 'auto', padding: '30px 20px', position: 'relative', borderTop: '1px solid #000', animation: 'slideUp 0.3s ease-out' }}>
+          {/* Khối nội dung nằm giữa màn hình */}
+          <div style={{ width: '90%', maxWidth: '500px', maxHeight: '85vh', backgroundColor: '#FFFFFF', overflowY: 'auto', padding: '30px 24px', position: 'relative', borderRadius: '8px', boxShadow: '0 8px 30px rgba(0,0,0,0.12)' }}>
             
             {/* Nút X đóng Modal */}
-            <div onClick={() => setActiveModalProduct(null)} style={{ position: 'absolute', top: '20px', right: '20px', fontSize: '20px', cursor: 'pointer', padding: '4px' }}>✕</div>
+            <div onClick={() => setActiveModalProduct(null)} style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '20px', cursor: 'pointer', padding: '4px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F5F5', borderRadius: '50%' }}>✕</div>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
               <div style={{ fontSize: '10px', color: '#757575', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>{activeModalProduct.category}</div>
