@@ -113,3 +113,20 @@ input:focus, select:focus {
   color: var(--text-secondary);
   margin-bottom: 14px;
 }
+/* Lưới Catalogue linh hoạt (Responsive Luxury Grid) */
+.luxury-grid {
+  display: grid;
+  /* MẶC ĐỊNH TRÊN ĐIỆN THOẠI: Luôn chia 2 cột song song gọn gàng */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 12px;
+  width: 100%;
+}
+
+/* KHI MÀN HÌNH LỚN HƠN 800px (TABLET & PC) */
+@media (min-width: 800px) {
+  .luxury-grid {
+    /* Tự động chia 3 cột to, thoáng, trang trọng */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px;
+  }
+}
