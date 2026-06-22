@@ -8,25 +8,27 @@ function App() {
   const [currentPath, setCurrentPath] = useState('/');
 
   const renderPage = () => {
-    switch(currentPath) {
-      case '/': return <Home setActiveTab={setCurrentPath} />;
-      case '/explore': return <Explore setActiveTab={setCurrentPath} />;
-      case '/cart': return <Cart setActiveTab={setCurrentPath} />;
-      default: return <Home setActiveTab={setCurrentPath} />;
+    if (currentPath === '/') return <Home setActiveTab={setCurrentPath} />;
+    if (currentPath === '/cart') return <Cart setActiveTab={setCurrentPath} />;
+    
+    // Nếu bấm nút Kính lúp search hoặc "Discover" -> Mở toàn bộ sản phẩm
+    if (currentPath === '/explore') return <Explore selectedCategory="ALL" setActiveTab={setCurrentPath} />;
+
+    // BƯỚC NGOẶT: Nếu URL là /category/Handbags & Totes -> Bóc tách chuỗi gửi đi
+    if (currentPath.startsWith('/category/')) {
+      const categoryName = currentPath.replace('/category/', '');
+      return <Explore selectedCategory={categoryName} setActiveTab={setCurrentPath} />;
     }
+
+    return <Home setActiveTab={setCurrentPath} />;
   };
 
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
-      
-      {/* Thanh điều hướng ở trên cùng */}
       <NavBar currentPath={currentPath} setCurrentPath={setCurrentPath} />
-
-      {/* Nội dung trang */}
       <div style={{ flex: 1, width: '100%' }}>
         {renderPage()}
       </div>
-
     </div>
   );
 }
