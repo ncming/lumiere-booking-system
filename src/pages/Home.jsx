@@ -1,4 +1,14 @@
+import { useState } from 'react';
+
+const heroImages = [
+  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1543087903-1ac2ec7aa8f5?q=80&w=1920&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1920&auto=format&fit=crop'
+];
+
 const Home = ({ setActiveTab }) => {
+  const [heroIndex] = useState(() => Math.floor(Math.random() * heroImages.length));
+
   return (
     <div className="screen active" style={{ width: '100%', paddingBottom: '60px', backgroundColor: '#FFFFFF' }}>
       
@@ -6,20 +16,20 @@ const Home = ({ setActiveTab }) => {
       <div style={{ 
         position: 'relative', 
         width: '100%', 
-        height: '75vh',         
-        maxHeight: '800px',     
-        minHeight: '500px',     
+        height: 'clamp(420px, 72vw, 820px)',
+        minHeight: '420px',
+        maxHeight: '820px',
         overflow: 'hidden'
       }}>
         <img 
-          src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop" 
+          src={heroImages[heroIndex]} 
           alt="Autumn Campaign"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} 
         />
         <div style={{ position: 'absolute', top:0, left:0, right:0, bottom:0, background: 'rgba(0,0,0,0.15)' }}></div>
         
         <div style={{ 
-          position: 'absolute', bottom: '10%', left: '0', right: '0', 
+          position: 'absolute', bottom: 'clamp(28px, 8vw, 80px)', left: '0', right: '0', 
           display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' 
         }}>
           <h2 style={{ color: '#fff', fontSize: 'clamp(24px, 5vw, 40px)', fontFamily: '"Playfair Display", serif', fontWeight: '400', marginBottom: '20px', letterSpacing: '4px' }}>
@@ -41,18 +51,18 @@ const Home = ({ setActiveTab }) => {
       </div>
 
       {/* 2. KHU VỰC SẢN PHẨM: Trải dài theo chiều dọc */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 20px 20px', textAlign: 'center' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 16px 20px', textAlign: 'center' }}>
         <h3 style={{ fontSize: '12px', color: '#757575', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '60px' }}>
           Curated For You
         </h3>
 
         {/* Xếp dọc (column) các sản phẩm thay vì xếp lưới ngang */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '80px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '28px' }}>
           
           {/* Khối Sản phẩm 1 */}
           <div onClick={() => setActiveTab('/explore')} style={{ cursor: 'pointer' }}>
-            {/* Khung ảnh ngang rộng (tỷ lệ 21:9 giống banner điện ảnh) */}
-            <div style={{ width: '100%', aspectRatio: '21/9', overflow: 'hidden', backgroundColor: '#F9F9F9' }}>
+            {/* Khung ảnh phù hợp desktop và mobile */}
+            <div style={{ width: '100%', aspectRatio: '4/3', maxHeight: '420px', overflow: 'hidden', backgroundColor: '#F9F9F9' }}>
               <img 
                 src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1200&auto=format&fit=crop" 
                 alt="Iconic Handbags" 
@@ -71,8 +81,8 @@ const Home = ({ setActiveTab }) => {
 
           {/* Khối Sản phẩm 2 */}
           <div onClick={() => setActiveTab('/explore')} style={{ cursor: 'pointer' }}>
-            {/* Khung ảnh ngang rộng */}
-            <div style={{ width: '100%', aspectRatio: '21/9', overflow: 'hidden', backgroundColor: '#F9F9F9' }}>
+            {/* Khung ảnh phù hợp desktop và mobile */}
+            <div style={{ width: '100%', aspectRatio: '4/3', maxHeight: '420px', overflow: 'hidden', backgroundColor: '#F9F9F9' }}>
               <img 
                 src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1200&auto=format&fit=crop" 
                 alt="Rouge Lumière" 

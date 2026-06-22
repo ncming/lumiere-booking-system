@@ -58,23 +58,23 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
       </div>
 
       {/* Lưới sản phẩm */}
-      <div style={{ padding: '30px 20px' }}>
+      <div style={{ padding: '24px 16px 32px' }}>
         {Object.keys(groupedProducts).length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 0', color: '#757575', fontSize: '11px', letterSpacing: '1px' }}>NO PRODUCTS FOUND.</div>
         ) : (
           Object.keys(groupedProducts).map((catName) => (
-            <div key={catName} style={{ marginBottom: '40px' }}>
-              <h3 style={{ fontSize: '13px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px', borderBottom: '1px solid #000', paddingBottom: '8px', display: 'inline-block' }}>
+            <div key={catName} style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '13px', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px', borderBottom: '1px solid #000', paddingBottom: '8px', display: 'inline-block' }}>
                 {catName}
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 220px))', justifyContent: 'center', gap: '14px' }}>
                 {groupedProducts[catName].map((product) => (
                   <div 
                     key={product.id} 
                     onClick={() => handleOpenQuickView(product)} /* BẤM VÀO MỞ MODAL */
-                    style={{ backgroundColor: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #EEEEEE', padding: '8px', paddingBottom: '16px', transition: 'border-color 0.2s' }}
+                    style={{ backgroundColor: '#fff', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #EEEEEE', padding: '8px', paddingBottom: '14px', transition: 'border-color 0.2s', minWidth: 0, width: '100%', maxWidth: '220px', margin: '0 auto' }}
                   >
-                    <div style={{ width: '100%', aspectRatio: '1', backgroundColor: '#F9F9F9', overflow: 'hidden', marginBottom: '12px' }}>
+                    <div style={{ width: '100%', aspectRatio: '4/5', maxHeight: '260px', backgroundColor: '#F9F9F9', overflow: 'hidden', marginBottom: '12px' }}>
                       <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ textAlign: 'center', padding: '0 8px' }}>
@@ -91,32 +91,32 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
 
       {/* ================= MODAL XEM CHI TIẾT SẢN PHẨM ================= */}
       {activeModalProduct && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(3px)' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(3px)', padding: '16px' }}>
           
           {/* Khối nội dung nằm giữa màn hình */}
-          <div style={{ width: '90%', maxWidth: '500px', maxHeight: '85vh', backgroundColor: '#FFFFFF', overflowY: 'auto', padding: '30px 24px', position: 'relative', borderRadius: '8px', boxShadow: '0 8px 30px rgba(0,0,0,0.12)' }}>
+          <div style={{ width: 'min(100%, 480px)', maxHeight: '85vh', backgroundColor: '#FFFFFF', overflowY: 'auto', padding: '24px 20px', position: 'relative', borderRadius: '10px', boxShadow: '0 8px 30px rgba(0,0,0,0.12)' }}>
             
             {/* Nút X đóng Modal */}
             <div onClick={() => setActiveModalProduct(null)} style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '20px', cursor: 'pointer', padding: '4px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F5F5', borderRadius: '50%' }}>✕</div>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
               <div style={{ fontSize: '10px', color: '#757575', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>{activeModalProduct.category}</div>
-              <h3 style={{ fontSize: '24px', fontWeight: '400', letterSpacing: '2px', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>{activeModalProduct.name}</h3>
-              <div style={{ fontSize: '14px', marginBottom: '24px', color: '#000' }}>{activeModalProduct.price}</div>
+              <h3 style={{ fontSize: 'clamp(20px, 4vw, 24px)', fontWeight: '400', letterSpacing: '2px', marginBottom: '12px', fontFamily: '"Playfair Display", serif' }}>{activeModalProduct.name}</h3>
+              <div style={{ fontSize: '14px', marginBottom: '20px', color: '#000' }}>{activeModalProduct.price}</div>
 
               {/* Khung ảnh to trong Modal */}
-              <div style={{ width: '100%', maxWidth: '320px', aspectRatio: '1', backgroundColor: '#F9F9F9', marginBottom: '30px' }}>
+              <div style={{ width: '100%', maxWidth: '320px', aspectRatio: '1', backgroundColor: '#F9F9F9', marginBottom: '24px' }}>
                 <img src={activeModalProduct.image} alt={activeModalProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
 
               {/* Chọn Option (Màu / Size) */}
-              <div style={{ width: '100%', marginBottom: '30px', textAlign: 'left' }}>
+              <div style={{ width: '100%', marginBottom: '20px', textAlign: 'left' }}>
                 <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px', color: '#757575' }}>Select Option: <span style={{ color: '#000', fontWeight: '600' }}>{selectedOption}</span></div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                   {activeModalProduct.options.map((opt, i) => (
                     <button 
                       key={i} onClick={() => setSelectedOption(opt)}
-                      style={{ padding: '10px 18px', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px', border: selectedOption === opt ? '1px solid #000' : '1px solid #E0E0E0', backgroundColor: selectedOption === opt ? '#000' : '#fff', color: selectedOption === opt ? '#fff' : '#000', cursor: 'pointer', transition: 'all 0.2s' }}
+                      style={{ padding: '10px 14px', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px', border: selectedOption === opt ? '1px solid #000' : '1px solid #E0E0E0', backgroundColor: selectedOption === opt ? '#000' : '#fff', color: selectedOption === opt ? '#fff' : '#000', cursor: 'pointer', transition: 'all 0.2s' }}
                     >
                       {opt}
                     </button>
@@ -127,7 +127,7 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
               {/* Nút THÊM VÀO GIỎ HÀNG */}
               <button 
                 onClick={handleAddToCart}
-                style={{ width: '100%', padding: '16px', backgroundColor: '#000', color: '#fff', border: '1px solid #000', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '11px', cursor: 'pointer', marginBottom: '40px' }}
+                style={{ width: '100%', padding: '15px', backgroundColor: '#000', color: '#fff', border: '1px solid #000', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '11px', cursor: 'pointer', marginBottom: '28px' }}
               >
                 Add To Shopping Bag
               </button>
