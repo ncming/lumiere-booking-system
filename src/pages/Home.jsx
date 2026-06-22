@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 const heroImages = [
-  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1543087903-1ac2ec7aa8f5?q=80&w=1920&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1920&auto=format&fit=crop'
+  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop', // Nữ áo choàng xanh (Gốc)
+  'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1920&auto=format&fit=crop', // Người mẫu phong cách Editorial
+  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop'  // Trang phục dạo phố sang trọng
 ];
 
 const Home = ({ setActiveTab }) => {
