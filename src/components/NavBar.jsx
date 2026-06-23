@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import MenuDrawer from './MenuDrawer';
+import { useApp } from '../context/AppContext';
 
 const NavBar = ({ currentPath, setCurrentPath }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Trạng thái bật/tắt tìm kiếm
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { cartCount, toggleBag } = useApp();
 
   const isHome = currentPath === '/';
-  
-  // Nếu đang mở tìm kiếm, tự động chuyển nền thành trắng và chữ thành đen
+
+  // On home page with no overlays, use transparent/white. Elsewhere always solid.
   const isSolidBg = !isHome || isSearchOpen;
   const color = isSolidBg ? '#000000' : '#ffffff';
   const bgColor = isSolidBg ? '#ffffff' : 'transparent';
@@ -19,7 +21,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
   const handleSearchSubmit = (e) => {
     if (e.key === 'Enter') {
       setIsSearchOpen(false);
-      setCurrentPath('/explore'); // Nhấn Enter chuyển sang trang Catalogue
+      setCurrentPath('/explore');
     }
   };
 
@@ -33,20 +35,21 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
         transition: 'all 0.3s ease',
         boxShadow: isSolidBg ? '0 1px 0 rgba(0,0,0,0.05)' : 'none'
       }}>
-        
-        {/* Phần Thanh Menu chính */}
+
+        {/* Main Menu Bar */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px 20px', position: 'relative' }}>
-          
+
+          {/* Left Controls: Hamburger + Search */}
           <div style={{ position: 'absolute', left: '20px', display: 'flex', gap: '20px', alignItems: 'center' }}>
-            {/* Nút mở Menu Draw */}
+            {/* Hamburger */}
             <div onClick={() => setIsMenuOpen(true)} style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <div style={{ width: '22px', height: '1.5px', backgroundColor: color, transition: 'background-color 0.3s' }}></div>
               <div style={{ width: '22px', height: '1.5px', backgroundColor: color, transition: 'background-color 0.3s' }}></div>
             </div>
-            
-            {/* Nút Kính lúp (Bật/Tắt Tìm kiếm) */}
-            <svg 
-              onClick={handleToggleSearch} 
+
+            {/* Search Icon */}
+            <svg
+              onClick={handleToggleSearch}
               style={{ cursor: 'pointer', transition: 'stroke 0.3s' }}
               width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"
             >
@@ -54,18 +57,66 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
             </svg>
           </div>
 
-          <div 
+          {/* Logo */}
+          <div
             onClick={() => setCurrentPath('/')}
-            style={{ 
-              fontFamily: '"Playfair Display", serif', fontSize: '26px', 
+            style={{
+              fontFamily: '"Playfair Display", serif', fontSize: '26px',
               fontWeight: '400', letterSpacing: '2px', cursor: 'pointer', color: color,
               transition: 'color 0.3s'
-            }}>
+            }}
+          >
             Lumière
+          </div>
+
+          {/* Right Controls: Bag icon */}
+          <div style={{ position: 'absolute', right: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div
+              onClick={toggleBag}
+              style={{ cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              title="Shopping Bag"
+            >
+              <svg
+                width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke={color} strokeWidth="1.5"
+                style={{ transition: 'stroke 0.3s' }}
+              >
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+
+              {/* Cart Badge */}
+              {cartCount > 0 && (
+                <div style={{
+                  position: 'absolute',
+                  top: '-6px',
+                  right: '-6px',
+                  width: '16px',
+                  height: '16px',
+                  borderRadius: '50%',
+                  backgroundColor: '#000',
+                  border: `1.5px solid ${bgColor || '#fff'}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '8px',
+                  fontWeight: '600',
+                  color: '#fff',
+                  letterSpacing: 0,
+                  transition: 'background-color 0.3s',
+                  // On transparent bg (home), flip badge to white bg + black text
+                  backgroundColor: isSolidBg ? '#000' : '#fff',
+                  color: isSolidBg ? '#fff' : '#000',
+                }}>
+                  {cartCount > 9 ? '9+' : cartCount}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Phần Tìm kiếm thu gọn (Mở ra khi bấm kính lúp) */}
+        {/* Search Bar (expandable) */}
         <div style={{
           height: isSearchOpen ? '50px' : '0',
           overflow: 'hidden',
@@ -73,9 +124,9 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
           display: 'flex', alignItems: 'center',
           padding: isSearchOpen ? '0 20px 10px 20px' : '0 20px'
         }}>
-          <input 
-            type="text" 
-            placeholder="WHAT ARE YOU LOOKING FOR?" 
+          <input
+            type="text"
+            placeholder="WHAT ARE YOU LOOKING FOR?"
             onKeyDown={handleSearchSubmit}
             style={{
               width: '100%',

@@ -1,15 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap');
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Lato', sans-serif;
-  background: #FDFBF7;
-  color: #2C2420;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #FFFFFF;
+  color: #000000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :root {
-  /* Hệ màu Dior: Trắng, Đen và Xám nhạt */
-  --accent: #000000; 
+  /* Lumière Maison Color System */
+  --accent: #000000;
   --accent-light: #F2F2F2;
   --accent-lt: #F9F9F9;
   --dark: #000000;
@@ -17,59 +22,68 @@ body {
   --text-secondary: #757575;
   --text-tertiary: #BDBDBD;
   --border-light: #E0E0E0;
+  --border-subtle: #EEEEEE;
   --bg-primary: #FFFFFF;
   --bg-secondary: #F9F9F9;
   --color-border-tertiary: #EEEEEE;
-  
-  /* Dùng thiết kế sắc cạnh, không bo tròn */
+
+  /* Sharp edges — no border radius */
   --border-radius-md: 0px;
   --border-radius-lg: 0px;
 }
 
-/* Tiêu đề thanh mảnh, in hoa và khoảng cách chữ rộng */
-h1, h2, h3, .section-title { 
-  font-family: 'Playfair Display', serif; 
-  font-weight: 400; 
-  text-transform: uppercase;
+/* ─── Typography ─────────────────────────────────────────────── */
+h1, h2, h3, .section-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
   letter-spacing: 2px;
   color: var(--text-primary);
 }
-.tab-bar {
-  display: flex;
-  gap: 0;
-  border-bottom: 0.5px solid var(--color-border-tertiary);
-  margin-bottom: 0;
-  background: var(--bg-primary);
-  overflow-x: auto;
-}
 
-/* Tab menu tinh giản, in hoa*/
-.tab {
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.tab.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-  font-weight: 600;
-}
-
-.tab:hover:not(.active) {
-  color: var(--text-primary);
-}
-
+/* ─── Screen utility ──────────────────────────────────────────── */
 .screen { display: none; }
 .screen.active { display: block; }
-/* Removed unused UI helpers: chips, outlines, cards, sidebar, nav-brand, and related utilities
-   These were not referenced by current components and were removed to keep CSS concise. */
 
-/* Time-slot styles removed (booking/time selection not used in shop flow) */
+/* ─── Buttons ────────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.btn-primary:hover {
+  background: #222;
+}
 
-/* Removed stepper/progress styles (unused in current shop flow) */
+/* ─── Inputs ─────────────────────────────────────────────────── */
+input[type=text],
+input[type=search],
+input[type=email],
+input[type=tel],
+input[type=date],
+select {
+  background: transparent;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: 'Lato', 'Helvetica Neue', sans-serif;
+  transition: all 0.2s;
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
 
+/* ─── Tables ─────────────────────────────────────────────────── */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-
 th {
   text-align: left;
   padding: 10px 12px;
@@ -81,30 +95,31 @@ th {
   letter-spacing: 0.5px;
   background: var(--bg-secondary);
 }
-
 td { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-
 tr:last-child td { border-bottom: none; }
 
-/* Removed mini-chart styles (unused) */
-
-input[type=text], input[type=search], select {
-  background: var(--color-background-secondary);
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: var(--border-radius-md);
-  padding: 8px 12px;
-  font-size: 13px;
+/* ─── Tab Bar ────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  background: var(--bg-primary);
+  overflow-x: auto;
+}
+.tab {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+.tab:hover:not(.active) {
   color: var(--text-primary);
-  font-family: 'Lato', sans-serif;
-  transition: all 0.2s;
 }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(184, 133, 93, 0.1);
-}
-
+/* ─── Section Title ──────────────────────────────────────────── */
 .section-title {
   font-size: 12px;
   font-weight: 600;
@@ -113,20 +128,82 @@ input:focus, select:focus {
   color: var(--text-secondary);
   margin-bottom: 14px;
 }
-/* Lưới Catalogue linh hoạt (Responsive Luxury Grid) */
+
+/* ─── Luxury Product Grid ────────────────────────────────────── */
 .luxury-grid {
   display: grid;
-  /* MẶC ĐỊNH TRÊN ĐIỆN THOẠI: Luôn chia 2 cột song song gọn gàng */
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   width: 100%;
 }
-
-/* KHI MÀN HÌNH LỚN HƠN 800px (TABLET & PC) */
 @media (min-width: 800px) {
   .luxury-grid {
-    /* Tự động chia 3 cột to, thoáng, trang trọng */
-    grid-template-columns: repeat(3, 1fr); 
+    grid-template-columns: repeat(3, 1fr);
     gap: 40px;
   }
+}
+
+/* ─── Toast Animation ────────────────────────────────────────── */
+@keyframes toastSlideUp {
+  from {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
+
+/* ─── Stepper ─────────────────────────────────────────────────── */
+.stepper-line {
+  flex: 1;
+  height: 1px;
+  background: #E0E0E0;
+  transition: background-color 0.3s ease;
+}
+.stepper-line.active {
+  background: #000000;
+}
+
+/* ─── CartDrawer / Panel Overlay ─────────────────────────────── */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  z-index: 150;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* ─── Scrollbar styling (webkit) ────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E0E0E0;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #BDBDBD;
+}
+
+/* ─── Selection color ────────────────────────────────────────── */
+::selection {
+  background: #000;
+  color: #fff;
 }
