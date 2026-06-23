@@ -39,8 +39,8 @@ function AppInner() {
       <NavBar currentPath={currentPath} setCurrentPath={setCurrentPath} />
       <CartDrawer setCurrentPath={setCurrentPath} />
       <ToastNotification />
-      {/* Home page handles its own top padding; other pages need offset for announcement bar (33px) + navbar (~68px) */}
-      <div style={{ flex: 1, width: '100%', paddingTop: isHome ? '0' : '101px' }}>
+      {/* Home page fills 100vh naturally; other pages need offset for the fixed navbar (~68px) */}
+      <div style={{ flex: 1, width: '100%', paddingTop: isHome ? '0' : '68px' }}>
         {renderPage()}
       </div>
       <Footer setCurrentPath={setCurrentPath} />
