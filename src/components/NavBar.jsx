@@ -86,7 +86,6 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
             </svg>
             Close
           </button>
-          {/* Search icon right corner */}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
             <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
           </svg>
@@ -118,7 +117,6 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
             </svg>
           </div>
 
-          {/* Fragrance & Beauty link */}
           <div style={{ textAlign: 'right', marginTop: '12px', fontSize: '12px', color: '#757575' }}>
             Search for <span
               onClick={() => { onClose(); setCurrentPath('/explore'); }}
@@ -187,11 +185,41 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartCount, toggleBag } = useApp();
 
+  // Auto-hide navbar on scroll down, show on scroll up
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        // Always show at top of page
+        if (currentY < 60) {
+          setVisible(true);
+        } else if (currentY > lastScrollY.current + 4) {
+          // Scrolling down — hide
+          setVisible(false);
+        } else if (currentY < lastScrollY.current - 4) {
+          // Scrolling up — show
+          setVisible(true);
+        }
+        lastScrollY.current = currentY;
+        ticking.current = false;
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Always show navbar when a drawer is open
   const isHome = currentPath === '/';
   const hasOverlay = isMenuOpen || isSearchOpen;
+  const navVisible = visible || hasOverlay;
 
-  // On home page with no overlays, navbar is transparent white text
-  const isSolidBg = !isHome || hasOverlay;
+  const isSolidBg = !isHome || hasOverlay || lastScrollY.current > 60;
   const color = isSolidBg ? '#000000' : '#ffffff';
   const bgColor = isSolidBg ? '#ffffff' : 'transparent';
 
@@ -207,32 +235,14 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
 
   return (
     <>
-      {/* Top announcement bar — Dior style */}
+      {/* Main Navbar — slides up/down */}
       <div style={{
-        width: '100%',
-        backgroundColor: '#000',
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: '10px',
-        letterSpacing: '2px',
-        padding: '8px 0',
-        textTransform: 'uppercase',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 51,
-      }}>
-        Complimentary Shipping &amp; Returns — Always
-      </div>
-
-      {/* Main Navbar */}
-      <div style={{
-        position: 'fixed', top: '33px', left: 0, right: 0,
+        position: 'fixed', top: 0, left: 0, right: 0,
         display: 'flex', flexDirection: 'column',
         zIndex: 50,
         backgroundColor: bgColor,
-        transition: 'background-color 0.3s ease',
+        transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease',
+        transform: navVisible ? 'translateY(0)' : 'translateY(-100%)',
         boxShadow: isSolidBg ? '0 1px 0 rgba(0,0,0,0.06)' : 'none',
       }}>
         {/* Main Menu Bar */}
@@ -298,7 +308,6 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
 
-              {/* Cart Badge */}
               {cartCount > 0 && (
                 <div style={{
                   position: 'absolute', top: '-6px', right: '-6px',

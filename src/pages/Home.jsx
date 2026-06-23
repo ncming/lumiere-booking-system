@@ -26,63 +26,73 @@ const editorialGrid = [
     img: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=900&auto=format&fit=crop',
     label: 'Iconic Handbags',
     sub: 'The new classics',
-    tall: true,
   },
   {
     img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=900&auto=format&fit=crop',
     label: 'Rouge Lumière',
     sub: 'The art of color',
-    tall: false,
   },
   {
     img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=900&auto=format&fit=crop',
     label: 'Fine Jewelry',
     sub: 'Timeless adornment',
-    tall: false,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=900&auto=format&fit=crop',
-    label: "Women's Fashion",
-    sub: 'Ready-to-wear',
-    tall: true,
   },
 ];
 
 const categories = [
   { label: "Women's", img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop' },
-  { label: "Men's", img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop' },
-  { label: "Bags", img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600&auto=format&fit=crop' },
+  { label: "Men's",   img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop' },
+  { label: "Bags",    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600&auto=format&fit=crop' },
   { label: "Jewelry", img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=600&auto=format&fit=crop' },
-  { label: "Beauty", img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop' },
+  { label: "Beauty",  img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop' },
 ];
 
 const Home = ({ setActiveTab }) => {
-  const [heroIndex, setHeroIndex] = useState(0);
-  const [fade, setFade] = useState(true);
+  // Track which slide index each "layer" shows
+  // We use two stacked <img> layers. The top layer fades out to reveal the bottom.
+  const [current, setCurrent] = useState(0);
+  const [next, setNext] = useState(1);
+  const [transitioning, setTransitioning] = useState(false);
   const [hoveredCat, setHoveredCat] = useState(null);
+  const [textVisible, setTextVisible] = useState(true);
 
-  // Auto-advance hero
+  // Auto-advance with slow crossfade — no black flash
   useEffect(() => {
     const timer = setInterval(() => {
-      setFade(false);
+      // Start: pre-load next, text fades out
+      setTextVisible(false);
+      setNext((current + 1) % heroSlides.length);
+
       setTimeout(() => {
-        setHeroIndex(prev => (prev + 1) % heroSlides.length);
-        setFade(true);
-      }, 400);
-    }, 6000);
+        // Crossfade starts — top image fades out over bottom
+        setTransitioning(true);
+      }, 300);
+
+      setTimeout(() => {
+        // Crossfade done — swap layers, reset
+        setCurrent(prev => (prev + 1) % heroSlides.length);
+        setTransitioning(false);
+        setTextVisible(true);
+      }, 1600); // 300ms text fade + 1300ms crossfade
+
+    }, 8000); // 8s between slides (slower)
     return () => clearInterval(timer);
-  }, []);
+  }, [current]);
 
   const goToSlide = (idx) => {
-    if (idx === heroIndex) return;
-    setFade(false);
-    setTimeout(() => { setHeroIndex(idx); setFade(true); }, 300);
+    if (idx === current || transitioning) return;
+    setTextVisible(false);
+    setNext(idx);
+    setTimeout(() => setTransitioning(true), 250);
+    setTimeout(() => {
+      setCurrent(idx);
+      setTransitioning(false);
+      setTextVisible(true);
+    }, 1500);
   };
 
-  const slide = heroSlides[heroIndex];
-
   return (
-    <div style={{ width: '100%', backgroundColor: '#FFFFFF', paddingTop: '33px' }}>
+    <div style={{ width: '100%', backgroundColor: '#FFFFFF' }}>
 
       {/* ─── 1. HERO FULLSCREEN SLIDER ─────────────────────── */}
       <div style={{
@@ -91,40 +101,57 @@ const Home = ({ setActiveTab }) => {
         height: '100vh',
         minHeight: '580px',
         overflow: 'hidden',
-        backgroundColor: '#1a1a1a',
+        // Background is always a solid dark — prevents any "black flash"
+        backgroundColor: '#2a2624',
       }}>
-        {/* Image */}
+
+        {/* Bottom layer: the NEXT image (always visible underneath) */}
         <img
-          key={heroIndex}
-          src={slide.img}
-          alt={slide.title}
+          src={heroSlides[next].img}
+          alt=""
+          aria-hidden="true"
           style={{
-            width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top',
-            opacity: fade ? 1 : 0,
-            transition: 'opacity 0.5s ease',
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center top',
           }}
         />
 
-        {/* Gradient overlay */}
+        {/* Top layer: current image — fades out during transition */}
+        <img
+          src={heroSlides[current].img}
+          alt={heroSlides[current].title}
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center top',
+            opacity: transitioning ? 0 : 1,
+            transition: transitioning ? 'opacity 1.3s ease-in-out' : 'none',
+          }}
+        />
+
+        {/* Gradient overlay — always on top of images */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.5) 100%)',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%)',
+          pointerEvents: 'none',
         }} />
 
         {/* Hero text */}
         <div style={{
-          position: 'absolute', bottom: '80px', left: 0, right: 0,
+          position: 'absolute', bottom: '90px', left: 0, right: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
           padding: '0 24px',
-          opacity: fade ? 1 : 0,
-          transform: fade ? 'translateY(0)' : 'translateY(10px)',
-          transition: 'opacity 0.5s ease, transform 0.5s ease',
+          opacity: textVisible ? 1 : 0,
+          transform: textVisible ? 'translateY(0)' : 'translateY(8px)',
+          transition: 'opacity 0.6s ease, transform 0.6s ease',
+          pointerEvents: 'none',
         }}>
           <div style={{
             fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.75)', marginBottom: '14px', fontFamily: 'inherit',
+            color: 'rgba(255,255,255,0.72)', marginBottom: '14px',
           }}>
-            {slide.subtitle}
+            {heroSlides[current].subtitle}
           </div>
           <h1 style={{
             fontFamily: '"Playfair Display", serif',
@@ -132,7 +159,7 @@ const Home = ({ setActiveTab }) => {
             fontWeight: '400', color: '#fff', letterSpacing: '6px',
             marginBottom: '32px', lineHeight: '1.1',
           }}>
-            {slide.title}
+            {heroSlides[current].title}
           </h1>
           <button
             onClick={() => setActiveTab('/explore')}
@@ -143,17 +170,18 @@ const Home = ({ setActiveTab }) => {
               cursor: 'pointer', fontFamily: 'inherit',
               transition: 'all 0.3s ease',
               backdropFilter: 'blur(4px)',
+              pointerEvents: 'auto',
             }}
-            onMouseOver={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#000'; e.currentTarget.style.borderColor = '#fff'; }}
-            onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)'; }}
+            onMouseOver={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#000'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#fff'; }}
           >
-            {slide.cta}
+            {heroSlides[current].cta}
           </button>
         </div>
 
         {/* Slide dots */}
         <div style={{
-          position: 'absolute', bottom: '32px', left: 0, right: 0,
+          position: 'absolute', bottom: '36px', left: 0, right: 0,
           display: 'flex', justifyContent: 'center', gap: '10px',
         }}>
           {heroSlides.map((_, i) => (
@@ -161,9 +189,9 @@ const Home = ({ setActiveTab }) => {
               key={i}
               onClick={() => goToSlide(i)}
               style={{
-                width: i === heroIndex ? '28px' : '6px',
+                width: i === current ? '28px' : '6px',
                 height: '1px',
-                backgroundColor: i === heroIndex ? '#fff' : 'rgba(255,255,255,0.45)',
+                backgroundColor: i === current ? '#fff' : 'rgba(255,255,255,0.4)',
                 cursor: 'pointer',
                 transition: 'all 0.4s ease',
               }}
@@ -173,51 +201,27 @@ const Home = ({ setActiveTab }) => {
 
         {/* Scroll indicator */}
         <div style={{
-          position: 'absolute', bottom: '60px', right: '32px',
+          position: 'absolute', bottom: '64px', right: '32px',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
         }}>
-          <div style={{ fontSize: '8px', letterSpacing: '2px', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', writingMode: 'vertical-rl' }}>
+          <div style={{ fontSize: '8px', letterSpacing: '2px', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', writingMode: 'vertical-rl' }}>
             Scroll
           </div>
-          <div style={{ width: '1px', height: '40px', backgroundColor: 'rgba(255,255,255,0.4)' }} />
+          <div style={{ width: '1px', height: '40px', backgroundColor: 'rgba(255,255,255,0.35)' }} />
         </div>
       </div>
 
-      {/* ─── 2. MARQUEE / ANNOUNCEMENT ─────────────────────── */}
+      {/* ─── 2. CATEGORY QUICK LINKS — responsive even grid ─── */}
       <div style={{
-        borderTop: '1px solid #E0E0E0', borderBottom: '1px solid #E0E0E0',
-        padding: '14px 0', overflow: 'hidden', position: 'relative',
-        backgroundColor: '#fff',
+        padding: '64px 32px 20px',
+        maxWidth: '1280px',
+        margin: '0 auto',
       }}>
+        {/* 5 equal columns, always fill the width */}
         <div style={{
-          display: 'flex', gap: '80px', width: 'max-content',
-          animation: 'marquee 24s linear infinite',
-        }}>
-          {[...Array(4)].flatMap(() => [
-            'Complimentary Shipping & Returns',
-            '✦',
-            'New Arrivals — Automne 2025',
-            '✦',
-            'Exclusive Boutique Appointments',
-            '✦',
-          ]).map((text, i) => (
-            <span key={i} style={{
-              fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase',
-              color: '#000', whiteSpace: 'nowrap',
-              fontWeight: text === '✦' ? '400' : '400',
-            }}>{text}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── 3. CATEGORY QUICK LINKS ────────────────────────── */}
-      <div style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 20px',
-      }}>
-        <div style={{
-          display: 'flex', gap: '12px', overflowX: 'auto',
-          paddingBottom: '4px',
-          scrollbarWidth: 'none',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+          gap: '16px',
         }}>
           {categories.map((cat, i) => (
             <div
@@ -225,30 +229,26 @@ const Home = ({ setActiveTab }) => {
               onClick={() => setActiveTab('/explore')}
               onMouseOver={() => setHoveredCat(i)}
               onMouseOut={() => setHoveredCat(null)}
-              style={{
-                flexShrink: 0,
-                width: 'clamp(100px, 16vw, 180px)',
-                cursor: 'pointer',
-              }}
+              style={{ cursor: 'pointer' }}
             >
               <div style={{
                 aspectRatio: '3/4',
                 overflow: 'hidden',
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#F2F2F2',
               }}>
                 <img
                   src={cat.img}
                   alt={cat.label}
                   style={{
                     width: '100%', height: '100%', objectFit: 'cover',
-                    transition: 'transform 0.5s ease',
+                    transition: 'transform 0.55s ease',
                     transform: hoveredCat === i ? 'scale(1.05)' : 'scale(1)',
                   }}
                 />
               </div>
               <div style={{
-                marginTop: '12px', textAlign: 'center',
-                fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase',
+                marginTop: '14px', textAlign: 'center',
+                fontSize: '11px', letterSpacing: '2.5px', textTransform: 'uppercase',
                 color: '#000',
               }}>
                 {cat.label}
@@ -258,9 +258,9 @@ const Home = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* ─── 4. EDITORIAL GRID ──────────────────────────────── */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+      {/* ─── 3. EDITORIAL GRID ──────────────────────────────── */}
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '72px 32px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '52px' }}>
           <div style={{ fontSize: '10px', letterSpacing: '4px', color: '#757575', textTransform: 'uppercase', marginBottom: '12px' }}>
             Collections
           </div>
@@ -272,74 +272,41 @@ const Home = ({ setActiveTab }) => {
           </h2>
         </div>
 
-        {/* Asymmetric editorial grid */}
+        {/* Symmetric 3-column grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gridTemplateRows: 'auto auto',
-          gap: '16px',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '20px',
         }}>
-          {/* Left tall item */}
-          <div
-            onClick={() => setActiveTab('/explore')}
-            style={{ cursor: 'pointer', gridRow: '1 / 3' }}
-          >
-            <div style={{ width: '100%', aspectRatio: '3/5', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
-              <img
-                src={editorialGrid[0].img}
-                alt={editorialGrid[0].label}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }}
-                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.03)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-              />
-            </div>
-            <div style={{ marginTop: '16px' }}>
-              <div style={{ fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: '400' }}>
-                {editorialGrid[0].label}
+          {editorialGrid.map((item, i) => (
+            <div
+              key={i}
+              onClick={() => setActiveTab('/explore')}
+              style={{ cursor: 'pointer' }}
+            >
+              <div style={{ width: '100%', aspectRatio: '3/4', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
+                <img
+                  src={item.img}
+                  alt={item.label}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }}
+                  onMouseOver={e => e.currentTarget.style.transform = 'scale(1.04)'}
+                  onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                />
               </div>
-              <div style={{ fontSize: '11px', color: '#757575', marginTop: '6px' }}>
-                {editorialGrid[0].sub}
+              <div style={{ marginTop: '18px' }}>
+                <div style={{ fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: '400' }}>
+                  {item.label}
+                </div>
+                <div style={{ fontSize: '11px', color: '#757575', marginTop: '6px' }}>
+                  {item.sub}
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Top-right */}
-          <div onClick={() => setActiveTab('/explore')} style={{ cursor: 'pointer' }}>
-            <div style={{ width: '100%', aspectRatio: '4/3', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
-              <img
-                src={editorialGrid[1].img}
-                alt={editorialGrid[1].label}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }}
-                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.03)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-              />
-            </div>
-            <div style={{ marginTop: '16px' }}>
-              <div style={{ fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase' }}>{editorialGrid[1].label}</div>
-              <div style={{ fontSize: '11px', color: '#757575', marginTop: '6px' }}>{editorialGrid[1].sub}</div>
-            </div>
-          </div>
-
-          {/* Bottom-right */}
-          <div onClick={() => setActiveTab('/explore')} style={{ cursor: 'pointer' }}>
-            <div style={{ width: '100%', aspectRatio: '4/3', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
-              <img
-                src={editorialGrid[2].img}
-                alt={editorialGrid[2].label}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }}
-                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.03)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-              />
-            </div>
-            <div style={{ marginTop: '16px' }}>
-              <div style={{ fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase' }}>{editorialGrid[2].label}</div>
-              <div style={{ fontSize: '11px', color: '#757575', marginTop: '6px' }}>{editorialGrid[2].sub}</div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* ─── 5. FULL-WIDTH EDITORIAL BANNER ─────────────────── */}
+      {/* ─── 4. FULL-WIDTH EDITORIAL BANNER ─────────────────── */}
       <div style={{ position: 'relative', width: '100%', height: 'clamp(380px, 55vw, 700px)', overflow: 'hidden', backgroundColor: '#1a1a1a' }}>
         <img
           src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1920&auto=format&fit=crop"
@@ -348,7 +315,7 @@ const Home = ({ setActiveTab }) => {
         />
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 60%)',
+          background: 'linear-gradient(to right, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.08) 60%)',
         }} />
         <div style={{
           position: 'absolute', top: '50%', left: 'clamp(32px, 8vw, 100px)',
@@ -381,7 +348,7 @@ const Home = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* ─── 6. BOUTIQUE APPOINTMENT CTA ─────────────────────── */}
+      {/* ─── 5. BOUTIQUE APPOINTMENT CTA ─────────────────────── */}
       <div style={{
         textAlign: 'center', padding: 'clamp(60px, 8vw, 100px) 24px',
         backgroundColor: '#FAFAFA', borderTop: '1px solid #EEEEEE',
@@ -412,14 +379,6 @@ const Home = ({ setActiveTab }) => {
           Book an Appointment
         </button>
       </div>
-
-      {/* Marquee keyframes injected */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 };
