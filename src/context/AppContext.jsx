@@ -13,7 +13,7 @@ export const AppProvider = ({ children }) => {
     setToast({ visible: true, message });
     toastTimerRef.current = setTimeout(() => {
       setToast({ visible: false, message: '' });
-    }, 3000);
+    }, 1800);
   }, []);
 
   const addToCart = useCallback((product, selectedOption) => {
@@ -43,7 +43,7 @@ export const AppProvider = ({ children }) => {
         },
       ];
     });
-    showToast(`✦ "${product.name}" added to your Shopping Bag`);
+    showToast(`"${product.name}" added to your Shopping Bag`);
   }, [showToast]);
 
   const removeFromCart = useCallback((productId, selectedOption) => {
