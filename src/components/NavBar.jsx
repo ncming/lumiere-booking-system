@@ -251,7 +251,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
         {/* Main Menu Bar */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '18px 24px', position: 'relative' }}>
 
-          {/* Left Controls: Hamburger + Search */}
+          {/* Left Controls: Hamburger only */}
           <div style={{ position: 'absolute', left: '24px', display: 'flex', gap: '24px', alignItems: 'center' }}>
             {/* Hamburger */}
             <button
@@ -264,20 +264,6 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
             >
               <div style={{ width: '22px', height: '1px', backgroundColor: color, transition: 'background-color 0.3s' }} />
               <div style={{ width: '22px', height: '1px', backgroundColor: color, transition: 'background-color 0.3s' }} />
-            </button>
-
-            {/* Search Icon */}
-            <button
-              onClick={handleToggleSearch}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}
-              aria-label="Search"
-            >
-              <svg
-                style={{ transition: 'stroke 0.3s' }}
-                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"
-              >
-                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-              </svg>
             </button>
           </div>
 
@@ -293,8 +279,23 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
             Lumière
           </div>
 
-          {/* Right Controls: Bag icon */}
-          <div style={{ position: 'absolute', right: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Right Controls: Search + Bag */}
+          <div style={{ position: 'absolute', right: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+            {/* Search Icon */}
+            <button
+              onClick={handleToggleSearch}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}
+              aria-label="Search"
+            >
+              <svg
+                style={{ transition: 'stroke 0.3s' }}
+                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"
+              >
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </button>
+
+            {/* Bag Icon */}
             <button
               onClick={toggleBag}
               style={{ cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', background: 'none', border: 'none', padding: 0 }}
@@ -318,7 +319,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '8px', fontWeight: '600', letterSpacing: 0,
                   transition: 'all 0.3s',
-              backgroundColor: useDarkIcons ? '#000' : '#fff',
+                  backgroundColor: useDarkIcons ? '#000' : '#fff',
                   color: useDarkIcons ? '#fff' : '#000',
                   border: `1.5px solid transparent`,
                 }}>
