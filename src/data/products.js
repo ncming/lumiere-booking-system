@@ -6,9 +6,9 @@ export const PRODUCTS = [
     price: '165,000,000₫',
     priceNum: 165000000,
     category: 'Handbags & Totes',
-    image: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=1000&auto=format&fit=crop',
     images: [
-      'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop',
     ],
@@ -26,7 +26,7 @@ export const PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop',
     images: [
       'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1000&auto=format&fit=crop',
     ],
     description: 'Designed to hold all the daily essentials, the style is fully embroidered with a blue Toile de Jouy motif.',
@@ -44,7 +44,7 @@ export const PRODUCTS = [
     images: [
       'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=1000&auto=format&fit=crop',
     ],
     description: 'Crafted in blue box calfskin for an elegant and modern look. Flap closure with CD clasp.',
     options: ['Navy Blue', 'Warm Taupe'],
@@ -127,9 +127,9 @@ export const PRODUCTS = [
     price: '85,000,000₫',
     priceNum: 85000000,
     category: "Women's Ready-To-Wear",
-    image: 'https://images.unsplash.com/photo-1583496641160-b5f86b695438?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1000&auto=format&fit=crop',
     images: [
-      'https://images.unsplash.com/photo-1583496641160-b5f86b695438?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop',
     ],
@@ -147,7 +147,7 @@ export const PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop',
     images: [
       'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1583496641160-b5f86b695438?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop',
     ],
     description: 'Emblematic New Look silhouette created by Christian Dior in 1947, crafted in black virgin wool.',
@@ -164,7 +164,7 @@ export const PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop',
     images: [
       'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1583496641160-b5f86b695438?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1000&auto=format&fit=crop',
     ],
     description: 'White and navy blue silk twill featuring the hallmark House motif.',
     options: ['S', 'M', 'L'],

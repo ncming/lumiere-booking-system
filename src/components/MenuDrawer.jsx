@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
 
 const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
-  const menuCategories = [
-    { label: "Gifts", hasArrow: true },
-    { label: "What's New", hasArrow: true },
-    { label: "Women's Fashion", hasArrow: true },
-    { label: "Men's Fashion", hasArrow: true },
-    { label: "Bags", hasArrow: true },
-    { label: "Jewelry & Timepieces", hasArrow: true },
-    { label: "Kids & Baby", hasArrow: true },
-    { label: "Haute Couture", hasArrow: true },
-    { label: "Lumière World & Fashion Shows", hasArrow: true },
+  const [activeMenuTab, setActiveMenuTab] = React.useState('fashion');
+
+  const fashionCategories = [
+    { label: "Gifts", hasArrow: true, path: '/explore' },
+    { label: "What's New", hasArrow: true, path: '/explore' },
+    { label: "Women's Fashion", hasArrow: true, path: "/category/Women's Ready-To-Wear" },
+    { label: "Men's Fashion", hasArrow: true, path: "/category/Men's Ready-To-Wear" },
+    { label: "Bags", hasArrow: true, path: '/category/Handbags & Totes' },
+    { label: "Jewelry & Timepieces", hasArrow: true, path: '/category/Jewelry' },
+    { label: "Kids & Baby", hasArrow: true, path: '/explore' },
+    { label: "Haute Couture", hasArrow: true, path: '/explore' },
+    { label: "Lumière World & Fashion Shows", hasArrow: true, path: '/explore' },
   ];
+
+  const beautyCategories = [
+    { label: "Fragrance", hasArrow: true, path: "/category/Fragrance" },
+    { label: "Makeup", hasArrow: true, path: "/category/Makeup" },
+    { label: "Skincare", hasArrow: true, path: "/category/Skincare" },
+    { label: "Gifts & Sets", hasArrow: true, path: "/explore" },
+  ];
+
+  const displayedCategories = activeMenuTab === 'fashion' ? fashionCategories : beautyCategories;
 
   const serviceLinks = [
     { label: "Contact" },
@@ -86,33 +97,43 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
         </div>
 
         {/* Tab Bar - Fashion & Accessories / Fragrance & Beauty */}
-        <div style={{
-          display: 'flex', borderBottom: '1px solid #EEEEEE',
-        }}>
-          <button style={{
-            flex: 1, padding: '14px 12px',
-            fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase',
-            fontWeight: '600', color: '#000', background: 'none', border: 'none',
-            borderBottom: '2px solid #000', cursor: 'pointer', fontFamily: 'inherit',
-          }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid #EEEEEE' }}>
+          <button
+            onClick={() => setActiveMenuTab('fashion')}
+            style={{
+              flex: 1, padding: '14px 12px',
+              fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase',
+              fontWeight: activeMenuTab === 'fashion' ? '600' : '400',
+              color: activeMenuTab === 'fashion' ? '#000' : '#757575',
+              background: 'none', border: 'none',
+              borderBottom: activeMenuTab === 'fashion' ? '2px solid #000' : '2px solid transparent',
+              cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s',
+            }}
+          >
             Fashion &amp; Accessories
           </button>
-          <button style={{
-            flex: 1, padding: '14px 12px',
-            fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase',
-            fontWeight: '400', color: '#757575', background: 'none', border: 'none',
-            borderBottom: '2px solid transparent', cursor: 'pointer', fontFamily: 'inherit',
-          }}>
+          <button
+            onClick={() => setActiveMenuTab('beauty')}
+            style={{
+              flex: 1, padding: '14px 12px',
+              fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase',
+              fontWeight: activeMenuTab === 'beauty' ? '600' : '400',
+              color: activeMenuTab === 'beauty' ? '#000' : '#757575',
+              background: 'none', border: 'none',
+              borderBottom: activeMenuTab === 'beauty' ? '2px solid #000' : '2px solid transparent',
+              cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s',
+            }}
+          >
             Fragrance &amp; Beauty
           </button>
         </div>
 
         {/* Main Category Links */}
         <div style={{ flex: 1, padding: '0 0 16px 0' }}>
-          {menuCategories.map((item, idx) => (
+          {displayedCategories.map((item, idx) => (
             <div
-              key={idx}
-              onClick={() => handleNavigate('/explore')}
+              key={item.label}
+              onClick={() => handleNavigate(item.path)}
               style={{
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 padding: '16px 24px',
