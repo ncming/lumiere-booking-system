@@ -187,6 +187,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
 
   // Auto-hide navbar on scroll down, show on scroll up
   const [visible, setVisible] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
@@ -196,6 +197,8 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
       ticking.current = true;
       requestAnimationFrame(() => {
         const currentY = window.scrollY;
+        // Track whether we're past the hero
+        setScrolled(currentY > 80);
         // Always show at top of page
         if (currentY < 60) {
           setVisible(true);
@@ -219,9 +222,10 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
   const hasOverlay = isMenuOpen || isSearchOpen;
   const navVisible = visible || hasOverlay;
 
-  const isSolidBg = !isHome || hasOverlay || lastScrollY.current > 60;
-  const color = isSolidBg ? '#000000' : '#ffffff';
-  const bgColor = isSolidBg ? '#ffffff' : 'transparent';
+  // On home page at top: white icons over dark hero.
+  // Anywhere else (scrolled / other pages): black icons.
+  const useDarkIcons = !isHome || scrolled || hasOverlay;
+  const color = useDarkIcons ? '#000000' : '#ffffff';
 
   const handleToggleSearch = () => {
     setIsMenuOpen(false);
@@ -235,15 +239,14 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
 
   return (
     <>
-      {/* Main Navbar — slides up/down */}
+      {/* Main Navbar — always transparent, slides up/down */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0,
         display: 'flex', flexDirection: 'column',
         zIndex: 50,
-        backgroundColor: bgColor,
-        transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease',
+        backgroundColor: 'transparent',
+        transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
         transform: navVisible ? 'translateY(0)' : 'translateY(-100%)',
-        boxShadow: isSolidBg ? '0 1px 0 rgba(0,0,0,0.06)' : 'none',
       }}>
         {/* Main Menu Bar */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '18px 24px', position: 'relative' }}>
@@ -315,9 +318,9 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '8px', fontWeight: '600', letterSpacing: 0,
                   transition: 'all 0.3s',
-                  backgroundColor: isSolidBg ? '#000' : '#fff',
-                  color: isSolidBg ? '#fff' : '#000',
-                  border: `1.5px solid ${bgColor || '#fff'}`,
+              backgroundColor: useDarkIcons ? '#000' : '#fff',
+                  color: useDarkIcons ? '#fff' : '#000',
+                  border: `1.5px solid transparent`,
                 }}>
                   {cartCount > 9 ? '9+' : cartCount}
                 </div>
