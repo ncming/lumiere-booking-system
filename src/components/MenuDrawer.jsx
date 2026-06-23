@@ -10,9 +10,9 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
     { label: "Men's Fashion", hasArrow: true, path: "/category/Men's Ready-To-Wear" },
     { label: "Bags", hasArrow: true, path: '/category/Handbags & Totes' },
     { label: "Jewelry & Timepieces", hasArrow: true, path: '/category/Jewelry' },
-    { label: "Kids & Baby", hasArrow: true, path: '/explore' },
-    { label: "Haute Couture", hasArrow: true, path: '/explore' },
-    { label: "Lumière World & Fashion Shows", hasArrow: true, path: '/explore' },
+    { label: "Kids & Baby", hasArrow: true, path: '/category/Kids & Baby' },
+    { label: "Haute Couture", hasArrow: true, path: '/category/Haute Couture' },
+    { label: "Lumière World & Fashion Shows", hasArrow: true, path: '/category/Lumière World & Fashion Shows' },
   ];
 
   const beautyCategories = [
