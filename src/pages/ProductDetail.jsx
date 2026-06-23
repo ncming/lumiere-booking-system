@@ -99,7 +99,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
               position: 'relative',
               marginBottom: '12px',
             }}
-            onMouseEnter={() => setIsZoomed(true)}
+            onClick={() => setIsZoomed(!isZoomed)}
             onMouseLeave={() => setIsZoomed(false)}
             onMouseMove={handleMouseMove}
           >
@@ -124,8 +124,9 @@ const ProductDetail = ({ productId, setActiveTab }) => {
                 backgroundColor: 'rgba(0,0,0,0.35)',
                 padding: '5px 10px',
                 backdropFilter: 'blur(4px)',
+                pointerEvents: 'none',
               }}>
-                Hover to zoom
+                Click to zoom
               </div>
             )}
           </div>
@@ -247,13 +248,15 @@ const ProductDetail = ({ productId, setActiveTab }) => {
             gap: '8px', marginBottom: '28px',
           }}>
             {[
-              { icon: '🎁', label: 'Gift Wrapping' },
-              { icon: '🚚', label: 'Free Delivery' },
-              { icon: '↩', label: 'Easy Returns' },
-            ].map(({ icon, label }) => (
-              <div key={label} style={{ textAlign: 'center', padding: '12px 4px', border: '1px solid #F2F2F2' }}>
-                <div style={{ fontSize: '18px', marginBottom: '4px' }}>{icon}</div>
-                <div style={{ fontSize: '8px', letterSpacing: '1px', textTransform: 'uppercase', color: '#757575' }}>{label}</div>
+              'Gift Wrapping',
+              'Free Delivery',
+              'Easy Returns',
+            ].map((label) => (
+              <div key={label} style={{
+                textAlign: 'center', padding: '14px 8px', border: '1px solid #E0E0E0',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <div style={{ fontSize: '8px', letterSpacing: '1px', textTransform: 'uppercase', color: '#000' }}>{label}</div>
               </div>
             ))}
           </div>

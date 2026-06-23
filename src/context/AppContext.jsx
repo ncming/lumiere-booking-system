@@ -67,6 +67,10 @@ export const AppProvider = ({ children }) => {
   const toggleBag = useCallback(() => setIsBagOpen(prev => !prev), []);
   const closeBag = useCallback(() => setIsBagOpen(false), []);
 
+  const clearCart = useCallback(() => {
+    setCartItems([]);
+  }, []);
+
   const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
   const cartTotal = cartItems.reduce((sum, item) => sum + item.priceNum * item.qty, 0);
 
@@ -82,6 +86,7 @@ export const AppProvider = ({ children }) => {
       updateQty,
       toggleBag,
       closeBag,
+      clearCart,
       showToast,
     }}>
       {children}

@@ -4,11 +4,14 @@ const formatPrice = (num) =>
   num === 0 ? '—' : num.toLocaleString('vi-VN') + '₫';
 
 const Cart = ({ setActiveTab }) => {
-  const { cartItems, cartTotal, removeFromCart, updateQty, showToast } = useApp();
+  const { cartItems, cartTotal, removeFromCart, updateQty, showToast, clearCart } = useApp();
 
   const handleCheckout = () => {
-    showToast('✦ Purchase confirmed. Your order is on its way.');
-    setTimeout(() => setActiveTab('/'), 1200);
+    showToast('Purchase confirmed. Your order is on its way.');
+    setTimeout(() => {
+      clearCart();
+      setActiveTab('/');
+    }, 1200);
   };
 
   return (
@@ -79,9 +82,8 @@ const Cart = ({ setActiveTab }) => {
             </div>
 
             {/* Complimentary note */}
-            <div style={{ backgroundColor: '#F9F9F9', padding: '14px 16px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '14px' }}>🎁</span>
-              <div style={{ fontSize: '10px', color: '#757575', letterSpacing: '0.5px', lineHeight: 1.6 }}>
+            <div style={{ backgroundColor: '#F9F9F9', padding: '14px 16px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ fontSize: '10px', color: '#757575', letterSpacing: '0.5px', lineHeight: 1.6, textAlign: 'center' }}>
                 Complimentary gift wrapping · Free delivery on all orders
               </div>
             </div>
