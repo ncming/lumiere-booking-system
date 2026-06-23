@@ -1,132 +1,170 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
   const menuCategories = [
-    {
-      title: 'FASHION',
-      items: [
-        { label: "Women's Ready-To-Wear" },
-        { label: "Men's Ready-To-Wear" },
-      ]
-    },
-    {
-      title: 'BAGS & ACCESSORIES',
-      items: [
-        { label: "Handbags & Totes" },
-        { label: "Small Leather Goods" },
-        { label: "Jewelry" },
-      ]
-    },
-    {
-      title: 'BEAUTY',
-      items: [
-        { label: "Fragrance" },
-        { label: "Makeup" },
-        { label: "Skincare" },
-      ]
-    }
+    { label: "Gifts", hasArrow: true },
+    { label: "What's New", hasArrow: true },
+    { label: "Women's Fashion", hasArrow: true },
+    { label: "Men's Fashion", hasArrow: true },
+    { label: "Bags", hasArrow: true },
+    { label: "Jewelry & Timepieces", hasArrow: true },
+    { label: "Kids & Baby", hasArrow: true },
+    { label: "Haute Couture", hasArrow: true },
+    { label: "Lumière World & Fashion Shows", hasArrow: true },
   ];
 
-  const handleNavigateCategory = (catLabel) => {
-    setCurrentPath(`/category/${catLabel}`);
-    onClose();
-  };
+  const serviceLinks = [
+    { label: "Contact" },
+    { label: "Your Boutique Appointment", path: '/reserve' },
+    { label: "Find your closest boutique" },
+    { label: "Change country/region: Vietnam (English)" },
+  ];
 
   const handleNavigate = (path) => {
-    setCurrentPath(path);
+    if (path) setCurrentPath(path);
+    else setCurrentPath('/explore');
     onClose();
   };
 
+  // Lock body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: '#FFFFFF', zIndex: 100, display: 'flex', flexDirection: 'column',
-      transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
-      opacity: isOpen ? 1 : 0, visibility: isOpen ? 'visible' : 'hidden',
-      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-    }}>
-      {/* Header */}
-      <div style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', borderBottom: '1px solid #EEEEEE' }} onClick={onClose}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <div style={{ width: '22px', height: '1.5px', backgroundColor: '#000' }}></div>
-          <div style={{ width: '22px', height: '1.5px', backgroundColor: '#000' }}></div>
-        </div>
-        <span style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>Close</span>
-      </div>
+    <>
+      {/* Backdrop overlay with blur */}
+      <div
+        onClick={onClose}
+        style={{
+          position: 'fixed', inset: 0,
+          backgroundColor: 'rgba(0,0,0,0.45)',
+          backdropFilter: isOpen ? 'blur(6px)' : 'blur(0px)',
+          WebkitBackdropFilter: isOpen ? 'blur(6px)' : 'blur(0px)',
+          zIndex: 99,
+          opacity: isOpen ? 1 : 0,
+          visibility: isOpen ? 'visible' : 'hidden',
+          transition: 'opacity 0.4s ease, visibility 0.4s ease, backdrop-filter 0.4s ease',
+          pointerEvents: isOpen ? 'auto' : 'none',
+        }}
+      />
 
-      {/* Menu Items */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-        {menuCategories.map((category, idx) => (
-          <div key={idx} style={{ marginBottom: '32px' }}>
-            <div style={{ fontSize: '11px', color: '#757575', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '16px' }}>{category.title}</div>
-            {category.items.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => handleNavigateCategory(item.label)}
-                style={{ fontSize: '18px', fontWeight: '400', color: '#000', cursor: 'pointer', marginBottom: '16px', letterSpacing: '0.5px', transition: 'color 0.2s' }}
-                onMouseOver={e => e.currentTarget.style.color = '#757575'}
-                onMouseOut={e => e.currentTarget.style.color = '#000'}
-              >
-                {item.label}
-              </div>
-            ))}
-          </div>
-        ))}
-
-        {/* Divider */}
-        <div style={{ height: '1px', backgroundColor: '#EEEEEE', marginBottom: '28px' }} />
-
-        {/* Services Links */}
-        <div style={{ marginBottom: '32px' }}>
-          <div style={{ fontSize: '11px', color: '#757575', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '16px' }}>CLIENT SERVICES</div>
-          <div
-            onClick={() => handleNavigate('/reserve')}
+      {/* Side Panel */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, bottom: 0,
+        width: 'clamp(280px, 38vw, 480px)',
+        backgroundColor: '#FFFFFF',
+        zIndex: 100,
+        display: 'flex', flexDirection: 'column',
+        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        boxShadow: isOpen ? '4px 0 40px rgba(0,0,0,0.12)' : 'none',
+        overflowY: 'auto',
+      }}>
+        {/* Header */}
+        <div style={{
+          padding: '20px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          borderBottom: '1px solid #EEEEEE',
+          position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1,
+        }}>
+          <button
+            onClick={onClose}
             style={{
-              fontSize: '16px', fontWeight: '400', color: '#000', cursor: 'pointer',
-              marginBottom: '16px', letterSpacing: '0.5px',
               display: 'flex', alignItems: 'center', gap: '10px',
-              transition: 'color 0.2s',
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase',
+              color: '#000', fontFamily: 'inherit',
             }}
-            onMouseOver={e => e.currentTarget.style.color = '#757575'}
-            onMouseOut={e => e.currentTarget.style.color = '#000'}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
-            Book a Boutique Visit
-          </div>
-          <div
-            onClick={() => handleNavigate('/explore')}
-            style={{
-              fontSize: '16px', fontWeight: '400', color: '#000', cursor: 'pointer',
-              marginBottom: '16px', letterSpacing: '0.5px',
-              display: 'flex', alignItems: 'center', gap: '10px',
-              transition: 'color 0.2s',
-            }}
-            onMouseOver={e => e.currentTarget.style.color = '#757575'}
-            onMouseOut={e => e.currentTarget.style.color = '#000'}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-            </svg>
-            All Collections
-          </div>
+            Close
+          </button>
         </div>
-      </div>
 
-      {/* Footer inside drawer */}
-      <div style={{ padding: '20px 24px', borderTop: '1px solid #EEEEEE', backgroundColor: '#FAFAFA' }}>
-        <div style={{ fontSize: '9px', color: '#BDBDBD', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
-          VIP Client Services
+        {/* Tab Bar - Fashion & Accessories / Fragrance & Beauty */}
+        <div style={{
+          display: 'flex', borderBottom: '1px solid #EEEEEE',
+        }}>
+          <button style={{
+            flex: 1, padding: '14px 12px',
+            fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase',
+            fontWeight: '600', color: '#000', background: 'none', border: 'none',
+            borderBottom: '2px solid #000', cursor: 'pointer', fontFamily: 'inherit',
+          }}>
+            Fashion &amp; Accessories
+          </button>
+          <button style={{
+            flex: 1, padding: '14px 12px',
+            fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase',
+            fontWeight: '400', color: '#757575', background: 'none', border: 'none',
+            borderBottom: '2px solid transparent', cursor: 'pointer', fontFamily: 'inherit',
+          }}>
+            Fragrance &amp; Beauty
+          </button>
         </div>
-        <div style={{ fontSize: '11px', color: '#000', letterSpacing: '1px' }}>
-          1800 ✦✦✦✦
+
+        {/* Main Category Links */}
+        <div style={{ flex: 1, padding: '0 0 16px 0' }}>
+          {menuCategories.map((item, idx) => (
+            <div
+              key={idx}
+              onClick={() => handleNavigate('/explore')}
+              style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                padding: '16px 24px',
+                fontSize: '14px', letterSpacing: '0.2px', color: '#000',
+                cursor: 'pointer', borderBottom: '1px solid #F5F5F5',
+                transition: 'background 0.15s',
+              }}
+              onMouseOver={e => e.currentTarget.style.backgroundColor = '#FAFAFA'}
+              onMouseOut={e => e.currentTarget.style.backgroundColor = 'transparent'}
+            >
+              <span>{item.label}</span>
+              {item.hasArrow && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#BDBDBD" strokeWidth="1.5">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              )}
+            </div>
+          ))}
+
+          {/* Divider */}
+          <div style={{ height: '1px', backgroundColor: '#E0E0E0', margin: '16px 0' }} />
+
+          {/* Service Links */}
+          {serviceLinks.map((item, idx) => (
+            <div
+              key={idx}
+              onClick={() => handleNavigate(item.path || '/explore')}
+              style={{
+                padding: '12px 24px',
+                fontSize: '13px', color: idx === 3 ? '#757575' : '#000',
+                cursor: 'pointer', letterSpacing: '0.1px',
+                transition: 'color 0.15s',
+              }}
+              onMouseOver={e => e.currentTarget.style.color = '#757575'}
+              onMouseOut={e => e.currentTarget.style.color = idx === 3 ? '#757575' : '#000'}
+            >
+              {idx === 3 ? <><span style={{ color: '#BDBDBD', fontSize: '11px' }}>Change country/region: </span>Vietnam (English)</> : item.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Footer inside drawer */}
+        <div style={{ padding: '20px 24px', borderTop: '1px solid #EEEEEE', backgroundColor: '#FAFAFA' }}>
+          <div style={{ fontSize: '9px', color: '#BDBDBD', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
+            VIP Client Services
+          </div>
+          <div style={{ fontSize: '11px', color: '#000', letterSpacing: '1px' }}>
+            1800 ✦✦✦✦
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -32,12 +32,15 @@ function AppInner() {
     return <Home setActiveTab={setCurrentPath} />;
   };
 
+  const isHome = currentPath === '/';
+
   return (
     <div style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
       <NavBar currentPath={currentPath} setCurrentPath={setCurrentPath} />
       <CartDrawer setCurrentPath={setCurrentPath} />
       <ToastNotification />
-      <div style={{ flex: 1, width: '100%' }}>
+      {/* Home page handles its own top padding; other pages need offset for announcement bar (33px) + navbar (~68px) */}
+      <div style={{ flex: 1, width: '100%', paddingTop: isHome ? '0' : '101px' }}>
         {renderPage()}
       </div>
       <Footer setCurrentPath={setCurrentPath} />
