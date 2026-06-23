@@ -4,19 +4,19 @@ const heroSlides = [
   {
     img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1920&auto=format&fit=crop',
     subtitle: 'New Collection',
-    title: 'AUTOMNE 2025',
+    title: 'AUTUMN 2025',
     cta: 'Discover the Collection',
   },
   {
     img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop',
     subtitle: 'Exclusive Campaign',
-    title: 'FEMME ÉTERNELLE',
+    title: 'THE ETERNAL WOMAN',
     cta: 'Explore Now',
   },
   {
     img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop',
     subtitle: 'Resort 2025',
-    title: 'LUMIÈRE DU SUD',
+    title: 'SOUTHERN LIGHT',
     cta: 'View Lookbook',
   },
 ];
@@ -29,7 +29,7 @@ const editorialGrid = [
   },
   {
     img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=900&auto=format&fit=crop',
-    label: 'Rouge Lumière',
+    label: 'Lumière Red',
     sub: 'The art of color',
   },
   {
@@ -199,16 +199,7 @@ const Home = ({ setActiveTab }) => {
           ))}
         </div>
 
-        {/* Scroll indicator */}
-        <div style={{
-          position: 'absolute', bottom: '64px', right: '32px',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-        }}>
-          <div style={{ fontSize: '8px', letterSpacing: '2px', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', writingMode: 'vertical-rl' }}>
-            Scroll
-          </div>
-          <div style={{ width: '1px', height: '40px', backgroundColor: 'rgba(255,255,255,0.35)' }} />
-        </div>
+
       </div>
 
       {/* ─── 2. CATEGORY QUICK LINKS — responsive even grid ─── */}
