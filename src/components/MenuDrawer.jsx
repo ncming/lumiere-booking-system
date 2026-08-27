@@ -25,9 +25,9 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
   const displayedCategories = activeMenuTab === 'fashion' ? fashionCategories : beautyCategories;
 
   const serviceLinks = [
-    { label: "Contact" },
+    { label: "Contact", path: '/contact' },
     { label: "Your Boutique Appointment", path: '/reserve' },
-    { label: "Find your closest boutique" },
+    { label: "Find your closest boutique", path: '/store-locator' },
     { label: "Change country/region: Vietnam (English)" },
   ];
 
@@ -160,7 +160,7 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
           {serviceLinks.map((item, idx) => (
             <div
               key={idx}
-              onClick={() => handleNavigate(item.path || '/explore')}
+              onClick={() => handleNavigate(item.path)}
               style={{
                 padding: '12px 24px',
                 fontSize: '13px', color: idx === 3 ? '#757575' : '#000',
@@ -181,7 +181,7 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
             VIP Client Services
           </div>
           <div style={{ fontSize: '11px', color: '#000', letterSpacing: '1px' }}>
-            1800 ✦✦✦✦
+            0339 708 788
           </div>
         </div>
       </div>

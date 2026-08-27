@@ -26,25 +26,28 @@ const editorialGrid = [
     img: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=900&auto=format&fit=crop',
     label: 'Iconic Handbags',
     sub: 'The new classics',
+    path: '/category/Handbags & Totes',
   },
   {
     img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=900&auto=format&fit=crop',
     label: 'MITU Red',
     sub: 'The art of color',
+    path: '/category/Makeup',
   },
   {
     img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=900&auto=format&fit=crop',
     label: 'Fine Jewelry',
     sub: 'Timeless adornment',
+    path: '/category/Jewelry',
   },
 ];
 
 const categories = [
-  { label: "Women's", img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop' },
-  { label: "Men's",   img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop' },
-  { label: "Bags",    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600&auto=format&fit=crop' },
-  { label: "Jewelry", img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=600&auto=format&fit=crop' },
-  { label: "Beauty",  img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop' },
+  { label: "Women's", img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop', path: "/category/Women's Ready-To-Wear" },
+  { label: "Men's",   img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop', path: "/category/Men's Ready-To-Wear" },
+  { label: "Bags",    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600&auto=format&fit=crop', path: '/category/Handbags & Totes' },
+  { label: "Jewelry", img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=600&auto=format&fit=crop', path: '/category/Jewelry' },
+  { label: "Beauty",  img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop', path: '/category/Fragrance' },
 ];
 
 const Home = ({ setActiveTab }) => {
@@ -221,8 +224,8 @@ const Home = ({ setActiveTab }) => {
               role="button"
               tabIndex={0}
               aria-label={`Browse ${cat.label}`}
-              onClick={() => setActiveTab('/explore')}
-              onKeyDown={e => e.key === 'Enter' && setActiveTab('/explore')}
+              onClick={() => setActiveTab(cat.path)}
+              onKeyDown={e => e.key === 'Enter' && setActiveTab(cat.path)}
               onMouseOver={() => setHoveredCat(i)}
               onMouseOut={() => setHoveredCat(null)}
               style={{ cursor: 'pointer' }}
@@ -278,8 +281,8 @@ const Home = ({ setActiveTab }) => {
               role="button"
               tabIndex={0}
               aria-label={`Explore ${item.label}`}
-              onClick={() => setActiveTab('/explore')}
-              onKeyDown={e => e.key === 'Enter' && setActiveTab('/explore')}
+              onClick={() => setActiveTab(item.path)}
+              onKeyDown={e => e.key === 'Enter' && setActiveTab(item.path)}
               style={{ cursor: 'pointer' }}
             >
               <div style={{ width: '100%', aspectRatio: '3/4', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
@@ -334,7 +337,7 @@ const Home = ({ setActiveTab }) => {
             The Art of<br />Haute Couture
           </h2>
           <button
-            onClick={() => setActiveTab('/explore')}
+            onClick={() => setActiveTab("/category/Women's Ready-To-Wear")}
             style={{
               background: '#fff', border: '1px solid #fff',
               color: '#000', padding: '14px 36px',

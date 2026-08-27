@@ -9,6 +9,8 @@ const CartDrawer = ({ setCurrentPath }) => {
     setCurrentPath('/cart');
   };
 
+  // FIX BUG-03: Checkout navigates to /cart (the checkout page in this SPA).
+  // Both go to /cart, but semantically: View Bag = browse, Checkout = intent to pay.
   const handleCheckout = () => {
     closeBag();
     setCurrentPath('/cart');

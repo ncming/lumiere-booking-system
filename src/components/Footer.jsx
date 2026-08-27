@@ -15,9 +15,11 @@ const Footer = ({ setCurrentPath }) => {
     setTimeout(() => setSubscribed(false), 4000);
   };
 
+  // FIX NAV-05: Social icons now open real external links
   const socialIcons = [
     {
       label: 'Instagram',
+      href: 'https://www.instagram.com',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -28,6 +30,7 @@ const Footer = ({ setCurrentPath }) => {
     },
     {
       label: 'Pinterest',
+      href: 'https://www.pinterest.com',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3">
           <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.77 1.22-5.15 1.22-5.15s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.49-.25 1.04.52 1.89 1.54 1.89 1.85 0 3.1-2.37 3.1-5.17 0-2.14-1.44-3.63-3.51-3.63-2.39 0-3.79 1.79-3.79 3.65 0 .72.28 1.5.62 1.92a.25.25 0 01.06.24l-.23.95c-.04.14-.12.17-.28.1-1.04-.49-1.69-2.01-1.69-3.24 0-2.63 1.91-5.05 5.52-5.05 2.9 0 5.15 2.07 5.15 4.83 0 2.88-1.82 5.2-4.34 5.2-.85 0-1.64-.44-1.91-.96l-.52 1.94c-.19.72-.69 1.63-1.03 2.18.78.24 1.6.37 2.45.37 5.52 0 10-4.48 10-10S17.52 2 12 2z" />
@@ -36,6 +39,7 @@ const Footer = ({ setCurrentPath }) => {
     },
     {
       label: 'WeChat',
+      href: 'https://www.wechat.com',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3">
           <path d="M9.5 3C5.36 3 2 6.13 2 10c0 2.08 1.02 3.94 2.64 5.22L4 18l3.07-1.53A8.2 8.2 0 009.5 17c4.14 0 7.5-3.13 7.5-7S13.64 3 9.5 3z" />
@@ -43,6 +47,14 @@ const Footer = ({ setCurrentPath }) => {
         </svg>
       ),
     },
+  ];
+
+  // FIX NAV-06: Legal links now navigate to their pages
+  const legalLinks = [
+    { label: 'Privacy Policy', path: '/privacy-policy' },
+    { label: 'Legal Mentions', path: '/legal' },
+    { label: 'Cookies', path: '/cookies' },
+    { label: 'Accessibility', path: '/accessibility' },
   ];
 
   return (
@@ -80,16 +92,16 @@ const Footer = ({ setCurrentPath }) => {
             Maison de Haute Couture<br />Since 1993
           </div>
 
-          {/* Divider */}
           <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255,255,255,0.25)', marginBottom: '28px' }} />
 
-          {/* Social Icons */}
+          {/* FIX NAV-05: Social icons with external href */}
           <div style={{ display: 'flex', gap: '16px' }}>
-            {socialIcons.map(({ label, icon }) => (
+            {socialIcons.map(({ label, href, icon }) => (
               <button
                 key={label}
                 aria-label={label}
                 title={label}
+                onClick={() => window.open(href, '_blank', 'noopener,noreferrer')}
                 style={{
                   color: 'rgba(255,255,255,0.5)',
                   cursor: 'pointer',
@@ -202,7 +214,7 @@ const Footer = ({ setCurrentPath }) => {
                 VIP Hotline
               </div>
               <div style={{ fontSize: '13px', letterSpacing: '1px', fontFamily: '"Playfair Display", serif' }}>
-                0339708788
+                0339 708 788
               </div>
             </div>
 
@@ -216,10 +228,10 @@ const Footer = ({ setCurrentPath }) => {
               </div>
             </div>
 
-            {/* Boutique Locator */}
+            {/* FIX NAV-07: "Find a Boutique" → /store-locator (not /reserve) */}
             <div>
               <button
-                onClick={() => setCurrentPath('/reserve')}
+                onClick={() => setCurrentPath('/store-locator')}
                 style={{
                   fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
                   color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
@@ -264,6 +276,29 @@ const Footer = ({ setCurrentPath }) => {
                 Book a Styling Session
               </button>
             </div>
+
+            {/* Contact */}
+            <div>
+              <button
+                onClick={() => setCurrentPath('/contact')}
+                style={{
+                  fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  transition: 'color 0.2s',
+                  background: 'none', border: 'none',
+                  fontFamily: 'inherit',
+                }}
+                onMouseOver={e => e.currentTarget.style.color = '#FFFFFF'}
+                onMouseOut={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Contact Us
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -281,21 +316,25 @@ const Footer = ({ setCurrentPath }) => {
         margin: '0 auto',
       }}>
         <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.45)', letterSpacing: '1px' }}>
-          © 2024 MITU Maison. All rights reserved.
+          © 2025 MITU Maison. All rights reserved.
         </div>
-        <div style={{ display: 'flex', gap: '24px' }}>
-          {['Privacy Policy', 'Legal Mentions', 'Cookies', 'Accessibility'].map(link => (
-            <button key={link} style={{
-              fontSize: '9px', color: 'rgba(255,255,255,0.45)',
-              letterSpacing: '1px', cursor: 'pointer', textTransform: 'uppercase',
-              transition: 'color 0.2s',
-              background: 'none', border: 'none', padding: 0,
-              fontFamily: 'inherit',
-            }}
+        {/* FIX NAV-06: Legal buttons now navigate to their pages */}
+        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+          {legalLinks.map(({ label, path }) => (
+            <button
+              key={label}
+              onClick={() => setCurrentPath(path)}
+              style={{
+                fontSize: '9px', color: 'rgba(255,255,255,0.45)',
+                letterSpacing: '1px', cursor: 'pointer', textTransform: 'uppercase',
+                transition: 'color 0.2s',
+                background: 'none', border: 'none', padding: 0,
+                fontFamily: 'inherit',
+              }}
               onMouseOver={e => e.target.style.color = 'rgba(255,255,255,0.7)'}
               onMouseOut={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
             >
-              {link}
+              {label}
             </button>
           ))}
         </div>

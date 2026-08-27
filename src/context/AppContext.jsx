@@ -3,25 +3,64 @@ import { createContext, useContext, useState, useCallback, useRef, useEffect } f
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-  // Initialize cart from localStorage
+  // ─── Cart ──────────────────────────────────────────────────────────
   const [cartItems, setCartItems] = useState(() => {
     try {
       const saved = localStorage.getItem('mitu-cart');
       return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+    } catch { return []; }
   });
+
+  useEffect(() => {
+    try { localStorage.setItem('mitu-cart', JSON.stringify(cartItems)); }
+    catch { /* quota exceeded */ }
+  }, [cartItems]);
+
+  // ─── Wishlist ──────────────────────────────────────────────────────
+  const [wishlistItems, setWishlistItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mitu-wishlist');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem('mitu-wishlist', JSON.stringify(wishlistItems)); }
+    catch { /* quota exceeded */ }
+  }, [wishlistItems]);
+
+  const addToWishlist = useCallback((product) => {
+    setWishlistItems(prev => {
+      if (prev.find(p => p.id === product.id)) return prev;
+      return [...prev, {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        priceNum: product.priceNum || 0,
+        image: product.image,
+        category: product.category,
+      }];
+    });
+    showToast(`"${product.name}" added to your Wishlist`);
+  }, []); // eslint-disable-line
+
+  const removeFromWishlist = useCallback((productId) => {
+    setWishlistItems(prev => prev.filter(p => p.id !== productId));
+  }, []);
+
+  const isInWishlist = useCallback((productId) => {
+    return wishlistItems.some(p => p.id === productId);
+  }, [wishlistItems]);
+
+  const wishlistCount = wishlistItems.length;
+
+  // ─── Pending Search (search-and-navigate) ────────────────────────
+  const [pendingSearch, setPendingSearch] = useState('');
+
+  // ─── Toast ────────────────────────────────────────────────────────
   const [toast, setToast] = useState({ visible: false, message: '' });
   const [isBagOpen, setIsBagOpen] = useState(false);
   const toastTimerRef = useRef(null);
-
-  // Persist cart to localStorage on every change
-  useEffect(() => {
-    try {
-      localStorage.setItem('mitu-cart', JSON.stringify(cartItems));
-    } catch { /* quota exceeded — ignore */ }
-  }, [cartItems]);
 
   const showToast = useCallback((message) => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
@@ -31,6 +70,7 @@ export const AppProvider = ({ children }) => {
     }, 1800);
   }, []);
 
+  // ─── Cart actions ─────────────────────────────────────────────────
   const addToCart = useCallback((product, selectedOption) => {
     setCartItems(prev => {
       const existingIndex = prev.findIndex(
@@ -38,25 +78,19 @@ export const AppProvider = ({ children }) => {
       );
       if (existingIndex >= 0) {
         const updated = [...prev];
-        updated[existingIndex] = {
-          ...updated[existingIndex],
-          qty: updated[existingIndex].qty + 1,
-        };
+        updated[existingIndex] = { ...updated[existingIndex], qty: updated[existingIndex].qty + 1 };
         return updated;
       }
-      return [
-        ...prev,
-        {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          priceNum: product.priceNum || 0,
-          image: product.image,
-          category: product.category,
-          selectedOption,
-          qty: 1,
-        },
-      ];
+      return [...prev, {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        priceNum: product.priceNum || 0,
+        image: product.image,
+        category: product.category,
+        selectedOption,
+        qty: 1,
+      }];
     });
     showToast(`"${product.name}" added to your Shopping Bag`);
   }, [showToast]);
@@ -92,18 +126,18 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
-      cartItems,
-      toast,
-      isBagOpen,
-      cartCount,
-      cartTotal,
-      addToCart,
-      removeFromCart,
-      updateQty,
-      toggleBag,
-      closeBag,
-      clearCart,
-      showToast,
+      // Cart
+      cartItems, cartCount, cartTotal,
+      addToCart, removeFromCart, updateQty, clearCart,
+      // Wishlist
+      wishlistItems, wishlistCount,
+      addToWishlist, removeFromWishlist, isInWishlist,
+      // Bag drawer
+      isBagOpen, toggleBag, closeBag,
+      // Toast
+      toast, showToast,
+      // Search
+      pendingSearch, setPendingSearch,
     }}>
       {children}
     </AppContext.Provider>

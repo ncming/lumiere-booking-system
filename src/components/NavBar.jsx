@@ -2,22 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import MenuDrawer from './MenuDrawer';
 import { useApp } from '../context/AppContext';
 
-const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
+/* ─── Search Panel ──────────────────────────────────────────────── */
+const SearchPanel = ({ isOpen, onClose, setCurrentPath, setPendingSearch }) => {
   const inputRef = useRef(null);
   const suggestions = ['Wallet', 'Lady bag', 'Lady', 'Card holder', 'Earrings'];
   const youMayLike = [
-    {
-      img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=400&auto=format&fit=crop',
-      label: 'Earrings'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400&auto=format&fit=crop',
-      label: 'Sneakers'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=400&auto=format&fit=crop',
-      label: 'Bag'
-    },
+    { img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=400&auto=format&fit=crop', label: 'Earrings' },
+    { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400&auto=format&fit=crop', label: 'Sneakers' },
+    { img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=400&auto=format&fit=crop', label: 'Bag' },
   ];
 
   useEffect(() => {
@@ -28,11 +20,16 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
-    if (e.key === 'Enter') {
-      onClose();
-      setCurrentPath('/explore');
-    }
+  // FIX BUG-01: Capture input value, store as pending search, then navigate
+  const doSearch = (query) => {
+    const q = query ?? inputRef.current?.value ?? '';
+    setPendingSearch(q.trim());
+    onClose();
+    setCurrentPath('/explore');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') doSearch();
   };
 
   return (
@@ -101,15 +98,16 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
               ref={inputRef}
               type="text"
               placeholder="What are you looking for?"
-              onKeyDown={handleSubmit}
+              onKeyDown={handleKeyDown}
               style={{
                 flex: 1, border: 'none', outline: 'none',
                 fontSize: '14px', color: '#000', background: 'transparent',
                 fontFamily: 'inherit', letterSpacing: '0.2px',
               }}
             />
+            {/* Arrow — submit search */}
             <svg
-              onClick={() => { onClose(); setCurrentPath('/explore'); }}
+              onClick={() => doSearch()}
               style={{ cursor: 'pointer' }}
               width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5"
             >
@@ -119,7 +117,7 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
 
           <div style={{ textAlign: 'right', marginTop: '12px', fontSize: '12px', color: '#757575' }}>
             Search for <span
-              onClick={() => { onClose(); setCurrentPath('/explore'); }}
+              onClick={() => doSearch('Fragrance')}
               style={{ textDecoration: 'underline', cursor: 'pointer', color: '#000' }}
             >Fragrance &amp; Beauty</span> products
           </div>
@@ -133,7 +131,7 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
           {suggestions.map((s, i) => (
             <div
               key={i}
-              onClick={() => { onClose(); setCurrentPath('/explore'); }}
+              onClick={() => doSearch(s)}
               style={{
                 fontSize: '14px', color: '#000', cursor: 'pointer',
                 padding: '7px 0', letterSpacing: '0.1px',
@@ -156,7 +154,7 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
             {youMayLike.map((item, i) => (
               <div
                 key={i}
-                onClick={() => { onClose(); setCurrentPath('/explore'); }}
+                onClick={() => doSearch(item.label)}
                 style={{ flex: 1, cursor: 'pointer' }}
               >
                 <div style={{ aspectRatio: '1/1', overflow: 'hidden', backgroundColor: '#F9F9F9' }}>
@@ -180,10 +178,11 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath }) => {
   );
 };
 
+/* ─── NavBar ────────────────────────────────────────────────────── */
 const NavBar = ({ currentPath, setCurrentPath }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { cartCount, toggleBag } = useApp();
+  const { cartCount, wishlistCount, toggleBag, setPendingSearch } = useApp();
 
   // Auto-hide navbar on scroll down, show on scroll up
   const [visible, setVisible] = useState(true);
@@ -197,16 +196,12 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
       ticking.current = true;
       requestAnimationFrame(() => {
         const currentY = window.scrollY;
-        // Track whether we're past the hero
         setScrolled(currentY > 80);
-        // Always show at top of page
         if (currentY < 60) {
           setVisible(true);
         } else if (currentY > lastScrollY.current + 4) {
-          // Scrolling down — hide
           setVisible(false);
         } else if (currentY < lastScrollY.current - 4) {
-          // Scrolling up — show
           setVisible(true);
         }
         lastScrollY.current = currentY;
@@ -217,13 +212,10 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Always show navbar when a drawer is open
   const isHome = currentPath === '/';
   const hasOverlay = isMenuOpen || isSearchOpen;
   const navVisible = visible || hasOverlay;
 
-  // On home page at top: white icons over dark hero.
-  // Anywhere else (scrolled / other pages): black icons.
   const useDarkIcons = !isHome || scrolled || hasOverlay;
   const color = useDarkIcons ? '#000000' : '#ffffff';
 
@@ -239,7 +231,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
 
   return (
     <>
-      {/* Main Navbar — always transparent, slides up/down */}
+      {/* Main Navbar */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0,
         display: 'flex', flexDirection: 'column',
@@ -251,9 +243,8 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
         {/* Main Menu Bar */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '18px 24px', position: 'relative' }}>
 
-          {/* Left Controls: Hamburger only */}
+          {/* Left: Hamburger */}
           <div style={{ position: 'absolute', left: '24px', display: 'flex', gap: '24px', alignItems: 'center' }}>
-            {/* Hamburger */}
             <button
               onClick={handleOpenMenu}
               style={{
@@ -279,8 +270,9 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
             MITU
           </div>
 
-          {/* Right Controls: Search + Bag */}
+          {/* Right: Search + Wishlist + Bag */}
           <div style={{ position: 'absolute', right: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+
             {/* Search Icon */}
             <button
               onClick={handleToggleSearch}
@@ -293,6 +285,35 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
               >
                 <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
               </svg>
+            </button>
+
+            {/* Wishlist Icon */}
+            <button
+              onClick={() => setCurrentPath('/wishlist')}
+              style={{ cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', background: 'none', border: 'none', padding: 0 }}
+              aria-label="Wishlist"
+              title="Wishlist"
+            >
+              <svg
+                width="19" height="19" viewBox="0 0 24 24" fill="none"
+                stroke={color} strokeWidth="1.5"
+                style={{ transition: 'stroke 0.3s' }}
+              >
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+              {wishlistCount > 0 && (
+                <div style={{
+                  position: 'absolute', top: '-6px', right: '-6px',
+                  width: '16px', height: '16px', borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '8px', fontWeight: '600', letterSpacing: 0,
+                  transition: 'all 0.3s',
+                  backgroundColor: useDarkIcons ? '#000' : '#fff',
+                  color: useDarkIcons ? '#fff' : '#000',
+                }}>
+                  {wishlistCount > 9 ? '9+' : wishlistCount}
+                </div>
+              )}
             </button>
 
             {/* Bag Icon */}
@@ -333,7 +354,12 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
 
       {/* Drawers */}
       <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} setCurrentPath={setCurrentPath} />
-      <SearchPanel isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} setCurrentPath={setCurrentPath} />
+      <SearchPanel
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        setCurrentPath={setCurrentPath}
+        setPendingSearch={setPendingSearch}
+      />
     </>
   );
 };
