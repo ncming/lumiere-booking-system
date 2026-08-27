@@ -10,7 +10,7 @@ const Footer = ({ setCurrentPath }) => {
     e.preventDefault();
     if (!email.trim() || !email.includes('@')) return;
     setSubscribed(true);
-    showToast('✦ You are now subscribed to Lumière Maison');
+    showToast('✦ You are now subscribed to MITU Maison');
     setEmail('');
     setTimeout(() => setSubscribed(false), 4000);
   };
@@ -67,7 +67,7 @@ const Footer = ({ setCurrentPath }) => {
             letterSpacing: '3px',
             marginBottom: '12px',
           }}>
-            Lumière
+            MITU
           </div>
           <div style={{
             fontSize: '9px',
@@ -274,7 +274,7 @@ const Footer = ({ setCurrentPath }) => {
         margin: '0 auto',
       }}>
         <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', letterSpacing: '1px' }}>
-          © 2024 Lumière Maison. All rights reserved.
+          © 2024 MITU Maison. All rights reserved.
         </div>
         <div style={{ display: 'flex', gap: '24px' }}>
           {['Privacy Policy', 'Legal Mentions', 'Cookies', 'Accessibility'].map(link => (

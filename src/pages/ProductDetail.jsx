@@ -299,7 +299,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
             <div style={{ flex: 1, height: '1px', backgroundColor: '#EEEEEE' }} />
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '8px', letterSpacing: '4px', textTransform: 'uppercase', color: '#757575', marginBottom: '4px' }}>
-                Styled by Lumière
+                Styled by MITU
               </div>
               <h2 style={{
                 fontFamily: '"Playfair Display", serif',

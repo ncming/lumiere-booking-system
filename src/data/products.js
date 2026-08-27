@@ -19,7 +19,7 @@ export const PRODUCTS = [
   },
   {
     id: 'dior-book-tote',
-    name: 'Lumière Embroidery Tote',
+    name: 'MITU Embroidery Tote',
     price: '89,000,000₫',
     priceNum: 89000000,
     category: 'Handbags & Totes',
@@ -71,7 +71,7 @@ export const PRODUCTS = [
   },
   {
     id: 'caro-compact-wallet',
-    name: 'Lumière Compact Wallet',
+    name: 'MITU Compact Wallet',
     price: '22,000,000₫',
     priceNum: 22000000,
     category: 'Small Leather Goods',
@@ -259,7 +259,7 @@ export const PRODUCTS = [
   },
   {
     id: 'gris-dior',
-    name: 'Gris Lumière Couture Edition',
+    name: 'Gris MITU Couture Edition',
     price: '7,800,000₫',
     priceNum: 7800000,
     category: 'Fragrance',
@@ -361,8 +361,8 @@ export const PRODUCTS = [
 
   // ================= 9. KIDS & BABY =================
   {
-    id: 'baby-lumiere-stroller',
-    name: 'Lumière Baby Stroller',
+    id: 'baby-mitu-stroller',
+    name: 'MITU Baby Stroller',
     price: '125,000,000₫',
     priceNum: 125000000,
     category: 'Kids & Baby',
@@ -373,7 +373,7 @@ export const PRODUCTS = [
     description: 'An elegant baby stroller featuring the Maison\'s iconic Oblique canvas canopy and luxurious leather detailing.',
     options: ['Navy Blue', 'Beige'],
     details: 'Adjustable leather handle, water-repellent canopy, reversible seat. Includes rain cover.',
-    completeLook: ['baby-lumiere-stroller'],
+    completeLook: ['baby-mitu-stroller'],
   },
   {
     id: 'kids-cotton-dress',
@@ -423,13 +423,13 @@ export const PRODUCTS = [
     completeLook: ['couture-silk-cape'],
   },
 
-  // ================= 11. LUMIÈRE WORLD & FASHION SHOWS =================
+  // ================= 11. MITU WORLD & FASHION SHOWS =================
   {
     id: 'fashion-show-book',
-    name: 'Lumière: The Collections Book',
+    name: 'MITU: The Collections Book',
     price: '4,500,000₫',
     priceNum: 4500000,
-    category: 'Lumière World & Fashion Shows',
+    category: 'MITU World & Fashion Shows',
     image: 'https://images.unsplash.com/photo-1537832816519-689ad163238b?q=80&w=1000&auto=format&fit=crop',
     images: [
       'https://images.unsplash.com/photo-1537832816519-689ad163238b?q=80&w=1000&auto=format&fit=crop',
@@ -444,7 +444,7 @@ export const PRODUCTS = [
     name: 'VIP Fashion Show Experience',
     price: 'Exclusive Invitation',
     priceNum: 0,
-    category: 'Lumière World & Fashion Shows',
+    category: 'MITU World & Fashion Shows',
     image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000&auto=format&fit=crop',
     images: [
       'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000&auto=format&fit=crop',

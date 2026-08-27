@@ -29,7 +29,7 @@ const editorialGrid = [
   },
   {
     img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=900&auto=format&fit=crop',
-    label: 'Lumière Red',
+    label: 'MITU Red',
     sub: 'The art of color',
   },
   {
@@ -354,7 +354,7 @@ const Home = ({ setActiveTab }) => {
           Book a Boutique Appointment
         </h2>
         <p style={{ fontSize: '13px', color: '#757575', maxWidth: '460px', margin: '0 auto 36px', lineHeight: '1.8', letterSpacing: '0.3px' }}>
-          Experience the world of Lumière with a private appointment at your nearest boutique. Our advisors are at your disposal.
+          Experience the world of MITU with a private appointment at your nearest boutique. Our advisors are at your disposal.
         </p>
         <button
           onClick={() => setActiveTab('/reserve')}

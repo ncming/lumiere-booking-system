@@ -276,7 +276,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
               transition: 'color 0.3s', userSelect: 'none',
             }}
           >
-            Lumière
+            MITU
           </div>
 
           {/* Right Controls: Search + Bag */}
