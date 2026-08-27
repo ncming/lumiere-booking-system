@@ -115,6 +115,7 @@ const Home = ({ setActiveTab }) => {
             width: '100%', height: '100%',
             objectFit: 'cover', objectPosition: 'center top',
           }}
+          onError={e => { e.target.style.display = 'none'; }}
         />
 
         {/* Top layer: current image — fades out during transition */}
@@ -128,6 +129,7 @@ const Home = ({ setActiveTab }) => {
             opacity: transitioning ? 0 : 1,
             transition: transitioning ? 'opacity 1.3s ease-in-out' : 'none',
           }}
+          onError={e => { e.target.style.display = 'none'; }}
         />
 
         {/* Gradient overlay — always on top of images */}
@@ -163,6 +165,7 @@ const Home = ({ setActiveTab }) => {
           </h1>
           <button
             onClick={() => setActiveTab('/explore')}
+            aria-label={heroSlides[current].cta}
             style={{
               background: 'transparent', border: '1px solid rgba(255,255,255,0.8)',
               color: '#fff', padding: '14px 40px',
@@ -185,15 +188,17 @@ const Home = ({ setActiveTab }) => {
           display: 'flex', justifyContent: 'center', gap: '10px',
         }}>
           {heroSlides.map((_, i) => (
-            <div
+            <button
               key={i}
               onClick={() => goToSlide(i)}
+              aria-label={`Go to slide ${i + 1}`}
               style={{
                 width: i === current ? '28px' : '6px',
                 height: '1px',
                 backgroundColor: i === current ? '#fff' : 'rgba(255,255,255,0.4)',
                 cursor: 'pointer',
                 transition: 'all 0.4s ease',
+                border: 'none', padding: 0,
               }}
             />
           ))}
@@ -208,16 +213,16 @@ const Home = ({ setActiveTab }) => {
         maxWidth: '1280px',
         margin: '0 auto',
       }}>
-        {/* 5 equal columns, always fill the width */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '16px',
-        }}>
+        {/* Responsive category grid — 2 col mobile, 3 col tablet, 5 col desktop */}
+        <div className="category-grid">
           {categories.map((cat, i) => (
             <div
               key={i}
+              role="button"
+              tabIndex={0}
+              aria-label={`Browse ${cat.label}`}
               onClick={() => setActiveTab('/explore')}
+              onKeyDown={e => e.key === 'Enter' && setActiveTab('/explore')}
               onMouseOver={() => setHoveredCat(i)}
               onMouseOut={() => setHoveredCat(null)}
               style={{ cursor: 'pointer' }}
@@ -230,11 +235,13 @@ const Home = ({ setActiveTab }) => {
                 <img
                   src={cat.img}
                   alt={cat.label}
+                  loading="lazy"
                   style={{
                     width: '100%', height: '100%', objectFit: 'cover',
                     transition: 'transform 0.55s ease',
                     transform: hoveredCat === i ? 'scale(1.05)' : 'scale(1)',
                   }}
+                  onError={e => { e.target.style.display = 'none'; }}
                 />
               </div>
               <div style={{
@@ -263,25 +270,27 @@ const Home = ({ setActiveTab }) => {
           </h2>
         </div>
 
-        {/* Symmetric 3-column grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '20px',
-        }}>
+        {/* Responsive editorial grid — 1 col mobile, 2 col tablet, 3 col desktop */}
+        <div className="editorial-grid">
           {editorialGrid.map((item, i) => (
             <div
               key={i}
+              role="button"
+              tabIndex={0}
+              aria-label={`Explore ${item.label}`}
               onClick={() => setActiveTab('/explore')}
+              onKeyDown={e => e.key === 'Enter' && setActiveTab('/explore')}
               style={{ cursor: 'pointer' }}
             >
               <div style={{ width: '100%', aspectRatio: '3/4', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
                 <img
                   src={item.img}
                   alt={item.label}
+                  loading="lazy"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }}
                   onMouseOver={e => e.currentTarget.style.transform = 'scale(1.04)'}
                   onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                  onError={e => { e.target.style.display = 'none'; }}
                 />
               </div>
               <div style={{ marginTop: '18px' }}>
@@ -301,8 +310,10 @@ const Home = ({ setActiveTab }) => {
       <div style={{ position: 'relative', width: '100%', height: 'clamp(380px, 55vw, 700px)', overflow: 'hidden', backgroundColor: '#1a1a1a' }}>
         <img
           src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1920&auto=format&fit=crop"
-          alt="Women's Fashion"
+          alt="Women's Fashion editorial banner"
+          loading="lazy"
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%' }}
+          onError={e => { e.target.style.display = 'none'; }}
         />
         <div style={{
           position: 'absolute', inset: 0,

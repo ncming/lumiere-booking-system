@@ -1,16 +1,77 @@
-# React + Vite
+# MITU — Maison de Haute Couture
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A luxury fashion e-commerce booking system built with **React** and **Vite**.
 
-Currently, two official plugins are available:
+Browse curated collections, add items to your shopping bag, and book a private styling session at our boutiques.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✦ Features
 
-## React Compiler
+- **Curated Homepage** — Hero slider, editorial grids, and category quick links
+- **Product Catalogue** — Browse by category with search and quick-view modals
+- **Product Detail** — Image zoom, variant selector, "Complete The Look" recommendations
+- **Shopping Bag** — Slide-out cart drawer + full cart page with quantity controls
+- **Cart Persistence** — Cart items saved to `localStorage` (survive page refresh)
+- **Boutique Reservation** — Multi-step booking flow: select boutique → stylist & time → confirm
+- **Toast Notifications** — Glassmorphism feedback for all actions
+- **Responsive Design** — Adaptive grids from mobile (2-col) to desktop (5-col)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✦ Tech Stack
 
-## Expanding the ESLint configuration
+| Layer | Technology |
+|---|---|
+| Framework | React 19 |
+| Bundler | Vite 6 |
+| Styling | Vanilla CSS + CSS Variables |
+| State | React Context API |
+| Typography | Playfair Display + Lato (Google Fonts) |
+| Images | Unsplash CDN |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✦ Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## ✦ Project Structure
+
+```
+src/
+├── App.jsx                 # Root app with SPA routing
+├── main.jsx                # React DOM entry point
+├── index.css               # Global CSS design system
+├── components/
+│   ├── NavBar.jsx           # Fixed navbar with auto-hide, search panel, menu drawer
+│   ├── CartDrawer.jsx       # Slide-out shopping bag drawer
+│   ├── MenuDrawer.jsx       # Full-screen navigation menu
+│   ├── Footer.jsx           # Newsletter, social links, client services
+│   └── ToastNotification.jsx
+├── context/
+│   └── AppContext.jsx       # Global state: cart, toast, bag drawer
+├── data/
+│   └── products.js          # Static product catalogue
+├── pages/
+│   ├── Home.jsx             # Hero slider, categories, editorial, CTA
+│   ├── Explore.jsx          # Product grid with search + quick view
+│   ├── ProductDetail.jsx    # Full product page with zoom + recommendations
+│   ├── Cart.jsx             # Shopping bag page
+│   └── Reserve.jsx          # Multi-step boutique appointment booking
+├── utils/
+│   └── format.js            # Shared price formatting utility
+└── public/
+    ├── favicon.svg          # MITU brand icon
+    └── icons.svg            # UI icon sprite
+```
+
+## ✦ License
+
+This is a demonstration project. All product imagery from [Unsplash](https://unsplash.com).

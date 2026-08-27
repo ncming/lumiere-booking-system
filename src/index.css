@@ -40,6 +40,39 @@ h1, h2, h3, .section-title {
   color: var(--text-primary);
 }
 
+/* ─── Reusable Text Utility Classes ──────────────────────────── */
+.text-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.text-label-sm {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.text-caption {
+  font-size: 8px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.text-product-name {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.text-price {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
 /* ─── Screen utility ──────────────────────────────────────────── */
 .screen { display: none; }
 .screen.active { display: block; }
@@ -58,6 +91,15 @@ h1, h2, h3, .section-title {
 }
 .btn-primary:hover {
   background: #222;
+}
+
+/* Accessible focus styles */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ─── Inputs ─────────────────────────────────────────────────── */
@@ -143,6 +185,59 @@ tr:last-child td { border-bottom: none; }
   }
 }
 
+/* ─── Responsive Category Grid (Home) ────────────────────────── */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 600px) {
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+@media (min-width: 900px) {
+  .category-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+}
+
+/* ─── Responsive Editorial Grid (Home) ───────────────────────── */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 600px) {
+  .editorial-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+@media (min-width: 900px) {
+  .editorial-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ─── Responsive Product Detail Layout ───────────────────────── */
+.product-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 60px);
+}
+@media (min-width: 768px) {
+  .product-detail-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* ─── Toast Animation ────────────────────────────────────────── */
 @keyframes toastSlideUp {
   from {
@@ -206,4 +301,28 @@ tr:last-child td { border-bottom: none; }
 ::selection {
   background: #000;
   color: #fff;
+}
+
+/* ─── Visually Hidden (Accessibility) ────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ─── Image fallback placeholder ─────────────────────────────── */
+.img-fallback {
+  background-color: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  letter-spacing: 1px;
 }

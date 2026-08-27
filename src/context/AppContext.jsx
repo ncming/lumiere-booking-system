@@ -1,12 +1,27 @@
-import { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  // Initialize cart from localStorage
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mitu-cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [toast, setToast] = useState({ visible: false, message: '' });
   const [isBagOpen, setIsBagOpen] = useState(false);
   const toastTimerRef = useRef(null);
+
+  // Persist cart to localStorage on every change
+  useEffect(() => {
+    try {
+      localStorage.setItem('mitu-cart', JSON.stringify(cartItems));
+    } catch { /* quota exceeded — ignore */ }
+  }, [cartItems]);
 
   const showToast = useCallback((message) => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
@@ -69,6 +84,7 @@ export const AppProvider = ({ children }) => {
 
   const clearCart = useCallback(() => {
     setCartItems([]);
+    try { localStorage.removeItem('mitu-cart'); } catch { /* ignore */ }
   }, []);
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.qty, 0);

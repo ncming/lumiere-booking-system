@@ -87,9 +87,11 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
                       <img
                         src={product.image}
                         alt={product.name}
+                        loading="lazy"
                         style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                         onMouseOver={e => e.target.style.transform = 'scale(1.04)'}
                         onMouseOut={e => e.target.style.transform = 'scale(1)'}
+                        onError={e => { e.target.style.display = 'none'; }}
                       />
                     </div>
                     <div style={{ textAlign: 'center', padding: '0 4px' }}>
@@ -114,7 +116,7 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
           <div style={{ width: 'min(100%, 480px)', maxHeight: '88vh', backgroundColor: '#FFFFFF', overflowY: 'auto', padding: '24px 20px', position: 'relative', boxShadow: '0 8px 30px rgba(0,0,0,0.18)' }}>
 
             {/* Close */}
-            <div onClick={() => setActiveModalProduct(null)} style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '20px', cursor: 'pointer', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F5F5' }}>✕</div>
+            <button onClick={() => setActiveModalProduct(null)} aria-label="Close quick view" style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '20px', cursor: 'pointer', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F5F5', border: 'none', color: '#000' }}>✕</button>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
               <div style={{ fontSize: '10px', color: '#757575', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>{activeModalProduct.category}</div>
@@ -122,7 +124,7 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
               <div style={{ fontSize: '14px', marginBottom: '20px', color: '#000' }}>{activeModalProduct.price}</div>
 
               <div style={{ width: '100%', maxWidth: '320px', aspectRatio: '1', backgroundColor: '#F9F9F9', marginBottom: '20px' }}>
-                <img src={activeModalProduct.image} alt={activeModalProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={activeModalProduct.image} alt={activeModalProduct.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
               </div>
 
               {/* Option selector */}

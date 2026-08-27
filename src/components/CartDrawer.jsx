@@ -1,7 +1,5 @@
 import { useApp } from '../context/AppContext';
-
-const formatPrice = (num) =>
-  num === 0 ? '—' : num.toLocaleString('vi-VN') + '₫';
+import { formatPrice } from '../utils/format';
 
 const CartDrawer = ({ setCurrentPath }) => {
   const { cartItems, cartTotal, cartCount, isBagOpen, closeBag, removeFromCart, updateQty } = useApp();
@@ -67,14 +65,15 @@ const CartDrawer = ({ setCurrentPath }) => {
               )}
             </div>
           </div>
-          <div
+          <button
             onClick={closeBag}
-            style={{ cursor: 'pointer', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            aria-label="Close shopping bag"
+            style={{ cursor: 'pointer', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', padding: 0 }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="1.5">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
-          </div>
+          </button>
         </div>
 
         {/* Items List */}
@@ -123,7 +122,7 @@ const CartDrawer = ({ setCurrentPath }) => {
                     width: '70px', height: '90px', flexShrink: 0,
                     backgroundColor: '#F9F9F9', overflow: 'hidden',
                   }}>
-                    <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={item.image} alt={item.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
                   </div>
 
                   {/* Info */}

@@ -1,7 +1,5 @@
 import { useApp } from '../context/AppContext';
-
-const formatPrice = (num) =>
-  num === 0 ? '—' : num.toLocaleString('vi-VN') + '₫';
+import { formatPrice } from '../utils/format';
 
 const Cart = ({ setActiveTab }) => {
   const { cartItems, cartTotal, removeFromCart, updateQty, showToast, clearCart } = useApp();

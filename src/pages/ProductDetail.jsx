@@ -77,14 +77,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
       </div>
 
       {/* Main 2-col layout */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-        gap: '0',
-        maxWidth: '1300px',
-        margin: '0 auto',
-        padding: '0 clamp(16px, 4vw, 60px)',
-      }}>
+      <div className="product-detail-grid">
 
         {/* LEFT: Gallery */}
         <div style={{ paddingRight: 'clamp(0px, 3vw, 48px)' }}>
@@ -114,6 +107,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
                 transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
                 transform: isZoomed ? 'scale(1.8)' : 'scale(1)',
               }}
+              onError={e => { e.target.src = ''; e.target.alt = 'Image unavailable'; e.target.style.display = 'none'; }}
             />
             {/* Zoom hint */}
             {!isZoomed && (
@@ -148,7 +142,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
                     transition: 'border-color 0.2s',
                   }}
                 >
-                  <img src={img} alt={`View ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={img} alt={`View ${i + 1}`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
                 </div>
               ))}
             </div>
@@ -325,12 +319,14 @@ const ProductDetail = ({ productId, setActiveTab }) => {
                 style={{ cursor: 'pointer' }}
               >
                 <div style={{ width: '100%', aspectRatio: '4/5', backgroundColor: '#F9F9F9', overflow: 'hidden', marginBottom: '12px' }}>
-                  <img
+                <img
                     src={p.image}
                     alt={p.name}
+                    loading="lazy"
                     style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                     onMouseOver={e => e.target.style.transform = 'scale(1.04)'}
                     onMouseOut={e => e.target.style.transform = 'scale(1)'}
+                    onError={e => { e.target.style.display = 'none'; }}
                   />
                 </div>
                 <div style={{ textAlign: 'center', padding: '0 4px' }}>

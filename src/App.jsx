@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppProvider } from './context/AppContext';
 import NavBar from './components/NavBar';
 import CartDrawer from './components/CartDrawer';
@@ -12,6 +12,11 @@ import ProductDetail from './pages/ProductDetail';
 
 function AppInner() {
   const [currentPath, setCurrentPath] = useState('/');
+
+  // Scroll to top on every route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [currentPath]);
 
   const renderPage = () => {
     if (currentPath === '/') return <Home setActiveTab={setCurrentPath} />;
