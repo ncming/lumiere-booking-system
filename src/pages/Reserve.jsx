@@ -1,24 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { BOUTIQUES } from '../data/boutiques';
 
-const BOUTIQUES = [
-  {
-    id: 'trang-tien',
-    name: 'Tràng Tiền Plaza',
-    address: '24 Hai Bà Trưng, Hoàn Kiếm, Hà Nội',
-    phone: '(024) 3936 ✦✦✦✦',
-    hours: 'Daily 9:30 — 21:00',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'dong-khoi',
-    name: 'Đồng Khởi',
-    address: '92 Đồng Khởi, Bến Nghé, Quận 1, TP.HCM',
-    phone: '(028) 3822 ✦✦✦✦',
-    hours: 'Daily 9:30 — 21:00',
-    image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?q=80&w=800&auto=format&fit=crop',
-  },
-];
 
 const STYLISTS = [
   {
@@ -70,10 +53,14 @@ const Reserve = ({ setActiveTab }) => {
   const [clientPhone, setClientPhone] = useState('');
   const [confirmed, setConfirmed] = useState(false);
 
+  // FIX BUG-04: Validate name and phone before confirming
   const handleConfirm = () => {
+    if (!clientName.trim() || !clientPhone.trim()) return;
     setConfirmed(true);
     showToast('✦ Your appointment has been confirmed. See you soon.');
   };
+
+  const canConfirm = clientName.trim() !== '' && clientPhone.trim() !== '';
 
   const stepLabel = ['', 'Select Boutique', 'Your Stylist & Time', 'Confirm'];
 
@@ -415,7 +402,17 @@ const Reserve = ({ setActiveTab }) => {
               </button>
               <button
                 onClick={handleConfirm}
-                style={{ padding: '14px 40px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
+                disabled={!canConfirm}
+                title={!canConfirm ? 'Please enter your name and phone number' : ''}
+                style={{
+                  padding: '14px 40px',
+                  backgroundColor: canConfirm ? '#000' : '#E0E0E0',
+                  color: canConfirm ? '#fff' : '#BDBDBD',
+                  border: 'none', fontSize: '10px', letterSpacing: '2px',
+                  textTransform: 'uppercase',
+                  cursor: canConfirm ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.25s',
+                }}
               >
                 Confirm Appointment
               </button>

@@ -4,7 +4,8 @@ import { useApp } from '../context/AppContext';
 
 const ProductDetail = ({ productId, setActiveTab }) => {
   const product = PRODUCTS.find(p => p.id === productId);
-  const { addToCart, toggleBag } = useApp();
+  const { addToCart, toggleBag, addToWishlist, removeFromWishlist, isInWishlist } = useApp();
+  const inWishlist = isInWishlist(product?.id);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
@@ -220,6 +221,31 @@ const ProductDetail = ({ productId, setActiveTab }) => {
             Add To Shopping Bag
           </button>
 
+          {/* Wishlist button */}
+          <button
+            onClick={() => inWishlist ? removeFromWishlist(product.id) : addToWishlist(product)}
+            style={{
+              width: '100%', padding: '15px',
+              backgroundColor: inWishlist ? '#000' : '#FFFFFF',
+              color: inWishlist ? '#fff' : '#000',
+              border: `1px solid ${inWishlist ? '#000' : '#E0E0E0'}`,
+              fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
+              cursor: 'pointer', marginBottom: '12px',
+              transition: 'all 0.25s',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            }}
+            onMouseOver={e => { if (!inWishlist) e.currentTarget.style.borderColor = '#000'; }}
+            onMouseOut={e => { if (!inWishlist) e.currentTarget.style.borderColor = '#E0E0E0'; }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24"
+              fill={inWishlist ? '#fff' : 'none'}
+              stroke={inWishlist ? '#fff' : '#000'} strokeWidth="1.5"
+            >
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+            {inWishlist ? 'Saved to Wishlist' : 'Add to Wishlist'}
+          </button>
+
           {/* Reserve Appointment */}
           <button
             onClick={() => setActiveTab('/reserve')}
@@ -230,8 +256,8 @@ const ProductDetail = ({ productId, setActiveTab }) => {
               cursor: 'pointer', marginBottom: '28px',
               transition: 'border-color 0.2s',
             }}
-            onMouseOver={e => { e.target.style.borderColor = '#000'; }}
-            onMouseOut={e => { e.target.style.borderColor = '#E0E0E0'; }}
+            onMouseOver={e => { e.currentTarget.style.borderColor = '#000'; }}
+            onMouseOut={e => { e.currentTarget.style.borderColor = '#E0E0E0'; }}
           >
             ✦ Book a Styling Session
           </button>
