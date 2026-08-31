@@ -262,8 +262,11 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
           <div
             onClick={() => setCurrentPath('/')}
             style={{
-              fontFamily: '"Playfair Display", serif', fontSize: '28px',
-              fontWeight: '400', letterSpacing: '3px', cursor: 'pointer', color: color,
+              fontFamily: '"Playfair Display", serif',
+              fontSize: 'clamp(28px, 3.5vw, 44px)',
+              fontWeight: '400',
+              letterSpacing: 'clamp(3px, 0.6vw, 10px)',
+              cursor: 'pointer', color: color,
               transition: 'color 0.3s', userSelect: 'none',
             }}
           >

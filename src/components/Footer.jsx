@@ -74,9 +74,9 @@ const Footer = ({ setCurrentPath }) => {
         <div>
           <div style={{
             fontFamily: '"Playfair Display", serif',
-            fontSize: '28px',
+            fontSize: 'clamp(28px, 3.5vw, 44px)',
             fontWeight: '400',
-            letterSpacing: '3px',
+            letterSpacing: 'clamp(3px, 0.6vw, 10px)',
             marginBottom: '12px',
           }}>
             MITU
