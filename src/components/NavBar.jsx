@@ -249,7 +249,9 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
               onClick={handleOpenMenu}
               style={{
                 cursor: 'pointer', display: 'flex', flexDirection: 'column',
-                gap: '5px', background: 'none', border: 'none', padding: 0,
+                gap: '5px', background: 'none', border: 'none',
+                padding: '14px 16px',   /* large hit area ~50×48px */
+                margin: '-14px -16px',  /* pull back so visual position unchanged */
               }}
               aria-label="Open menu"
             >

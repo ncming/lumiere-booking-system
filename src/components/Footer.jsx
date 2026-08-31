@@ -60,7 +60,7 @@ const Footer = ({ setCurrentPath }) => {
   return (
     <footer style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF' }}>
 
-      {/* Top section */}
+      {/* Top section — centered, original layout */}
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -82,7 +82,7 @@ const Footer = ({ setCurrentPath }) => {
             MITU
           </div>
           <div style={{
-            fontSize: '9px',
+            fontSize: 'clamp(9px, 0.75vw, 11px)',
             letterSpacing: '3px',
             textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.45)',
@@ -121,14 +121,14 @@ const Footer = ({ setCurrentPath }) => {
         {/* Col 2 — Newsletter */}
         <div>
           <div style={{
-            fontSize: '8px', letterSpacing: '4px',
+            fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '4px',
             textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
             marginBottom: '16px',
           }}>
             Newsletter
           </div>
           <div style={{
-            fontSize: '18px',
+            fontSize: 'clamp(18px, 2vw, 26px)',
             fontFamily: '"Playfair Display", serif',
             fontWeight: '400',
             letterSpacing: '1px',
@@ -138,7 +138,7 @@ const Footer = ({ setCurrentPath }) => {
             Receive exclusive news from the Maison
           </div>
           <div style={{
-            fontSize: '10px', color: 'rgba(255,255,255,0.4)',
+            fontSize: 'clamp(10px, 0.9vw, 13px)', color: 'rgba(255,255,255,0.4)',
             lineHeight: 1.7, marginBottom: '24px',
           }}>
             New collections, private events, and client privileges — delivered first to you.
@@ -147,7 +147,7 @@ const Footer = ({ setCurrentPath }) => {
           {subscribed ? (
             <div style={{
               padding: '14px 0',
-              fontSize: '10px',
+              fontSize: 'clamp(10px, 0.9vw, 13px)',
               letterSpacing: '2px',
               color: 'rgba(255,255,255,0.6)',
               borderBottom: '1px solid rgba(255,255,255,0.2)',
@@ -168,7 +168,7 @@ const Footer = ({ setCurrentPath }) => {
                     border: 'none',
                     outline: 'none',
                     color: '#FFFFFF',
-                    fontSize: '11px',
+                    fontSize: 'clamp(11px, 0.9vw, 13px)',
                     letterSpacing: '0.5px',
                     padding: '10px 0',
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -181,7 +181,7 @@ const Footer = ({ setCurrentPath }) => {
                     border: 'none',
                     color: '#FFFFFF',
                     cursor: 'pointer',
-                    fontSize: '9px',
+                    fontSize: 'clamp(9px, 0.8vw, 11px)',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
                     padding: '10px 0 10px 16px',
@@ -200,7 +200,7 @@ const Footer = ({ setCurrentPath }) => {
         {/* Col 3 — Client Services */}
         <div>
           <div style={{
-            fontSize: '8px', letterSpacing: '4px',
+            fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '4px',
             textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
             marginBottom: '16px',
           }}>
@@ -210,30 +210,30 @@ const Footer = ({ setCurrentPath }) => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Hotline */}
             <div>
-              <div style={{ fontSize: '8px', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
                 VIP Hotline
               </div>
-              <div style={{ fontSize: '13px', letterSpacing: '1px', fontFamily: '"Playfair Display", serif' }}>
+              <div style={{ fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '1px', fontFamily: '"Playfair Display", serif' }}>
                 0339 708 788
               </div>
             </div>
 
             {/* Hours */}
             <div>
-              <div style={{ fontSize: '8px', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
                 Opening Hours
               </div>
-              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
+              <div style={{ fontSize: 'clamp(10px, 0.9vw, 13px)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
                 Monday – Sunday<br />9:30 AM – 9:00 PM
               </div>
             </div>
 
-            {/* FIX NAV-07: "Find a Boutique" → /store-locator (not /reserve) */}
+            {/* FIX NAV-07: Find a Boutique → /store-locator */}
             <div>
               <button
                 onClick={() => setCurrentPath('/store-locator')}
                 style={{
-                  fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
+                  fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
                   color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: '8px',
                   paddingTop: '4px',
@@ -257,7 +257,7 @@ const Footer = ({ setCurrentPath }) => {
               <button
                 onClick={() => setCurrentPath('/reserve')}
                 style={{
-                  fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
+                  fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
                   color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: '8px',
                   transition: 'color 0.2s',
@@ -282,7 +282,7 @@ const Footer = ({ setCurrentPath }) => {
               <button
                 onClick={() => setCurrentPath('/contact')}
                 style={{
-                  fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
+                  fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
                   color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: '8px',
                   transition: 'color 0.2s',
@@ -303,7 +303,7 @@ const Footer = ({ setCurrentPath }) => {
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — original centered layout */}
       <div style={{
         borderTop: '1px solid rgba(255,255,255,0.08)',
         padding: '20px clamp(20px, 5vw, 60px)',
@@ -315,7 +315,7 @@ const Footer = ({ setCurrentPath }) => {
         maxWidth: '1200px',
         margin: '0 auto',
       }}>
-        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.45)', letterSpacing: '1px' }}>
+        <div style={{ fontSize: 'clamp(9px, 0.75vw, 12px)', color: 'rgba(255,255,255,0.45)', letterSpacing: '1px' }}>
           © 2025 MITU Maison. All rights reserved.
         </div>
         {/* FIX NAV-06: Legal buttons now navigate to their pages */}
@@ -325,7 +325,7 @@ const Footer = ({ setCurrentPath }) => {
               key={label}
               onClick={() => setCurrentPath(path)}
               style={{
-                fontSize: '9px', color: 'rgba(255,255,255,0.45)',
+                fontSize: 'clamp(9px, 0.75vw, 12px)', color: 'rgba(255,255,255,0.45)',
                 letterSpacing: '1px', cursor: 'pointer', textTransform: 'uppercase',
                 transition: 'color 0.2s',
                 background: 'none', border: 'none', padding: 0,
