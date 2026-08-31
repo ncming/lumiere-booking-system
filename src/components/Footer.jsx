@@ -70,7 +70,7 @@ const Footer = ({ setCurrentPath }) => {
             marginBottom: '28px',
             lineHeight: 1.8,
           }}>
-            Maison de Haute Couture<br />Since 1993
+            Maison de Haute Couture<br />Since 2025
           </div>
 
           <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255,255,255,0.25)', marginBottom: '28px' }} />
