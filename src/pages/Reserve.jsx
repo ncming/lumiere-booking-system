@@ -66,7 +66,7 @@ const Reserve = ({ setActiveTab }) => {
 
   if (confirmed) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', paddingTop: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 20px' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', paddingTop: '68px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 20px' }}>
         <div style={{ textAlign: 'center', maxWidth: '480px' }}>
           {/* Icon */}
           <div style={{ width: '80px', height: '80px', margin: '0 auto 32px', border: '1px solid #000', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -105,7 +105,7 @@ const Reserve = ({ setActiveTab }) => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', paddingTop: '80px', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', paddingTop: '68px', paddingBottom: '80px' }}>
 
       {/* Page Header */}
       <div style={{ textAlign: 'center', padding: 'clamp(32px, 5vw, 56px) 20px 0' }}>

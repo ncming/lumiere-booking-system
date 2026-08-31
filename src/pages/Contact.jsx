@@ -51,7 +51,7 @@ const Contact = ({ setActiveTab }) => {
   const errorStyle = { fontSize: '9px', letterSpacing: '1px', color: '#C00000', marginTop: '4px' };
 
   return (
-    <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingTop: '68px', paddingBottom: '80px' }}>
 
       {/* Hero Header */}
       <div style={{

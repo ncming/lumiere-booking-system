@@ -13,7 +13,7 @@ const Cart = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="screen active" style={{ paddingBottom: '80px', width: '100%', paddingTop: '80px' }}>
+    <div className="screen active" style={{ paddingBottom: '80px', width: '100%', paddingTop: '68px' }}>
 
       <div style={{ padding: '20px', textAlign: 'center', borderBottom: '1px solid #EEEEEE' }}>
         <h2 style={{ fontSize: '18px', fontWeight: '400', letterSpacing: '2px' }}>SHOPPING BAG</h2>

@@ -63,7 +63,7 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
   };
 
   return (
-    <div style={{ paddingBottom: '80px', width: '100%', paddingTop: '80px', backgroundColor: '#FFFFFF' }}>
+    <div style={{ paddingBottom: '80px', width: '100%', paddingTop: '68px', backgroundColor: '#FFFFFF' }}>
 
       {/* Category Header */}
       <div style={{ padding: '20px 20px 10px', borderBottom: '1px solid #EEEEEE', textAlign: 'center' }}>

@@ -116,7 +116,7 @@ const LegalPage = ({ type = 'privacy', setActiveTab }) => {
   const content = LEGAL_CONTENT[type] || LEGAL_CONTENT.privacy;
 
   return (
-    <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingTop: '68px', paddingBottom: '80px' }}>
 
       {/* Header */}
       <div style={{

@@ -2,7 +2,7 @@ import { BOUTIQUES } from '../data/boutiques';
 
 const StoreLocator = ({ setActiveTab }) => {
   return (
-    <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingTop: '68px', paddingBottom: '80px' }}>
 
       {/* Header */}
       <div style={{

@@ -7,7 +7,7 @@ const NotFound = ({ setActiveTab }) => {
       alignItems: 'center',
       justifyContent: 'center',
       textAlign: 'center',
-      padding: '40px 24px',
+      padding: '80px 24px 40px',
       backgroundColor: '#FFFFFF',
     }}>
       {/* Large 404 */}

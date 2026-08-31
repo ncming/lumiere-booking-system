@@ -15,7 +15,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
 
   if (!product) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '80px' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '68px' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#757575', marginBottom: '16px' }}>PRODUCT NOT FOUND</div>
           <button onClick={() => setActiveTab('/explore')} style={{ padding: '12px 28px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}>
@@ -50,7 +50,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', paddingTop: '80px', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF', paddingTop: '68px', paddingBottom: '80px' }}>
 
       {/* Breadcrumb */}
       <div style={{ padding: '20px clamp(16px, 4vw, 60px)', display: 'flex', alignItems: 'center', gap: '8px' }}>

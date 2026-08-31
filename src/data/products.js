@@ -332,9 +332,9 @@ export const PRODUCTS = [
     price: '9,800,000₫',
     priceNum: 9800000,
     category: 'Skincare',
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=1000&auto=format&fit=crop',
     images: [
-      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop',
     ],
     description: 'Concentrated in Rose de Granville sap. Repairs the skin barrier and visibly lifts contours.',
@@ -351,7 +351,7 @@ export const PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop',
     images: [
       'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=1000&auto=format&fit=crop',
     ],
     description: 'Global age-defying rich cream that wraps the skin in comfort and intense nourishment.',
     options: ['50 ml Refillable'],
