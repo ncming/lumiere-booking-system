@@ -1,8 +1,72 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
+import { api } from '../services/api';
 
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
+  // ─── Authentication ────────────────────────────────────────────────
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
+
+  // Verify token on mount
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token && !user) {
+      // Try to get user info
+      api.getMe()
+        .then(data => {
+          setUser(data.user);
+        })
+        .catch(() => {
+          // Token invalid, clear
+          api.clearToken();
+          setUser(null);
+        });
+    }
+  }, [user]);
+
+  const login = useCallback(async (email, password) => {
+    setIsAuthLoading(true);
+    try {
+      const data = await api.login(email, password);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsAuthLoading(false);
+    }
+  }, []);
+
+  const register = useCallback(async (userData) => {
+    setIsAuthLoading(true);
+    try {
+      const data = await api.register(userData);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsAuthLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    api.logout();
+    setUser(null);
+  }, []);
+
+  const isAuthenticated = !!user;
+  const isAdmin = user?.role === 'ADMIN';
+
   // ─── Toast (defined first so other callbacks can depend on it) ────
   const [toast, setToast] = useState({ visible: false, message: '' });
   const toastTimerRef = useRef(null);
@@ -127,6 +191,9 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
+      // Authentication
+      user, isAuthenticated, isAdmin, isAuthLoading,
+      login, register, logout,
       // Cart
       cartItems, cartCount, cartTotal,
       addToCart, removeFromCart, updateQty, clearCart,

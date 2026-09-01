@@ -13,6 +13,8 @@ import Contact from './pages/Contact';
 import Wishlist from './pages/Wishlist';
 import StoreLocator from './pages/StoreLocator';
 import LegalPage from './pages/LegalPage';
+import Auth from './pages/Auth';
+import MyBookings from './pages/MyBookings';
 import NotFound from './pages/NotFound';
 
 function AppInner() {
@@ -25,6 +27,8 @@ function AppInner() {
 
   const renderPage = () => {
     if (currentPath === '/') return <Home setActiveTab={setCurrentPath} />;
+    if (currentPath === '/auth') return <Auth setActiveTab={setCurrentPath} />;
+    if (currentPath === '/my-bookings') return <MyBookings setActiveTab={setCurrentPath} />;
     if (currentPath === '/cart') return <Cart setActiveTab={setCurrentPath} />;
     if (currentPath === '/reserve') return <Reserve setActiveTab={setCurrentPath} />;
     if (currentPath === '/explore') return <Explore selectedCategory="ALL" setActiveTab={setCurrentPath} />;

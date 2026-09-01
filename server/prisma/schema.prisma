@@ -1,0 +1,199 @@
+// Lumiere Booking System - Database Schema
+// Prisma ORM Configuration
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ────────────────────────────────────────────────────────────
+// USER & AUTHENTICATION
+// ────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  phone         String?
+  passwordHash  String
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  bookings      Booking[]
+  orders        Order[]
+  
+  @@index([email])
+}
+
+enum Role {
+  USER
+  ADMIN
+  STYLIST
+}
+
+// ────────────────────────────────────────────────────────────
+// PRODUCTS & INVENTORY
+// ────────────────────────────────────────────────────────────
+
+model Product {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String    @db.Text
+  category    String
+  price       Float
+  images      String[]  // Array of image URLs
+  inStock     Boolean   @default(true)
+  featured    Boolean   @default(false)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  variants    Variant[]
+  orderItems  OrderItem[]
+  
+  @@index([category])
+  @@index([slug])
+}
+
+model Variant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  size      String  // "XS", "S", "M", "L", "XL", "ONE SIZE"
+  color     String? // Optional color variant
+  stock     Int     @default(0)
+  
+  @@unique([productId, size, color])
+  @@index([productId])
+}
+
+// ────────────────────────────────────────────────────────────
+// BOOKINGS (Appointment System)
+// ────────────────────────────────────────────────────────────
+
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Boutique Info (matched with BOUTIQUES in data/boutiques.js)
+  boutiqueId  String        // "hcm-dong-khoi", "hn-trang-tien", etc.
+  boutiqueName String?      // Cache for display
+  
+  // Stylist Info (matched with STYLISTS array)
+  stylistId   String        // "s1", "s2", "s3", etc.
+  stylistName String?       // Cache for display
+  
+  // Appointment Details
+  date        DateTime
+  timeSlot    String        // "10:00", "14:30", etc.
+  occasion    String?       // "Personal Styling", "Gift Selection", etc.
+  
+  // Status Management
+  status      BookingStatus @default(PENDING)
+  notes       String?       @db.Text
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@index([userId])
+  @@index([date])
+  @@index([status])
+  @@unique([boutiqueId, date, timeSlot])  // Prevent double booking
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ────────────────────────────────────────────────────────────
+// ORDERS (E-commerce System)
+// ────────────────────────────────────────────────────────────
+
+model Order {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Order Items
+  items         OrderItem[]
+  
+  // Pricing
+  subtotal      Float
+  shippingFee   Float       @default(0)
+  tax           Float       @default(0)
+  totalAmount   Float
+  
+  // Status & Payment
+  status        OrderStatus @default(PENDING)
+  paymentMethod String?     // "credit_card", "bank_transfer", etc.
+  paymentId     String?     // Payment gateway transaction ID
+  paidAt        DateTime?
+  
+  // Shipping Info
+  shippingAddress String?   @db.Text
+  shippingPhone   String?
+  trackingNumber  String?
+  
+  // Timestamps
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  completedAt   DateTime?
+  
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  // Item Details (snapshot at time of order)
+  productName String
+  size        String?
+  color       String?
+  quantity    Int
+  price       Float   // Price per unit at time of purchase
+  
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ────────────────────────────────────────────────────────────
+// ADMIN & ANALYTICS (Future Enhancement)
+// ────────────────────────────────────────────────────────────
+
+// Placeholder for future features:
+// - Newsletter subscribers
+// - Wishlist items
+// - Product reviews
+// - Loyalty points
+// - Admin activity logs
