@@ -53,14 +53,41 @@ const Reserve = ({ setActiveTab }) => {
   const [clientPhone, setClientPhone] = useState('');
   const [confirmed, setConfirmed] = useState(false);
 
+  // Format phone number: only digits, auto-format to XXX XXX XXXX
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    // Remove all non-digit characters
+    const digits = value.replace(/\D/g, '');
+    
+    // Limit to 10 digits (standard Vietnamese phone)
+    const limitedDigits = digits.slice(0, 10);
+    
+    // Format: XXXX XXX XXX (for 10 digits)
+    let formatted = '';
+    if (limitedDigits.length > 0) {
+      formatted = limitedDigits.slice(0, 4);
+      if (limitedDigits.length > 4) {
+        formatted += ' ' + limitedDigits.slice(4, 7);
+      }
+      if (limitedDigits.length > 7) {
+        formatted += ' ' + limitedDigits.slice(7, 10);
+      }
+    }
+    
+    setClientPhone(formatted);
+  };
+
   // FIX BUG-04: Validate name and phone before confirming
   const handleConfirm = () => {
-    if (!clientName.trim() || !clientPhone.trim()) return;
+    // Validate phone has at least 10 digits
+    const phoneDigits = clientPhone.replace(/\D/g, '');
+    if (!clientName.trim() || phoneDigits.length < 10) return;
     setConfirmed(true);
     showToast('✦ Your appointment has been confirmed. See you soon.');
   };
 
-  const canConfirm = clientName.trim() !== '' && clientPhone.trim() !== '';
+  const phoneDigits = clientPhone.replace(/\D/g, '');
+  const canConfirm = clientName.trim() !== '' && phoneDigits.length === 10;
 
   const stepLabel = ['', 'Select Boutique', 'Your Stylist & Time', 'Confirm'];
 
@@ -375,9 +402,12 @@ const Reserve = ({ setActiveTab }) => {
                 />
                 <input
                   type="tel"
-                  placeholder="Phone Number"
+                  placeholder="Phone Number (e.g., 0901 234 567)"
                   value={clientPhone}
-                  onChange={e => setClientPhone(e.target.value)}
+                  onChange={handlePhoneChange}
+                  inputMode="numeric"
+                  pattern="[0-9\s]*"
+                  maxLength="12"
                   style={{ border: 'none', borderBottom: '1px solid #E0E0E0', padding: '10px 0', fontSize: '11px', outline: 'none', background: 'transparent', letterSpacing: '0.5px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
                 />
               </div>
@@ -403,7 +433,7 @@ const Reserve = ({ setActiveTab }) => {
               <button
                 onClick={handleConfirm}
                 disabled={!canConfirm}
-                title={!canConfirm ? 'Please enter your name and phone number' : ''}
+                title={!canConfirm ? 'Please enter your name and a valid 10-digit phone number' : ''}
                 style={{
                   padding: '14px 40px',
                   backgroundColor: canConfirm ? '#000' : '#E0E0E0',
