@@ -39,8 +39,6 @@ export const AppProvider = ({ children }) => {
       const data = await api.login(email, password);
       setUser(data.user);
       return data;
-    } catch (error) {
-      throw error;
     } finally {
       setIsAuthLoading(false);
     }
@@ -52,8 +50,6 @@ export const AppProvider = ({ children }) => {
       const data = await api.register(userData);
       setUser(data.user);
       return data;
-    } catch (error) {
-      throw error;
     } finally {
       setIsAuthLoading(false);
     }
@@ -212,6 +208,7 @@ export const AppProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useApp = () => {
   const ctx = useContext(AppContext);
   if (!ctx) throw new Error('useApp must be used within AppProvider');

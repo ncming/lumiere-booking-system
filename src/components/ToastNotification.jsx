@@ -7,6 +7,7 @@ const ToastNotification = () => {
 
   useEffect(() => {
     if (toast.visible) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsAnimating(true);
     } else {
       const t = setTimeout(() => setIsAnimating(false), 350);

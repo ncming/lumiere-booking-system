@@ -59,9 +59,8 @@ class ApiClient {
     } catch (error) {
       // Network errors
       if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
-        throw new Error('Unable to connect to server. Please check your connection.');
+        throw new Error('Unable to connect to server. Please check your connection.', { cause: error });
       }
-
       throw error;
     }
   }

@@ -67,7 +67,7 @@ export async function uploadImage(imageData, options = {}) {
     };
   } catch (error) {
     console.error('Upload image error:', error);
-    throw new Error(`Failed to upload image: ${error.message}`);
+    throw new Error(`Failed to upload image: ${error.message}`, { cause: error });
   }
 }
 

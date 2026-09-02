@@ -16,6 +16,7 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
   // FIX BUG-01: On mount, pick up search query set by NavBar and apply it locally
   useEffect(() => {
     if (pendingSearch) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchQuery(pendingSearch);
       setPendingSearch(''); // clear after consuming so it doesn't persist
     }

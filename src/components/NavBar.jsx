@@ -178,11 +178,258 @@ const SearchPanel = ({ isOpen, onClose, setCurrentPath, setPendingSearch }) => {
   );
 };
 
+/* ─── User Menu Dropdown ──────────────────────────────────────────── */
+const UserMenu = ({ isOpen, onClose, user, isAuthenticated, logout, setCurrentPath }) => {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const handleNavigation = (path) => {
+    setCurrentPath(path);
+    onClose();
+  };
+
+  const handleLogout = () => {
+    logout();
+    onClose();
+    setCurrentPath('/');
+  };
+
+  if (!isAuthenticated) {
+    // Not logged in - show login/register
+    return (
+      <div
+        ref={menuRef}
+        style={{
+          position: 'absolute',
+          top: 'calc(100% + 12px)',
+          right: 0,
+          backgroundColor: '#FFFFFF',
+          border: '1px solid #E0E0E0',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+          minWidth: '240px',
+          zIndex: 1000,
+        }}
+      >
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #F0F0F0' }}>
+          <div style={{ fontSize: '13px', fontWeight: '600', letterSpacing: '0.5px', marginBottom: '6px' }}>
+            Welcome to Lumiere
+          </div>
+          <div style={{ fontSize: '10px', color: '#757575', lineHeight: 1.6 }}>
+            Sign in to access your account
+          </div>
+        </div>
+
+        <div style={{ padding: '12px 0' }}>
+          <button
+            onClick={() => handleNavigation('/auth')}
+            style={{
+              width: '100%',
+              padding: '12px 24px',
+              border: 'none',
+              background: 'none',
+              textAlign: 'left',
+              fontSize: '12px',
+              letterSpacing: '0.5px',
+              cursor: 'pointer',
+              color: '#000',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={e => e.target.style.backgroundColor = '#F9F9F9'}
+            onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+          >
+            Sign In
+          </button>
+          <button
+            onClick={() => handleNavigation('/auth')}
+            style={{
+              width: '100%',
+              padding: '12px 24px',
+              border: 'none',
+              background: 'none',
+              textAlign: 'left',
+              fontSize: '12px',
+              letterSpacing: '0.5px',
+              cursor: 'pointer',
+              color: '#000',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={e => e.target.style.backgroundColor = '#F9F9F9'}
+            onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+          >
+            Create Account
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Logged in - show user menu
+  return (
+    <div
+      ref={menuRef}
+      style={{
+        position: 'absolute',
+        top: 'calc(100% + 12px)',
+        right: 0,
+        backgroundColor: '#FFFFFF',
+        border: '1px solid #E0E0E0',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+        minWidth: '260px',
+        zIndex: 1000,
+      }}
+    >
+      {/* User Info */}
+      <div style={{ padding: '20px 24px', borderBottom: '1px solid #F0F0F0' }}>
+        <div style={{ fontSize: '13px', fontWeight: '600', letterSpacing: '0.5px', marginBottom: '4px' }}>
+          {user?.name || 'User'}
+        </div>
+        <div style={{ fontSize: '10px', color: '#757575', lineHeight: 1.4 }}>
+          {user?.email}
+        </div>
+        {user?.role === 'ADMIN' && (
+          <div style={{
+            display: 'inline-block',
+            marginTop: '8px',
+            padding: '4px 8px',
+            backgroundColor: '#000',
+            color: '#fff',
+            fontSize: '8px',
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+          }}>
+            Admin
+          </div>
+        )}
+      </div>
+
+      {/* Menu Items */}
+      <div style={{ padding: '8px 0' }}>
+        <MenuItem
+          icon={
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          }
+          label="My Bookings"
+          onClick={() => handleNavigation('/my-bookings')}
+        />
+        <MenuItem
+          icon={
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+            </svg>
+          }
+          label="My Orders"
+          onClick={() => handleNavigation('/my-orders')}
+        />
+        <MenuItem
+          icon={
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+          }
+          label="Wishlist"
+          onClick={() => handleNavigation('/wishlist')}
+        />
+        
+        <div style={{ height: '1px', backgroundColor: '#F0F0F0', margin: '8px 0' }} />
+        
+        <MenuItem
+          icon={
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          }
+          label="Account Settings"
+          onClick={() => handleNavigation('/account')}
+        />
+        
+        {user?.role === 'ADMIN' && (
+          <>
+            <div style={{ height: '1px', backgroundColor: '#F0F0F0', margin: '8px 0' }} />
+            <MenuItem
+              icon={
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+              }
+              label="Admin Dashboard"
+              onClick={() => handleNavigation('/admin')}
+            />
+          </>
+        )}
+        
+        <div style={{ height: '1px', backgroundColor: '#F0F0F0', margin: '8px 0' }} />
+        
+        <MenuItem
+          icon={
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          }
+          label="Sign Out"
+          onClick={handleLogout}
+        />
+      </div>
+    </div>
+  );
+};
+
+const MenuItem = ({ icon, label, onClick }) => (
+  <button
+    onClick={onClick}
+    style={{
+      width: '100%',
+      padding: '12px 24px',
+      border: 'none',
+      background: 'none',
+      textAlign: 'left',
+      fontSize: '12px',
+      letterSpacing: '0.5px',
+      cursor: 'pointer',
+      color: '#000',
+      transition: 'background-color 0.2s',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+    }}
+    onMouseEnter={e => e.target.style.backgroundColor = '#F9F9F9'}
+    onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+  >
+    {icon}
+    {label}
+  </button>
+);
+
 /* ─── NavBar ────────────────────────────────────────────────────── */
 const NavBar = ({ currentPath, setCurrentPath }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { cartCount, wishlistCount, toggleBag, setPendingSearch } = useApp();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { user, isAuthenticated, logout, cartCount, wishlistCount, toggleBag, setPendingSearch } = useApp();
 
   // Auto-hide navbar on scroll down, show on scroll up
   const [visible, setVisible] = useState(true);
@@ -275,7 +522,7 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
             MITU
           </div>
 
-          {/* Right: Search + Wishlist + Bag */}
+          {/* Right: Search + User + Wishlist + Bag */}
           <div style={{ position: 'absolute', right: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
 
             {/* Search Icon */}
@@ -290,6 +537,40 @@ const NavBar = ({ currentPath, setCurrentPath }) => {
               >
                 <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
               </svg>
+            </button>
+
+            {/* User Icon */}
+            <button
+              onClick={() => setIsUserMenuOpen(prev => !prev)}
+              style={{ cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', background: 'none', border: 'none', padding: 0 }}
+              aria-label="Account"
+              title={isAuthenticated ? user?.name : 'Sign In'}
+            >
+              <svg
+                width="19" height="19" viewBox="0 0 24 24" fill="none"
+                stroke={color} strokeWidth="1.5"
+                style={{ transition: 'stroke 0.3s' }}
+              >
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              {isAuthenticated && (
+                <div style={{
+                  position: 'absolute', top: '-4px', right: '-4px',
+                  width: '8px', height: '8px', borderRadius: '50%',
+                  backgroundColor: '#4CAF50',
+                  border: `2px solid ${useDarkIcons ? '#fff' : '#000'}`,
+                }} />
+              )}
+              {/* User Menu Dropdown */}
+              <UserMenu
+                isOpen={isUserMenuOpen}
+                onClose={() => setIsUserMenuOpen(false)}
+                user={user}
+                isAuthenticated={isAuthenticated}
+                logout={logout}
+                setCurrentPath={setCurrentPath}
+              />
             </button>
 
             {/* Wishlist Icon */}

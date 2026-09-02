@@ -15,6 +15,8 @@ import StoreLocator from './pages/StoreLocator';
 import LegalPage from './pages/LegalPage';
 import Auth from './pages/Auth';
 import MyBookings from './pages/MyBookings';
+import MyOrders from './pages/MyOrders';
+import Account from './pages/Account';
 import NotFound from './pages/NotFound';
 
 function AppInner() {
@@ -29,6 +31,8 @@ function AppInner() {
     if (currentPath === '/') return <Home setActiveTab={setCurrentPath} />;
     if (currentPath === '/auth') return <Auth setActiveTab={setCurrentPath} />;
     if (currentPath === '/my-bookings') return <MyBookings setActiveTab={setCurrentPath} />;
+    if (currentPath === '/my-orders') return <MyOrders setActiveTab={setCurrentPath} />;
+    if (currentPath === '/account') return <Account setActiveTab={setCurrentPath} />;
     if (currentPath === '/cart') return <Cart setActiveTab={setCurrentPath} />;
     if (currentPath === '/reserve') return <Reserve setActiveTab={setCurrentPath} />;
     if (currentPath === '/explore') return <Explore selectedCategory="ALL" setActiveTab={setCurrentPath} />;

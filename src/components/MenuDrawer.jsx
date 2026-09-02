@@ -130,7 +130,7 @@ const MenuDrawer = ({ isOpen, onClose, setCurrentPath }) => {
 
         {/* Main Category Links */}
         <div style={{ flex: 1, padding: '0 0 16px 0' }}>
-          {displayedCategories.map((item, idx) => (
+          {displayedCategories.map((item) => (
             <div
               key={item.label}
               onClick={() => handleNavigate(item.path)}

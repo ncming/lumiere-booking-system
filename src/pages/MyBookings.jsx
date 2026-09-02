@@ -1,5 +1,5 @@
 // My Bookings Page - View user's appointment history
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
 import { api } from '../services/api';
 
@@ -8,16 +8,7 @@ const MyBookings = ({ setActiveTab }) => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setActiveTab('/auth');
-      return;
-    }
-
-    loadBookings();
-  }, [isAuthenticated, setActiveTab]);
-
-  const loadBookings = async () => {
+  const loadBookings = useCallback(async () => {
     setLoading(true);
     try {
       const data = await api.getMyBookings();
@@ -28,7 +19,16 @@ const MyBookings = ({ setActiveTab }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setActiveTab('/auth');
+      return;
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadBookings();
+  }, [isAuthenticated, setActiveTab, loadBookings]);
 
   const handleCancelBooking = async (bookingId) => {
     if (!confirm('Are you sure you want to cancel this appointment?')) return;

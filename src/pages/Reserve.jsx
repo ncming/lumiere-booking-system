@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { api } from '../services/api';
 import { BOUTIQUES } from '../data/boutiques';
 
 
@@ -42,16 +43,26 @@ const OCCASIONS = [
 ];
 
 const Reserve = ({ setActiveTab }) => {
-  const { showToast } = useApp();
+  const { showToast, isAuthenticated } = useApp();
   const [step, setStep] = useState(1);
   const [selectedBoutique, setSelectedBoutique] = useState(null);
   const [selectedStylist, setSelectedStylist] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedOccasion, setSelectedOccasion] = useState('');
-  const [clientName, setClientName] = useState('');
-  const [clientPhone, setClientPhone] = useState('');
+  // Pre-fill user info if authenticated — dùng initializer để tránh setState-in-effect
+  const [clientName, setClientName] = useState(() =>
+    (typeof window !== 'undefined' && localStorage.getItem('user'))
+      ? (JSON.parse(localStorage.getItem('user'))?.name || '')
+      : ''
+  );
+  const [clientPhone, setClientPhone] = useState(() =>
+    (typeof window !== 'undefined' && localStorage.getItem('user'))
+      ? (JSON.parse(localStorage.getItem('user'))?.phone || '')
+      : ''
+  );
   const [confirmed, setConfirmed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Format phone number: only digits, auto-format to XXX XXX XXXX
   const handlePhoneChange = (e) => {
@@ -78,16 +89,49 @@ const Reserve = ({ setActiveTab }) => {
   };
 
   // FIX BUG-04: Validate name and phone before confirming
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    // Check authentication first
+    if (!isAuthenticated) {
+      showToast('✕ Please sign in to book an appointment');
+      setActiveTab('/auth');
+      return;
+    }
+
     // Validate phone has at least 10 digits
     const phoneDigits = clientPhone.replace(/\D/g, '');
-    if (!clientName.trim() || phoneDigits.length < 10) return;
-    setConfirmed(true);
-    showToast('✦ Your appointment has been confirmed. See you soon.');
+    if (!clientName.trim() || phoneDigits.length < 10) {
+      showToast('✕ Please enter valid name and 10-digit phone number');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Call API to create booking
+      const bookingData = {
+        boutiqueId: selectedBoutique.id,
+        boutiqueName: selectedBoutique.name,
+        stylistId: selectedStylist.id,
+        stylistName: selectedStylist.name,
+        date: selectedDate,
+        timeSlot: selectedTime,
+        occasion: selectedOccasion || null,
+      };
+
+      await api.createBooking(bookingData);
+      
+      setConfirmed(true);
+      showToast('✦ Your appointment has been confirmed. See you soon.');
+    } catch (error) {
+      showToast('✕ ' + (error.message || 'Failed to create booking'));
+      console.error('Booking error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const phoneDigits = clientPhone.replace(/\D/g, '');
-  const canConfirm = clientName.trim() !== '' && phoneDigits.length === 10;
+  const canConfirm = clientName.trim() !== '' && phoneDigits.length === 10 && !isSubmitting;
 
   const stepLabel = ['', 'Select Boutique', 'Your Stylist & Time', 'Confirm'];
 
@@ -149,7 +193,7 @@ const Reserve = ({ setActiveTab }) => {
 
       {/* Stepper */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0', padding: 'clamp(24px, 4vw, 40px) 20px', maxWidth: '600px', margin: '0 auto' }}>
-        {[1, 2, 3].map((s, i) => (
+        {[1, 2, 3].map((s) => (
           <div key={s} style={{ display: 'flex', alignItems: 'center', flex: s < 3 ? 1 : 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
               <div style={{
@@ -444,7 +488,7 @@ const Reserve = ({ setActiveTab }) => {
                   transition: 'all 0.25s',
                 }}
               >
-                Confirm Appointment
+                {isSubmitting ? 'Confirming...' : 'Confirm Appointment'}
               </button>
             </div>
           </div>

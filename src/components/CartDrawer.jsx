@@ -113,7 +113,7 @@ const CartDrawer = ({ setCurrentPath }) => {
             </div>
           ) : (
             <div>
-              {cartItems.map((item, idx) => (
+              {cartItems.map((item) => (
                 <div key={`${item.id}-${item.selectedOption}`} style={{
                   display: 'flex', gap: '16px', padding: '20px 24px',
                   borderBottom: '1px solid #EEEEEE',

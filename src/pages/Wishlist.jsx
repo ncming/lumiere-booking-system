@@ -1,5 +1,4 @@
 import { useApp } from '../context/AppContext';
-import { formatPrice } from '../utils/format';
 import { PRODUCTS } from '../data/products';
 
 const Wishlist = ({ setActiveTab }) => {
