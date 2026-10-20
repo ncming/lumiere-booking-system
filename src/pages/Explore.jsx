@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PRODUCTS } from '../data/products';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { thumbSrc, thumbSrcSet } from '../utils/image';
 
 const Explore = () => {
   const navigate = useNavigate();
@@ -123,9 +124,13 @@ const Explore = () => {
                       overflow: 'hidden', marginBottom: '16px', position: 'relative',
                     }}>
                       <img
-                        src={product.image}
+                        src={thumbSrc(product.image)}
+                        srcSet={thumbSrcSet(product.image)}
+                        sizes="(max-width: 799px) calc(50vw - 40px), (max-width: 1299px) calc(33vw - 50px), calc(25vw - 50px)"
                         alt={product.name}
                         loading="lazy"
+                        width={600}
+                        height={750}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                         onMouseOver={e => e.target.style.transform = 'scale(1.04)'}
                         onMouseOut={e => e.target.style.transform = 'scale(1)'}
@@ -213,9 +218,13 @@ const Explore = () => {
 
               <div style={{ width: '100%', maxWidth: '320px', aspectRatio: '1', backgroundColor: '#F9F9F9', marginBottom: '20px' }}>
                 <img
-                  src={activeModalProduct.image}
+                  src={thumbSrc(activeModalProduct.image)}
+                  srcSet={thumbSrcSet(activeModalProduct.image)}
+                  sizes="320px"
                   alt={activeModalProduct.name}
                   loading="lazy"
+                  width={600}
+                  height={600}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   onError={e => { e.target.style.display = 'none'; }}
                 />

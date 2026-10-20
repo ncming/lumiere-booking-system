@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { heroSrc, heroSrcSet, thumbSrc, thumbSrcSet, editorialSrc, editorialSrcSet, bannerSrc, bannerSrcSet } from '../utils/image';
 
 // ─── Hero data ─────────────────────────────────────────────────────────────
 // Unsplash responsive params:
@@ -7,39 +8,26 @@ import { useNavigate } from 'react-router-dom';
 //   q=   → quality (80 cân bằng tốt giữa chất lượng và kích thước)
 //   auto=format → Unsplash tự chọn WebP / AVIF nếu browser hỗ trợ
 //   fit=crop + crop=entropy → crop thông minh vào vùng nổi bật nhất
-const HERO_BASE = {
-  s1: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d',
-  s2: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b',
-  s3: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f',
-};
-
-function buildSrc(base, w) {
-  return `${base}?q=80&w=${w}&auto=format&fit=crop&crop=entropy`;
-}
-
-// srcset: browser chọn ảnh phù hợp nhất theo DPR + viewport width
-function buildSrcSet(base) {
-  return [800, 1200, 1600, 1920]
-    .map(w => `${buildSrc(base, w)} ${w}w`)
-    .join(', ');
-}
+// ─── Hero slides — dùng utils/image.js để build URL nhất quán ────────────────
+const HERO_URLS = [
+  'https://images.unsplash.com/photo-1490481651871-ab68de25d43d',
+  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b',
+  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f',
+];
 
 const heroSlides = [
   {
-    base:     HERO_BASE.s1,
-    src:      buildSrc(HERO_BASE.s1, 1600),
-    srcSet:   buildSrcSet(HERO_BASE.s1),
+    src:      heroSrc(HERO_URLS[0]),
+    srcSet:   heroSrcSet(HERO_URLS[0]),
     subtitle: 'New Collection',
     title:    'AUTUMN 2025',
     cta:      'Discover the Collection',
-    // Kích thước thực tế của ảnh gốc (Unsplash) — ngăn CLS
     width:    1920,
     height:   1280,
   },
   {
-    base:     HERO_BASE.s2,
-    src:      buildSrc(HERO_BASE.s2, 1600),
-    srcSet:   buildSrcSet(HERO_BASE.s2),
+    src:      heroSrc(HERO_URLS[1]),
+    srcSet:   heroSrcSet(HERO_URLS[1]),
     subtitle: 'Exclusive Campaign',
     title:    'THE ETERNAL WOMAN',
     cta:      'Explore Now',
@@ -47,9 +35,8 @@ const heroSlides = [
     height:   1280,
   },
   {
-    base:     HERO_BASE.s3,
-    src:      buildSrc(HERO_BASE.s3, 1600),
-    srcSet:   buildSrcSet(HERO_BASE.s3),
+    src:      heroSrc(HERO_URLS[2]),
+    srcSet:   heroSrcSet(HERO_URLS[2]),
     subtitle: 'Resort 2025',
     title:    'SOUTHERN LIGHT',
     cta:      'View Lookbook',
@@ -58,38 +45,66 @@ const heroSlides = [
   },
 ];
 
-// sizes: browser dùng cùng với srcSet để tính ảnh cần tải
-// Hero luôn chiếm 100vw nên đơn giản là "100vw"
+// Hero luôn 100vw
 const HERO_SIZES = '100vw';
+
+// ─── Editorial grid — dùng base URL, build srcset runtime qua utils ──────────
+const EDITORIAL_URLS = [
+  'https://images.unsplash.com/photo-1584916201218-f4242ceb4809',
+  'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
+  'https://images.unsplash.com/photo-1524592094714-0f0654e20314',
+];
 
 const editorialGrid = [
   {
-    img: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=900&auto=format&fit=crop',
-    label: 'Iconic Handbags',
-    sub: 'The new classics',
-    path: '/category/Handbags & Totes',
+    img:    editorialSrc(EDITORIAL_URLS[0]),
+    srcSet: editorialSrcSet(EDITORIAL_URLS[0]),
+    label:  'Iconic Handbags',
+    sub:    'The new classics',
+    path:   '/category/Handbags & Totes',
+    // Aspect ratio 3/4 → width 900, height 1200
+    width: 900, height: 1200,
   },
   {
-    img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=900&auto=format&fit=crop',
-    label: 'MITU Red',
-    sub: 'The art of color',
-    path: '/category/Makeup',
+    img:    editorialSrc(EDITORIAL_URLS[1]),
+    srcSet: editorialSrcSet(EDITORIAL_URLS[1]),
+    label:  'MITU Red',
+    sub:    'The art of color',
+    path:   '/category/Makeup',
+    width: 900, height: 1200,
   },
   {
-    img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=900&auto=format&fit=crop',
-    label: 'Fine Jewelry',
-    sub: 'Timeless adornment',
-    path: '/category/Jewelry',
+    img:    editorialSrc(EDITORIAL_URLS[2]),
+    srcSet: editorialSrcSet(EDITORIAL_URLS[2]),
+    label:  'Fine Jewelry',
+    sub:    'Timeless adornment',
+    path:   '/category/Jewelry',
+    width: 900, height: 1200,
   },
 ];
 
-const categories = [
-  { label: "Women's", img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600&auto=format&fit=crop', path: "/category/Women's Ready-To-Wear" },
-  { label: "Men's",   img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop', path: "/category/Men's Ready-To-Wear" },
-  { label: "Bags",    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600&auto=format&fit=crop', path: '/category/Handbags & Totes' },
-  { label: "Jewelry", img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=600&auto=format&fit=crop', path: '/category/Jewelry' },
-  { label: "Beauty",  img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop', path: '/category/Fragrance' },
+// sizes cho editorial: 1 col mobile (100vw), 2 col tablet (50vw), 3 col desktop (33vw)
+const EDITORIAL_SIZES = '(max-width: 599px) calc(100vw - 64px), (max-width: 899px) calc(50vw - 44px), calc(33vw - 40px)';
+
+// ─── Category quick links ─────────────────────────────────────────────────────
+const CAT_URLS = [
+  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f',
+  'https://images.unsplash.com/photo-1507679799987-c73779587ccf',
+  'https://images.unsplash.com/photo-1548036328-c9fa89d128fa',
+  'https://images.unsplash.com/photo-1524592094714-0f0654e20314',
+  'https://images.unsplash.com/photo-1596462502278-27bfdc403348',
 ];
+
+const categories = [
+  { label: "Women's", img: thumbSrc(CAT_URLS[0]), srcSet: thumbSrcSet(CAT_URLS[0]), path: "/category/Women's Ready-To-Wear" },
+  { label: "Men's",   img: thumbSrc(CAT_URLS[1]), srcSet: thumbSrcSet(CAT_URLS[1]), path: "/category/Men's Ready-To-Wear" },
+  { label: "Bags",    img: thumbSrc(CAT_URLS[2]), srcSet: thumbSrcSet(CAT_URLS[2]), path: '/category/Handbags & Totes' },
+  { label: "Jewelry", img: thumbSrc(CAT_URLS[3]), srcSet: thumbSrcSet(CAT_URLS[3]), path: '/category/Jewelry' },
+  { label: "Beauty",  img: thumbSrc(CAT_URLS[4]), srcSet: thumbSrcSet(CAT_URLS[4]), path: '/category/Fragrance' },
+];
+
+// sizes cho category: 2 col mobile (50vw), 3 col tablet (33vw), 5 col desktop (20vw)
+const CAT_SIZES = '(max-width: 599px) calc(50vw - 38px), (max-width: 899px) calc(33vw - 36px), calc(20vw - 32px)';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -238,8 +253,12 @@ const Home = () => {
               }}>
                 <img
                   src={cat.img}
+                  srcSet={cat.srcSet}
+                  sizes={CAT_SIZES}
                   alt={cat.label}
                   loading="lazy"
+                  width={300}
+                  height={400}
                   style={{
                     width: '100%', height: '100%', objectFit: 'cover',
                     transition: 'transform 0.55s ease',
@@ -289,8 +308,12 @@ const Home = () => {
               <div style={{ width: '100%', aspectRatio: '3/4', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
                 <img
                   src={item.img}
+                  srcSet={item.srcSet}
+                  sizes={EDITORIAL_SIZES}
                   alt={item.label}
                   loading="lazy"
+                  width={item.width}
+                  height={item.height}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s ease' }}
                   onMouseOver={e => e.currentTarget.style.transform = 'scale(1.04)'}
                   onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -313,9 +336,13 @@ const Home = () => {
       {/* ─── 4. FULL-WIDTH EDITORIAL BANNER ─────────────────── */}
       <div style={{ position: 'relative', width: '100%', height: 'clamp(380px, 55vw, 700px)', overflow: 'hidden', backgroundColor: '#1a1a1a' }}>
         <img
-          src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1920&auto=format&fit=crop"
+          src={bannerSrc('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04')}
+          srcSet={bannerSrcSet('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04')}
+          sizes="100vw"
           alt="Women's Fashion editorial banner"
           loading="lazy"
+          width={1920}
+          height={700}
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%' }}
           onError={e => { e.target.style.display = 'none'; }}
         />

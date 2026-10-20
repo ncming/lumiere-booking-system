@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PRODUCTS } from '../data/products';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { thumbSrc, thumbSrcSet, optimizedSrc } from '../utils/image';
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -101,8 +102,12 @@ const ProductDetail = () => {
             onMouseMove={handleMouseMove}
           >
             <img
-              src={images[activeImageIndex]}
+              src={optimizedSrc(images[activeImageIndex], 900)}
+              srcSet={thumbSrcSet(images[activeImageIndex], [450, 700, 900, 1200])}
+              sizes="(max-width: 767px) calc(100vw - 32px), calc(50vw - 60px)"
               alt={product.name}
+              width={900}
+              height={1125}
               style={{
                 width: '100%',
                 height: '100%',
@@ -146,7 +151,17 @@ const ProductDetail = () => {
                     transition: 'border-color 0.2s',
                   }}
                 >
-                  <img src={img} alt={`View ${i + 1}`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
+                  <img
+                    src={thumbSrc(img)}
+                    srcSet={thumbSrcSet(img)}
+                    sizes="72px"
+                    alt={`View ${i + 1}`}
+                    loading="lazy"
+                    width={72}
+                    height={90}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={e => { e.target.style.display = 'none'; }}
+                  />
                 </div>
               ))}
             </div>
@@ -349,9 +364,13 @@ const ProductDetail = () => {
               >
                 <div style={{ width: '100%', aspectRatio: '4/5', backgroundColor: '#F9F9F9', overflow: 'hidden', marginBottom: '12px' }}>
                 <img
-                    src={p.image}
+                    src={thumbSrc(p.image)}
+                    srcSet={thumbSrcSet(p.image)}
+                    sizes="(max-width: 767px) calc(33vw - 20px), calc(25vw - 40px)"
                     alt={p.name}
                     loading="lazy"
+                    width={600}
+                    height={750}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                     onMouseOver={e => e.target.style.transform = 'scale(1.04)'}
                     onMouseOut={e => e.target.style.transform = 'scale(1)'}
