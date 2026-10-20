@@ -4,12 +4,32 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../services/api';
 
+// ─── Password strength helpers ────────────────────────────────────────────────
+const PWD_CRITERIA = [
+  { key: 'length',    label: 'Ít nhất 8 ký tự',            test: (p) => p.length >= 8 },
+  { key: 'upper',     label: 'Có chữ in hoa (A–Z)',         test: (p) => /[A-Z]/.test(p) },
+  { key: 'lower',     label: 'Có chữ thường (a–z)',         test: (p) => /[a-z]/.test(p) },
+  { key: 'digit',     label: 'Có chữ số (0–9)',             test: (p) => /[0-9]/.test(p) },
+  { key: 'special',   label: 'Có ký tự đặc biệt (!@#$…)',  test: (p) => /[^A-Za-z0-9]/.test(p) },
+];
+
+function getStrength(password) {
+  return PWD_CRITERIA.filter(c => c.test(password)).length; // 0–5
+}
+
+const STRENGTH_LABEL = ['', 'Rất yếu', 'Yếu', 'Trung bình', 'Mạnh', 'Rất mạnh'];
+const STRENGTH_COLOR = ['', '#E53935', '#FB8C00', '#F9A825', '#43A047', '#1B5E20'];
+
+// ─── Email format validator ───────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 const Account = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, showToast, logout } = useApp();
   const [activeSection, setActiveSection] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [profileErrors, setProfileErrors] = useState({});
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -30,42 +50,55 @@ const Account = () => {
     phone: user?.phone || '',
   });
 
+  // ─── Profile validation ──────────────────────────────────────────────────
+  const validateProfile = () => {
+    const errs = {};
+    if (!formData.name.trim()) errs.name = 'Vui lòng nhập họ tên';
+    if (formData.phone && !/^\d+$/.test(formData.phone))
+      errs.phone = 'Số điện thoại chỉ được chứa chữ số';
+    if (formData.phone && (formData.phone.length < 9 || formData.phone.length > 12))
+      errs.phone = 'Số điện thoại từ 9 đến 12 chữ số';
+    return errs;
+  };
+
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    const errs = validateProfile();
+    if (Object.keys(errs).length > 0) { setProfileErrors(errs); return; }
+    setProfileErrors({});
     setIsSaving(true);
-    
     try {
       await api.updateProfile(formData);
-      showToast('✦ Profile updated successfully');
+      showToast('Profile updated successfully');
       setIsEditing(false);
     } catch {
-      showToast('✕ Failed to update profile');
+      showToast('Failed to update profile');
     } finally {
       setIsSaving(false);
     }
   };
 
+  // ─── Password validation ─────────────────────────────────────────────────
+  const newPwdStrength = getStrength(passwordData.newPassword);
+  const allCriteriaMet = newPwdStrength === PWD_CRITERIA.length;
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    
+    if (!allCriteriaMet) {
+      showToast('Mật khẩu chưa đạt yêu cầu bảo mật');
+      return;
+    }
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      showToast('✕ Passwords do not match');
+      showToast('Mật khẩu xác nhận không khớp');
       return;
     }
-    
-    if (passwordData.newPassword.length < 6) {
-      showToast('✕ Password must be at least 6 characters');
-      return;
-    }
-    
     setIsSaving(true);
-    
     try {
       await api.changePassword(passwordData.currentPassword, passwordData.newPassword);
-      showToast('✦ Password changed successfully');
+      showToast('Password changed successfully');
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (error) {
-      showToast('✕ ' + (error.message || 'Failed to change password'));
+      showToast(error.message || 'Failed to change password');
     } finally {
       setIsSaving(false);
     }
@@ -204,20 +237,43 @@ const Account = () => {
                     </label>
                     <input
                       type="tel"
+                      inputMode="numeric"
                       value={formData.phone}
-                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                      onKeyDown={e => {
+                        // Cho phép: phím điều hướng, Backspace, Delete, Tab, Enter
+                        const allowed = ['Backspace','Delete','Tab','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];
+                        if (!allowed.includes(e.key) && !/^\d$/.test(e.key)) e.preventDefault();
+                      }}
+                      onChange={e => {
+                        // Lọc lại lần nữa (phòng paste chứa ký tự lạ)
+                        const digits = e.target.value.replace(/\D/g, '');
+                        setFormData({ ...formData, phone: digits });
+                        // Xoá lỗi khi user đang gõ
+                        if (profileErrors.phone) setProfileErrors(prev => ({ ...prev, phone: undefined }));
+                      }}
                       disabled={!isEditing}
-                      placeholder="0901 234 567"
+                      placeholder="0901234567"
+                      maxLength={12}
                       style={{
                         width: '100%',
                         padding: '12px 16px',
-                        border: '1px solid #E0E0E0',
+                        border: `1px solid ${profileErrors.phone ? '#E53935' : '#E0E0E0'}`,
                         fontSize: '13px',
                         outline: 'none',
                         backgroundColor: isEditing ? '#FFFFFF' : '#F9F9F9',
                         color: '#000',
                       }}
                     />
+                    {profileErrors.phone && (
+                      <div style={{ fontSize: '10px', color: '#E53935', marginTop: '6px', letterSpacing: '0.3px' }}>
+                        {profileErrors.phone}
+                      </div>
+                    )}
+                    {!profileErrors.phone && (
+                      <div style={{ fontSize: '10px', color: '#BDBDBD', marginTop: '6px' }}>
+                        Chỉ nhập chữ số (9–12 chữ số)
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ display: 'flex', gap: '12px' }}>
@@ -298,82 +354,148 @@ const Account = () => {
                 </div>
 
                 <form onSubmit={handleChangePassword} style={{ maxWidth: '500px' }}>
+
+                  {/* Current Password */}
                   <div style={{ marginBottom: '24px' }}>
                     <label style={{ display: 'block', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', color: '#757575', marginBottom: '8px' }}>
-                      Current Password
+                      Mật khẩu hiện tại
                     </label>
                     <input
                       type="password"
                       value={passwordData.currentPassword}
                       onChange={e => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                       required
+                      autoComplete="current-password"
                       style={{
-                        width: '100%',
-                        padding: '12px 16px',
-                        border: '1px solid #E0E0E0',
-                        fontSize: '13px',
-                        outline: 'none',
+                        width: '100%', padding: '12px 16px',
+                        border: '1px solid #E0E0E0', fontSize: '13px', outline: 'none',
                       }}
                     />
                   </div>
 
-                  <div style={{ marginBottom: '24px' }}>
+                  {/* New Password */}
+                  <div style={{ marginBottom: '16px' }}>
                     <label style={{ display: 'block', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', color: '#757575', marginBottom: '8px' }}>
-                      New Password
+                      Mật khẩu mới
                     </label>
                     <input
                       type="password"
                       value={passwordData.newPassword}
                       onChange={e => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                       required
-                      minLength={6}
+                      autoComplete="new-password"
                       style={{
-                        width: '100%',
-                        padding: '12px 16px',
-                        border: '1px solid #E0E0E0',
-                        fontSize: '13px',
-                        outline: 'none',
+                        width: '100%', padding: '12px 16px',
+                        border: `1px solid ${
+                          passwordData.newPassword === '' ? '#E0E0E0'
+                          : allCriteriaMet ? '#43A047' : '#FB8C00'
+                        }`,
+                        fontSize: '13px', outline: 'none',
                       }}
                     />
-                    <div style={{ fontSize: '10px', color: '#BDBDBD', marginTop: '6px' }}>
-                      At least 6 characters
-                    </div>
+
+                    {/* Strength bar */}
+                    {passwordData.newPassword !== '' && (
+                      <>
+                        <div style={{ display: 'flex', gap: '4px', marginTop: '10px' }}>
+                          {[1, 2, 3, 4, 5].map(i => (
+                            <div
+                              key={i}
+                              style={{
+                                flex: 1, height: '3px',
+                                borderRadius: '2px',
+                                backgroundColor: i <= newPwdStrength
+                                  ? STRENGTH_COLOR[newPwdStrength]
+                                  : '#E0E0E0',
+                                transition: 'background-color 0.3s',
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <div style={{
+                          fontSize: '10px', marginTop: '5px',
+                          color: STRENGTH_COLOR[newPwdStrength],
+                          fontWeight: '600', letterSpacing: '0.5px',
+                        }}>
+                          {STRENGTH_LABEL[newPwdStrength]}
+                        </div>
+
+                        {/* Criteria checklist */}
+                        <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          {PWD_CRITERIA.map(c => {
+                            const passed = c.test(passwordData.newPassword);
+                            return (
+                              <div key={c.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                {/* Checkmark icon */}
+                                <div style={{
+                                  width: '16px', height: '16px', borderRadius: '50%', flexShrink: 0,
+                                  backgroundColor: passed ? '#43A047' : '#E0E0E0',
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                  transition: 'background-color 0.25s',
+                                }}>
+                                  <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
+                                    {passed
+                                      ? <polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                                      : <line x1="4" y1="4" x2="8" y2="8" stroke="#BDBDBD" strokeWidth="1.5" strokeLinecap="round"/>
+                                    }
+                                  </svg>
+                                </div>
+                                <span style={{ fontSize: '11px', color: passed ? '#43A047' : '#757575', transition: 'color 0.25s' }}>
+                                  {c.label}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
                   </div>
 
+                  {/* Confirm Password */}
                   <div style={{ marginBottom: '32px' }}>
                     <label style={{ display: 'block', fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase', color: '#757575', marginBottom: '8px' }}>
-                      Confirm New Password
+                      Xác nhận mật khẩu mới
                     </label>
                     <input
                       type="password"
                       value={passwordData.confirmPassword}
                       onChange={e => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                       required
+                      autoComplete="new-password"
                       style={{
-                        width: '100%',
-                        padding: '12px 16px',
-                        border: '1px solid #E0E0E0',
-                        fontSize: '13px',
-                        outline: 'none',
+                        width: '100%', padding: '12px 16px',
+                        border: `1px solid ${
+                          passwordData.confirmPassword === '' ? '#E0E0E0'
+                          : passwordData.confirmPassword === passwordData.newPassword ? '#43A047' : '#E53935'
+                        }`,
+                        fontSize: '13px', outline: 'none',
                       }}
                     />
+                    {passwordData.confirmPassword !== '' && passwordData.confirmPassword !== passwordData.newPassword && (
+                      <div style={{ fontSize: '10px', color: '#E53935', marginTop: '6px' }}>
+                        Mật khẩu xác nhận chưa khớp
+                      </div>
+                    )}
+                    {passwordData.confirmPassword !== '' && passwordData.confirmPassword === passwordData.newPassword && (
+                      <div style={{ fontSize: '10px', color: '#43A047', marginTop: '6px' }}>
+                        ✓ Mật khẩu khớp
+                      </div>
+                    )}
                   </div>
 
                   <button
                     type="submit"
-                    disabled={isSaving}
+                    disabled={isSaving || !allCriteriaMet || passwordData.confirmPassword !== passwordData.newPassword}
                     style={{
                       padding: '12px 32px',
-                      backgroundColor: isSaving ? '#BDBDBD' : '#000',
-                      color: '#fff',
-                      border: 'none',
-                      fontSize: '10px',
-                      letterSpacing: '2px',
-                      textTransform: 'uppercase',
-                      cursor: isSaving ? 'not-allowed' : 'pointer',
+                      backgroundColor: (isSaving || !allCriteriaMet || passwordData.confirmPassword !== passwordData.newPassword) ? '#BDBDBD' : '#000',
+                      color: '#fff', border: 'none',
+                      fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
+                      cursor: (isSaving || !allCriteriaMet || passwordData.confirmPassword !== passwordData.newPassword) ? 'not-allowed' : 'pointer',
+                      transition: 'background-color 0.2s',
                     }}
                   >
-                    {isSaving ? 'Changing...' : 'Change Password'}
+                    {isSaving ? 'Đang lưu...' : 'Đổi mật khẩu'}
                   </button>
                 </form>
               </div>

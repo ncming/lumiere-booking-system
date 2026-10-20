@@ -1,13 +1,15 @@
 // Authentication Page - Login & Register
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, register, showToast, isAuthLoading } = useApp();
-  
-  const [mode, setMode] = useState('login'); // 'login' | 'register'
+
+  // Nhận mode từ navigation state (từ NavBar dropdown) hoặc mặc định 'login'
+  const [mode, setMode] = useState(location.state?.mode || 'login');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,6 +17,18 @@ const Auth = () => {
     phone: ''
   });
   const [error, setError] = useState('');
+
+  // Khi user đang ở /auth và click "Sign In" / "Create Account" từ dropdown
+  // React Router không re-mount component — cần effect để sync mode
+  useEffect(() => {
+    const incoming = location.state?.mode;
+    if (incoming && incoming !== mode) {
+      setMode(incoming);
+      setError('');
+      setFormData({ email: '', password: '', name: '', phone: '' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state?.mode]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -34,7 +48,7 @@ const Auth = () => {
         }
 
         await login(formData.email, formData.password);
-        showToast('✦ Welcome back');
+        showToast('Welcome back');
         navigate('/'); // Redirect to home
       } else {
         // Register
@@ -55,12 +69,12 @@ const Auth = () => {
           phone: formData.phone || undefined
         });
 
-        showToast('✦ Account created successfully');
+        showToast('Account created successfully');
         navigate('/'); // Redirect to home
       }
     } catch (err) {
       setError(err.message || 'Authentication failed');
-      showToast('✕ ' + (err.message || 'Authentication failed'));
+      showToast((err.message || 'Authentication failed'));
     }
   };
 
@@ -76,37 +90,37 @@ const Auth = () => {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       padding: '80px 20px 40px',
       backgroundColor: '#FFFFFF'
     }}>
-      <div style={{ 
-        maxWidth: '440px', 
-        width: '100%', 
-        border: '1px solid #E0E0E0', 
+      <div style={{
+        maxWidth: '440px',
+        width: '100%',
+        border: '1px solid #E0E0E0',
         padding: '48px 40px',
         backgroundColor: '#FFFFFF'
       }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ 
-            fontFamily: '"Playfair Display", serif', 
-            fontSize: 'clamp(24px, 4vw, 32px)', 
+          <h2 style={{
+            fontFamily: '"Playfair Display", serif',
+            fontSize: 'clamp(24px, 4vw, 32px)',
             fontWeight: '400',
             letterSpacing: '2px',
             marginBottom: '8px'
           }}>
             {mode === 'login' ? 'Welcome Back' : 'Create Account'}
           </h2>
-          <div style={{ 
-            fontSize: '10px', 
-            letterSpacing: '2px', 
-            textTransform: 'uppercase', 
-            color: '#757575' 
+          <div style={{
+            fontSize: '10px',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            color: '#757575'
           }}>
             {mode === 'login' ? 'Sign in to your account' : 'Join Lumiere'}
           </div>
@@ -132,11 +146,11 @@ const Auth = () => {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {mode === 'register' && (
             <div>
-              <label style={{ 
-                display: 'block', 
-                fontSize: '9px', 
-                letterSpacing: '2px', 
-                textTransform: 'uppercase', 
+              <label style={{
+                display: 'block',
+                fontSize: '9px',
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
                 color: '#757575',
                 marginBottom: '8px'
               }}>
@@ -149,10 +163,10 @@ const Auth = () => {
                 onChange={e => handleInputChange('name', e.target.value)}
                 required={mode === 'register'}
                 disabled={isAuthLoading}
-                style={{ 
+                style={{
                   width: '100%',
-                  padding: '12px 16px', 
-                  border: '1px solid #E0E0E0', 
+                  padding: '12px 16px',
+                  border: '1px solid #E0E0E0',
                   fontSize: '13px',
                   outline: 'none',
                   transition: 'border-color 0.2s',
@@ -166,11 +180,11 @@ const Auth = () => {
           )}
 
           <div>
-            <label style={{ 
-              display: 'block', 
-              fontSize: '9px', 
-              letterSpacing: '2px', 
-              textTransform: 'uppercase', 
+            <label style={{
+              display: 'block',
+              fontSize: '9px',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
               color: '#757575',
               marginBottom: '8px'
             }}>
@@ -183,10 +197,10 @@ const Auth = () => {
               onChange={e => handleInputChange('email', e.target.value)}
               required
               disabled={isAuthLoading}
-              style={{ 
+              style={{
                 width: '100%',
-                padding: '12px 16px', 
-                border: '1px solid #E0E0E0', 
+                padding: '12px 16px',
+                border: '1px solid #E0E0E0',
                 fontSize: '13px',
                 outline: 'none',
                 transition: 'border-color 0.2s',
@@ -200,11 +214,11 @@ const Auth = () => {
 
           {mode === 'register' && (
             <div>
-              <label style={{ 
-                display: 'block', 
-                fontSize: '9px', 
-                letterSpacing: '2px', 
-                textTransform: 'uppercase', 
+              <label style={{
+                display: 'block',
+                fontSize: '9px',
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
                 color: '#757575',
                 marginBottom: '8px'
               }}>
@@ -216,10 +230,10 @@ const Auth = () => {
                 value={formData.phone}
                 onChange={e => handleInputChange('phone', e.target.value)}
                 disabled={isAuthLoading}
-                style={{ 
+                style={{
                   width: '100%',
-                  padding: '12px 16px', 
-                  border: '1px solid #E0E0E0', 
+                  padding: '12px 16px',
+                  border: '1px solid #E0E0E0',
                   fontSize: '13px',
                   outline: 'none',
                   transition: 'border-color 0.2s',
@@ -233,11 +247,11 @@ const Auth = () => {
           )}
 
           <div>
-            <label style={{ 
-              display: 'block', 
-              fontSize: '9px', 
-              letterSpacing: '2px', 
-              textTransform: 'uppercase', 
+            <label style={{
+              display: 'block',
+              fontSize: '9px',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
               color: '#757575',
               marginBottom: '8px'
             }}>
@@ -251,10 +265,10 @@ const Auth = () => {
               required
               disabled={isAuthLoading}
               minLength={mode === 'register' ? 6 : undefined}
-              style={{ 
+              style={{
                 width: '100%',
-                padding: '12px 16px', 
-                border: '1px solid #E0E0E0', 
+                padding: '12px 16px',
+                border: '1px solid #E0E0E0',
                 fontSize: '13px',
                 outline: 'none',
                 transition: 'border-color 0.2s',
@@ -270,14 +284,14 @@ const Auth = () => {
           <button
             type="submit"
             disabled={isAuthLoading}
-            style={{ 
-              padding: '14px 40px', 
-              backgroundColor: isAuthLoading ? '#BDBDBD' : '#000', 
-              color: '#fff', 
-              border: 'none', 
-              fontSize: '10px', 
-              letterSpacing: '2px', 
-              textTransform: 'uppercase', 
+            style={{
+              padding: '14px 40px',
+              backgroundColor: isAuthLoading ? '#BDBDBD' : '#000',
+              color: '#fff',
+              border: 'none',
+              fontSize: '10px',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
               cursor: isAuthLoading ? 'not-allowed' : 'pointer',
               transition: 'background-color 0.2s',
               marginTop: '8px'
@@ -290,17 +304,17 @@ const Auth = () => {
         </form>
 
         {/* Divider */}
-        <div style={{ 
-          height: '1px', 
-          backgroundColor: '#E0E0E0', 
-          margin: '32px 0' 
+        <div style={{
+          height: '1px',
+          backgroundColor: '#E0E0E0',
+          margin: '32px 0'
         }} />
 
         {/* Switch Mode */}
         <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            fontSize: '11px', 
-            color: '#757575', 
+          <div style={{
+            fontSize: '11px',
+            color: '#757575',
             marginBottom: '12px',
             lineHeight: 1.6
           }}>
@@ -309,13 +323,13 @@ const Auth = () => {
           <button
             onClick={switchMode}
             disabled={isAuthLoading}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: '#000', 
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#000',
               fontSize: '11px',
               letterSpacing: '1px',
-              textDecoration: 'underline', 
+              textDecoration: 'underline',
               cursor: isAuthLoading ? 'not-allowed' : 'pointer',
               fontWeight: '500'
             }}
@@ -328,10 +342,10 @@ const Auth = () => {
         <div style={{ textAlign: 'center', marginTop: '24px' }}>
           <button
             onClick={() => navigate('/')}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: '#757575', 
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#757575',
               fontSize: '10px',
               letterSpacing: '1px',
               cursor: 'pointer',

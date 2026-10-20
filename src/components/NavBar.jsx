@@ -181,7 +181,10 @@ const UserMenu = ({ isOpen, onClose, user, isAuthenticated, logout }) => {
 
   if (!isOpen) return null;
 
-  const go = (path) => { navigate(path); onClose(); };
+  const go = (path, mode) => {
+    navigate(path, mode ? { state: { mode } } : undefined);
+    onClose();
+  };
 
   const handleLogout = () => {
     logout();
@@ -205,21 +208,30 @@ const UserMenu = ({ isOpen, onClose, user, isAuthenticated, logout }) => {
           </div>
         </div>
         <div style={{ padding: '12px 0' }}>
-          {['Sign In', 'Create Account'].map(label => (
-            <button
-              key={label}
-              onClick={() => go('/auth')}
-              style={{
-                width: '100%', padding: '12px 24px', border: 'none', background: 'none',
-                textAlign: 'left', fontSize: '12px', letterSpacing: '0.5px',
-                cursor: 'pointer', color: '#000', transition: 'background-color 0.2s',
-              }}
-              onMouseEnter={e => e.target.style.backgroundColor = '#F9F9F9'}
-              onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
-            >
-              {label}
-            </button>
-          ))}
+          <button
+            onClick={() => go('/auth', 'login')}
+            style={{
+              width: '100%', padding: '12px 24px', border: 'none', background: 'none',
+              textAlign: 'left', fontSize: '12px', letterSpacing: '0.5px',
+              cursor: 'pointer', color: '#000', transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={e => e.target.style.backgroundColor = '#F9F9F9'}
+            onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+          >
+            Sign In
+          </button>
+          <button
+            onClick={() => go('/auth', 'register')}
+            style={{
+              width: '100%', padding: '12px 24px', border: 'none', background: 'none',
+              textAlign: 'left', fontSize: '12px', letterSpacing: '0.5px',
+              cursor: 'pointer', color: '#000', transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={e => e.target.style.backgroundColor = '#F9F9F9'}
+            onMouseLeave={e => e.target.style.backgroundColor = 'transparent'}
+          >
+            Create Account
+          </button>
         </div>
       </div>
     );
@@ -382,23 +394,37 @@ const NavBar = () => {
               </svg>
             </button>
 
-            {/* User */}
+            {/* User / Account */}
             <button
               onClick={() => setIsUserMenuOpen(p => !p)}
-              style={{ cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', background: 'none', border: 'none', padding: 0 }}
+              style={{
+                cursor: 'pointer', position: 'relative',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
+                background: 'none', border: 'none', padding: 0,
+              }}
               aria-label="Account"
-              title={isAuthenticated ? user?.name : 'Sign In'}
+              title={isAuthenticated ? user?.name : 'Account'}
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" style={{ transition: 'stroke 0.3s' }}>
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-              </svg>
-              {isAuthenticated && (
-                <div style={{
-                  position: 'absolute', top: '-4px', right: '-4px',
-                  width: '8px', height: '8px', borderRadius: '50%',
-                  backgroundColor: '#4CAF50', border: `2px solid ${useDark ? '#fff' : '#000'}`,
-                }} />
-              )}
+              {/* Icon wrapper — cần position:relative cho badge */}
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" style={{ transition: 'stroke 0.3s' }}>
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                {isAuthenticated && (
+                  <div style={{
+                    position: 'absolute', top: '-4px', right: '-4px',
+                    width: '8px', height: '8px', borderRadius: '50%',
+                    backgroundColor: '#4CAF50', border: `2px solid ${useDark ? '#fff' : 'transparent'}`,
+                  }} />
+                )}
+              </div>
+              {/* Label */}
+              <span style={{
+                fontSize: '8px', letterSpacing: '1.5px', textTransform: 'uppercase',
+                color, transition: 'color 0.3s', userSelect: 'none', lineHeight: 1,
+              }}>
+                Account
+              </span>
               <UserMenu
                 isOpen={isUserMenuOpen}
                 onClose={() => setIsUserMenuOpen(false)}
