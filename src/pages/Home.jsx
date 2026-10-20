@@ -1,25 +1,65 @@
 import { useState, useEffect } from 'react';
 
+// ─── Hero data ─────────────────────────────────────────────────────────────
+// Unsplash responsive params:
+//   w=   → width hint cho srcset
+//   q=   → quality (80 cân bằng tốt giữa chất lượng và kích thước)
+//   auto=format → Unsplash tự chọn WebP / AVIF nếu browser hỗ trợ
+//   fit=crop + crop=entropy → crop thông minh vào vùng nổi bật nhất
+const HERO_BASE = {
+  s1: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d',
+  s2: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b',
+  s3: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f',
+};
+
+function buildSrc(base, w) {
+  return `${base}?q=80&w=${w}&auto=format&fit=crop&crop=entropy`;
+}
+
+// srcset: browser chọn ảnh phù hợp nhất theo DPR + viewport width
+function buildSrcSet(base) {
+  return [800, 1200, 1600, 1920]
+    .map(w => `${buildSrc(base, w)} ${w}w`)
+    .join(', ');
+}
+
 const heroSlides = [
   {
-    img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1920&auto=format&fit=crop',
+    base:     HERO_BASE.s1,
+    src:      buildSrc(HERO_BASE.s1, 1600),
+    srcSet:   buildSrcSet(HERO_BASE.s1),
     subtitle: 'New Collection',
-    title: 'AUTUMN 2025',
-    cta: 'Discover the Collection',
+    title:    'AUTUMN 2025',
+    cta:      'Discover the Collection',
+    // Kích thước thực tế của ảnh gốc (Unsplash) — ngăn CLS
+    width:    1920,
+    height:   1280,
   },
   {
-    img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop',
+    base:     HERO_BASE.s2,
+    src:      buildSrc(HERO_BASE.s2, 1600),
+    srcSet:   buildSrcSet(HERO_BASE.s2),
     subtitle: 'Exclusive Campaign',
-    title: 'THE ETERNAL WOMAN',
-    cta: 'Explore Now',
+    title:    'THE ETERNAL WOMAN',
+    cta:      'Explore Now',
+    width:    1920,
+    height:   1280,
   },
   {
-    img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop',
+    base:     HERO_BASE.s3,
+    src:      buildSrc(HERO_BASE.s3, 1600),
+    srcSet:   buildSrcSet(HERO_BASE.s3),
     subtitle: 'Resort 2025',
-    title: 'SOUTHERN LIGHT',
-    cta: 'View Lookbook',
+    title:    'SOUTHERN LIGHT',
+    cta:      'View Lookbook',
+    width:    1920,
+    height:   1280,
   },
 ];
+
+// sizes: browser dùng cùng với srcSet để tính ảnh cần tải
+// Hero luôn chiếm 100vw nên đơn giản là "100vw"
+const HERO_SIZES = '100vw';
 
 const editorialGrid = [
   {
@@ -98,117 +138,76 @@ const Home = ({ setActiveTab }) => {
     <div style={{ width: '100%', backgroundColor: '#FFFFFF' }}>
 
       {/* ─── 1. HERO FULLSCREEN SLIDER ─────────────────────── */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100vh',
-        minHeight: '580px',
-        overflow: 'hidden',
-        // Background is always a solid dark — prevents any "black flash"
-        backgroundColor: '#2a2624',
-      }}>
+      <section aria-label="Hero slideshow" className="hero">
 
-        {/* Bottom layer: the NEXT image (always visible underneath) */}
+        {/* Bottom layer: slide tiếp theo — luôn visible bên dưới */}
         <img
-          src={heroSlides[next].img}
+          className="hero__img"
+          src={heroSlides[next].src}
+          srcSet={heroSlides[next].srcSet}
+          sizes={HERO_SIZES}
+          width={heroSlides[next].width}
+          height={heroSlides[next].height}
           alt=""
           aria-hidden="true"
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: 'center top',
-          }}
-          onError={e => { e.target.style.display = 'none'; }}
+          /* fetchpriority="low" vì đây là layer bottom, không phải LCP */
+          fetchPriority="low"
+          decoding="async"
         />
 
-        {/* Top layer: current image — fades out during transition */}
+        {/* Top layer: slide hiện tại — fade out khi chuyển */}
         <img
-          src={heroSlides[current].img}
+          className={`hero__img hero__img--top${transitioning ? ' is-transitioning' : ''}`}
+          src={heroSlides[current].src}
+          srcSet={heroSlides[current].srcSet}
+          sizes={HERO_SIZES}
+          width={heroSlides[current].width}
+          height={heroSlides[current].height}
           alt={heroSlides[current].title}
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: 'center top',
-            opacity: transitioning ? 0 : 1,
-            transition: transitioning ? 'opacity 1.3s ease-in-out' : 'none',
-          }}
-          onError={e => { e.target.style.display = 'none'; }}
+          /* Slide đầu là LCP element — ưu tiên load cao nhất */
+          fetchPriority={current === 0 ? 'high' : 'auto'}
+          decoding={current === 0 ? 'sync' : 'async'}
         />
 
-        {/* Gradient overlay — always on top of images */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%)',
-          pointerEvents: 'none',
-        }} />
+        {/* Gradient overlay */}
+        <div className="hero__gradient" />
 
-        {/* Hero text */}
-        <div style={{
-          position: 'absolute', bottom: '90px', left: 0, right: 0,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-          padding: '0 24px',
-          opacity: textVisible ? 1 : 0,
-          transform: textVisible ? 'translateY(0)' : 'translateY(8px)',
-          transition: 'opacity 0.6s ease, transform 0.6s ease',
-          pointerEvents: 'none',
-        }}>
-          <div style={{
-            fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.72)', marginBottom: '14px',
-          }}>
+        {/* Text content */}
+        <div className={`hero__content${textVisible ? '' : ' is-hidden'}`}>
+          <p className="hero__subtitle">
             {heroSlides[current].subtitle}
-          </div>
-          <h1 style={{
-            fontFamily: '"Playfair Display", serif',
-            fontSize: 'clamp(32px, 6vw, 72px)',
-            fontWeight: '400', color: '#fff', letterSpacing: '6px',
-            marginBottom: '32px', lineHeight: '1.1',
-          }}>
+          </p>
+          <h1 className="hero__title">
             {heroSlides[current].title}
           </h1>
           <button
+            className="hero__cta"
             onClick={() => setActiveTab('/explore')}
-            aria-label={heroSlides[current].cta}
-            style={{
-              background: 'transparent', border: '1px solid rgba(255,255,255,0.8)',
-              color: '#fff', padding: '14px 40px',
-              fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase',
-              cursor: 'pointer', fontFamily: 'inherit',
-              transition: 'all 0.3s ease',
-              backdropFilter: 'blur(4px)',
-              pointerEvents: 'auto',
-            }}
-            onMouseOver={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#000'; }}
-            onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#fff'; }}
           >
             {heroSlides[current].cta}
           </button>
         </div>
 
-        {/* Slide dots */}
-        <div style={{
-          position: 'absolute', bottom: '36px', left: 0, right: 0,
-          display: 'flex', justifyContent: 'center', gap: '10px',
-        }}>
-          {heroSlides.map((_, i) => (
+        {/* Dot navigation */}
+        <div className="hero__dots" role="tablist" aria-label="Hero slides">
+          {heroSlides.map((slide, i) => (
             <button
               key={i}
+              role="tab"
+              aria-selected={i === current}
+              aria-label={`Slide ${i + 1}: ${slide.title}`}
+              className={`hero__dot${i === current ? ' is-active' : ''}`}
               onClick={() => goToSlide(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              style={{
-                width: i === current ? '28px' : '6px',
-                height: '1px',
-                backgroundColor: i === current ? '#fff' : 'rgba(255,255,255,0.4)',
-                cursor: 'pointer',
-                transition: 'all 0.4s ease',
-                border: 'none', padding: 0,
-              }}
             />
           ))}
         </div>
 
+        {/* Scroll hint */}
+        <div className="hero__scroll-hint" aria-hidden="true">
+          <span>Scroll</span>
+        </div>
 
-      </div>
+      </section>
 
       {/* ─── 2. CATEGORY QUICK LINKS — responsive even grid ─── */}
       <div style={{
