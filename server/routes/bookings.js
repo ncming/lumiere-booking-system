@@ -1,13 +1,11 @@
 // Bookings Routes
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../lib/prisma.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
-// Redis service sẽ được import sau khi tạo
-// import { holdSlot, releaseSlot, checkSlotAvailability } from '../services/redis.js';
-// import { sendBookingConfirmation } from '../services/email.js';
+import { holdSlot, releaseSlot } from '../services/redis.js';
+import { sendBookingConfirmation } from '../services/email.js';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 /**
  * GET /api/bookings/availability
@@ -84,33 +82,29 @@ router.post('/', authenticate, async (req, res) => {
         error: 'Missing required fields: boutiqueId, stylistId, date, timeSlot' 
       });
     }
-    
-    // TODO: Implement Redis lock để ngăn race condition
-    // await holdSlot(boutiqueId, date, timeSlot, userId);
-    
+
+    // Redis lock — giữ chỗ 10 phút để ngăn race condition
+    await holdSlot(boutiqueId, date, timeSlot, userId);
+
     // Kiểm tra slot availability trong database
     const existingBooking = await prisma.booking.findFirst({
       where: {
         boutiqueId,
         date: new Date(date),
         timeSlot,
-        status: {
-          in: ['PENDING', 'CONFIRMED']
-        }
+        status: { in: ['PENDING', 'CONFIRMED'] }
       }
     });
-    
+
     if (existingBooking) {
-      // TODO: Release Redis lock
-      // await releaseSlot(boutiqueId, date, timeSlot);
-      
-      return res.status(400).json({ 
+      await releaseSlot(boutiqueId, date, timeSlot);
+      return res.status(409).json({ 
         error: 'Time slot unavailable',
         message: 'This time slot has already been booked. Please select another time.' 
       });
     }
-    
-    // Tạo booking trong transaction
+
+    // Tạo booking
     const booking = await prisma.booking.create({
       data: {
         userId,
@@ -125,26 +119,31 @@ router.post('/', authenticate, async (req, res) => {
       },
       include: {
         user: {
-          select: {
-            name: true,
-            email: true,
-            phone: true
-          }
+          select: { name: true, email: true, phone: true }
         }
       }
     });
-    
-    // TODO: Release Redis lock
-    // await releaseSlot(boutiqueId, date, timeSlot);
-    
-    // TODO: Gửi email xác nhận
-    // await sendBookingConfirmation(booking);
-    
+
+    // Giải phóng Redis lock sau khi booking đã được persist
+    await releaseSlot(boutiqueId, date, timeSlot);
+
+    // Gửi email xác nhận (non-blocking — lỗi email không làm fail booking)
+    sendBookingConfirmation(booking).catch(err =>
+      console.error('Booking confirmation email failed:', err)
+    );
+
     res.status(201).json({ 
       message: 'Booking created successfully',
       booking 
     });
   } catch (error) {
+    // P2002: unique constraint violation — slot bị book đồng thời
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        error: 'Time slot unavailable',
+        message: 'This slot was just taken. Please select another time.',
+      });
+    }
     console.error('Create booking error:', error);
     res.status(500).json({ 
       error: 'Failed to create booking',

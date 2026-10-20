@@ -1,6 +1,7 @@
 // Lumiere Booking System - Backend Server
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 
@@ -20,6 +21,22 @@ const PORT = process.env.PORT || 3001;
 // ────────────────────────────────────────────────────────────
 // MIDDLEWARE
 // ────────────────────────────────────────────────────────────
+
+// Security headers (helmet) — must come before routes
+app.use(helmet({
+  // Allow Cloudinary images and Google Fonts to load
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc:  ["'self'", "'unsafe-inline'"],   // inline styles used by React inline-style components
+      styleSrc:   ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      fontSrc:    ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc:     ["'self'", 'data:', 'https://res.cloudinary.com', 'https://images.unsplash.com'],
+      connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:5173'],
+    },
+  },
+  crossOriginResourcePolicy: { policy: 'cross-origin' }, // allow CDN assets
+}));
 
 // CORS Configuration
 app.use(cors({
@@ -46,6 +63,22 @@ const limiter = rateLimit({
 });
 
 app.use('/api/', limiter);
+
+// Strict rate limiter for auth endpoints (prevent brute-force)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 phút
+  max: 10,                   // chỉ 10 lần login/register mỗi IP
+  message: {
+    error: 'Too many authentication attempts',
+    message: 'Please wait 15 minutes before trying again.',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true, // không đếm request thành công
+});
+
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
 
 // Logging middleware (development only)
 if (process.env.NODE_ENV !== 'production') {

@@ -1,10 +1,10 @@
 // Orders Routes
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../lib/prisma.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { sendOrderConfirmation, sendOrderStatusUpdate } from '../services/email.js';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 /**
  * POST /api/orders
@@ -130,14 +130,23 @@ router.post('/', authenticate, async (req, res) => {
       return newOrder;
     });
     
-    // TODO: Gửi email xác nhận order
-    // await sendOrderConfirmation(order);
-    
+    // Gửi email xác nhận order (non-blocking)
+    sendOrderConfirmation(order).catch(err =>
+      console.error('Order confirmation email failed:', err)
+    );
+
     res.status(201).json({ 
       message: 'Order created successfully',
       order 
     });
   } catch (error) {
+    // P2002: unique constraint — race condition trên stock update
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        error: 'Order conflict',
+        message: 'A conflict occurred while placing your order. Please try again.',
+      });
+    }
     console.error('Create order error:', error);
     res.status(500).json({ 
       error: 'Failed to create order',
@@ -269,8 +278,11 @@ router.patch('/:id/status', authenticate, requireAdmin, async (req, res) => {
     });
     
     // TODO: Gửi email thông báo status update
-    // await sendOrderStatusUpdate(order);
-    
+    // Gửi email thông báo status update (non-blocking)
+    sendOrderStatusUpdate(order).catch(err =>
+      console.error('Order status update email failed:', err)
+    );
+
     res.json({ 
       message: 'Order status updated',
       order 
