@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
-const Footer = ({ setCurrentPath }) => {
+const Footer = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const { showToast } = useApp();
@@ -15,81 +17,69 @@ const Footer = ({ setCurrentPath }) => {
     setTimeout(() => setSubscribed(false), 4000);
   };
 
-  // FIX NAV-05: Social icons now open real external links
   const socialIcons = [
     {
       label: 'Instagram',
       href: 'https://www.instagram.com/MiTu.prj/',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-          <circle cx="12" cy="12" r="4" />
-          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
         </svg>
       ),
     },
   ];
 
-  // FIX NAV-06: Legal links now navigate to their pages
   const legalLinks = [
     { label: 'Privacy Policy', path: '/privacy-policy' },
     { label: 'Legal Mentions', path: '/legal' },
-    { label: 'Cookies', path: '/cookies' },
-    { label: 'Accessibility', path: '/accessibility' },
+    { label: 'Cookies',        path: '/cookies' },
+    { label: 'Accessibility',  path: '/accessibility' },
   ];
+
+  const NavBtn = ({ path, children, ...rest }) => (
+    <button
+      onClick={() => navigate(path)}
+      style={{
+        fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: '8px',
+        transition: 'color 0.2s', background: 'none', border: 'none', fontFamily: 'inherit',
+        ...rest.style,
+      }}
+      onMouseOver={e => e.currentTarget.style.color = '#FFFFFF'}
+      onMouseOut={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <footer style={{ backgroundColor: '#0A0A0A', color: '#FFFFFF' }}>
-
-      {/* Top section — centered, original layout */}
       <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
+        maxWidth: '1200px', margin: '0 auto',
         padding: 'clamp(48px, 8vw, 80px) clamp(20px, 5vw, 60px) clamp(40px, 6vw, 64px)',
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
         gap: 'clamp(40px, 5vw, 60px)',
       }}>
-
         {/* Col 1 — Brand */}
         <div>
-          <div style={{
-            fontFamily: '"Playfair Display", serif',
-            fontSize: 'clamp(28px, 3.5vw, 44px)',
-            fontWeight: '400',
-            letterSpacing: 'clamp(3px, 0.6vw, 10px)',
-            marginBottom: '12px',
-          }}>
+          <div style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: '400', letterSpacing: 'clamp(3px, 0.6vw, 10px)', marginBottom: '12px' }}>
             MITU
           </div>
-          <div style={{
-            fontSize: 'clamp(9px, 0.75vw, 11px)',
-            letterSpacing: '3px',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.45)',
-            marginBottom: '28px',
-            lineHeight: 1.8,
-          }}>
-            Maison de Haute Couture<br />Since 2025
+          <div style={{ fontSize: 'clamp(9px, 0.75vw, 11px)', letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: '28px', lineHeight: 1.8 }}>
+            Maison de Haute Couture<br/>Since 2025
           </div>
-
           <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255,255,255,0.25)', marginBottom: '28px' }} />
-
-          {/* FIX NAV-05: Social icons with external href */}
           <div style={{ display: 'flex', gap: '16px' }}>
             {socialIcons.map(({ label, href, icon }) => (
               <button
                 key={label}
                 aria-label={label}
-                title={label}
                 onClick={() => window.open(href, '_blank', 'noopener,noreferrer')}
-                style={{
-                  color: 'rgba(255,255,255,0.5)',
-                  cursor: 'pointer',
-                  transition: 'color 0.25s',
-                  background: 'none', border: 'none', padding: 0,
-                  display: 'flex', alignItems: 'center',
-                }}
+                style={{ color: 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'color 0.25s', background: 'none', border: 'none', padding: 0, display: 'flex', alignItems: 'center' }}
                 onMouseOver={e => e.currentTarget.style.color = '#FFFFFF'}
                 onMouseOut={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
               >
@@ -101,75 +91,32 @@ const Footer = ({ setCurrentPath }) => {
 
         {/* Col 2 — Newsletter */}
         <div>
-          <div style={{
-            fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '4px',
-            textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
-            marginBottom: '16px',
-          }}>
+          <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '4px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>
             Newsletter
           </div>
-          <div style={{
-            fontSize: 'clamp(18px, 2vw, 26px)',
-            fontFamily: '"Playfair Display", serif',
-            fontWeight: '400',
-            letterSpacing: '1px',
-            marginBottom: '8px',
-            lineHeight: 1.3,
-          }}>
+          <div style={{ fontSize: 'clamp(18px, 2vw, 26px)', fontFamily: '"Playfair Display", serif', fontWeight: '400', letterSpacing: '1px', marginBottom: '8px', lineHeight: 1.3 }}>
             Receive exclusive news from the Maison
           </div>
-          <div style={{
-            fontSize: 'clamp(10px, 0.9vw, 13px)', color: 'rgba(255,255,255,0.4)',
-            lineHeight: 1.7, marginBottom: '24px',
-          }}>
+          <div style={{ fontSize: 'clamp(10px, 0.9vw, 13px)', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, marginBottom: '24px' }}>
             New collections, private events, and client privileges — delivered first to you.
           </div>
-
           {subscribed ? (
-            <div style={{
-              padding: '14px 0',
-              fontSize: 'clamp(10px, 0.9vw, 13px)',
-              letterSpacing: '2px',
-              color: 'rgba(255,255,255,0.6)',
-              borderBottom: '1px solid rgba(255,255,255,0.2)',
-            }}>
+            <div style={{ padding: '14px 0', fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', color: 'rgba(255,255,255,0.6)', borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
               ✦ Thank you for subscribing
             </div>
           ) : (
             <form onSubmit={handleSubscribe}>
-              <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.3)', marginBottom: '0' }}>
+              <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.3)' }}>
                 <input
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  style={{
-                    flex: 1,
-                    background: 'transparent',
-                    border: 'none',
-                    outline: 'none',
-                    color: '#FFFFFF',
-                    fontSize: 'clamp(11px, 0.9vw, 13px)',
-                    letterSpacing: '0.5px',
-                    padding: '10px 0',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  }}
+                  style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#FFFFFF', fontSize: 'clamp(11px, 0.9vw, 13px)', letterSpacing: '0.5px', padding: '10px 0', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
                 />
                 <button
                   type="submit"
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#FFFFFF',
-                    cursor: 'pointer',
-                    fontSize: 'clamp(9px, 0.8vw, 11px)',
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase',
-                    padding: '10px 0 10px 16px',
-                    whiteSpace: 'nowrap',
-                    opacity: email ? 1 : 0.4,
-                    transition: 'opacity 0.2s',
-                  }}
+                  style={{ background: 'none', border: 'none', color: '#FFFFFF', cursor: 'pointer', fontSize: 'clamp(9px, 0.8vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', padding: '10px 0 10px 16px', whiteSpace: 'nowrap', opacity: email ? 1 : 0.4, transition: 'opacity 0.2s' }}
                 >
                   Subscribe →
                 </button>
@@ -180,137 +127,53 @@ const Footer = ({ setCurrentPath }) => {
 
         {/* Col 3 — Client Services */}
         <div>
-          <div style={{
-            fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '4px',
-            textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
-            marginBottom: '16px',
-          }}>
+          <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '4px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>
             Client Services
           </div>
-
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {/* Hotline */}
             <div>
-              <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
-                VIP Hotline
-              </div>
-              <div style={{ fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '1px', fontFamily: '"Playfair Display", serif' }}>
-                0339 708 788
-              </div>
+              <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>VIP Hotline</div>
+              <div style={{ fontSize: 'clamp(13px, 1.2vw, 18px)', letterSpacing: '1px', fontFamily: '"Playfair Display", serif' }}>0339 708 788</div>
             </div>
-
-            {/* Hours */}
             <div>
-              <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
-                Opening Hours
-              </div>
-              <div style={{ fontSize: 'clamp(10px, 0.9vw, 13px)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
-                Monday – Sunday<br />9:30 AM – 9:00 PM
-              </div>
+              <div style={{ fontSize: 'clamp(8px, 0.7vw, 11px)', letterSpacing: '2px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>Opening Hours</div>
+              <div style={{ fontSize: 'clamp(10px, 0.9vw, 13px)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>Monday – Sunday<br/>9:30 AM – 9:00 PM</div>
             </div>
-
-            {/* FIX NAV-07: Find a Boutique → /store-locator */}
-            <div>
-              <button
-                onClick={() => setCurrentPath('/store-locator')}
-                style={{
-                  fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  paddingTop: '4px',
-                  transition: 'color 0.2s',
-                  background: 'none', border: 'none',
-                  fontFamily: 'inherit',
-                }}
-                onMouseOver={e => e.currentTarget.style.color = '#FFFFFF'}
-                onMouseOut={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                Find a Boutique
-              </button>
-            </div>
-
-            {/* Book Appointment */}
-            <div>
-              <button
-                onClick={() => setCurrentPath('/reserve')}
-                style={{
-                  fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  transition: 'color 0.2s',
-                  background: 'none', border: 'none',
-                  fontFamily: 'inherit',
-                }}
-                onMouseOver={e => e.currentTarget.style.color = '#FFFFFF'}
-                onMouseOut={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" />
-                  <line x1="8" y1="2" x2="8" y2="6" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
-                Book a Styling Session
-              </button>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <button
-                onClick={() => setCurrentPath('/contact')}
-                style={{
-                  fontSize: 'clamp(10px, 0.9vw, 13px)', letterSpacing: '2px', textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  transition: 'color 0.2s',
-                  background: 'none', border: 'none',
-                  fontFamily: 'inherit',
-                }}
-                onMouseOver={e => e.currentTarget.style.color = '#FFFFFF'}
-                onMouseOut={e => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-                Contact Us
-              </button>
-            </div>
+            <NavBtn path="/store-locator">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Find a Boutique
+            </NavBtn>
+            <NavBtn path="/reserve">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Book a Styling Session
+            </NavBtn>
+            <NavBtn path="/contact">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Contact Us
+            </NavBtn>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar — original centered layout */}
+      {/* Bottom bar */}
       <div style={{
         borderTop: '1px solid rgba(255,255,255,0.08)',
         padding: '20px clamp(20px, 5vw, 60px)',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: '12px',
-        maxWidth: '1200px',
-        margin: '0 auto',
+        display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center',
+        gap: '12px', maxWidth: '1200px', margin: '0 auto',
       }}>
         <div style={{ fontSize: 'clamp(9px, 0.75vw, 12px)', color: 'rgba(255,255,255,0.45)', letterSpacing: '1px' }}>
           © 2025 MITU Maison. All rights reserved.
         </div>
-        {/* FIX NAV-06: Legal buttons now navigate to their pages */}
         <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
           {legalLinks.map(({ label, path }) => (
             <button
               key={label}
-              onClick={() => setCurrentPath(path)}
+              onClick={() => navigate(path)}
               style={{
                 fontSize: 'clamp(9px, 0.75vw, 12px)', color: 'rgba(255,255,255,0.45)',
                 letterSpacing: '1px', cursor: 'pointer', textTransform: 'uppercase',
-                transition: 'color 0.2s',
-                background: 'none', border: 'none', padding: 0,
-                fontFamily: 'inherit',
+                transition: 'color 0.2s', background: 'none', border: 'none', padding: 0, fontFamily: 'inherit',
               }}
               onMouseOver={e => e.target.style.color = 'rgba(255,255,255,0.7)'}
               onMouseOut={e => e.target.style.color = 'rgba(255,255,255,0.45)'}

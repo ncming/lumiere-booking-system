@@ -1,9 +1,11 @@
 // My Bookings Page - View user's appointment history
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../services/api';
 
-const MyBookings = ({ setActiveTab }) => {
+const MyBookings = () => {
+  const navigate = useNavigate();
   const { user, isAuthenticated, showToast } = useApp();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,12 +25,12 @@ const MyBookings = ({ setActiveTab }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setActiveTab('/auth');
+      navigate('/auth');
       return;
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadBookings();
-  }, [isAuthenticated, setActiveTab, loadBookings]);
+  }, [isAuthenticated, loadBookings]);
 
   const handleCancelBooking = async (bookingId) => {
     if (!confirm('Are you sure you want to cancel this appointment?')) return;
@@ -93,7 +95,7 @@ const MyBookings = ({ setActiveTab }) => {
               Book a private styling session at your preferred boutique
             </div>
             <button
-              onClick={() => setActiveTab('/reserve')}
+              onClick={() => navigate('/reserve')}
               style={{ padding: '14px 40px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
             >
               Book an Appointment
@@ -205,7 +207,7 @@ const MyBookings = ({ setActiveTab }) => {
         {bookings.length > 0 && (
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <button
-              onClick={() => setActiveTab('/')}
+              onClick={() => navigate('/')}
               style={{
                 padding: '12px 32px',
                 backgroundColor: '#FFFFFF',
@@ -227,3 +229,4 @@ const MyBookings = ({ setActiveTab }) => {
 };
 
 export default MyBookings;
+

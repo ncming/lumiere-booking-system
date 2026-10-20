@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../services/api';
 import { BOUTIQUES } from '../data/boutiques';
@@ -42,7 +43,8 @@ const OCCASIONS = [
   'Corporate Wardrobe', 'Special Event', 'First Visit',
 ];
 
-const Reserve = ({ setActiveTab }) => {
+const Reserve = () => {
+  const navigate = useNavigate();
   const { showToast, isAuthenticated } = useApp();
   const [step, setStep] = useState(1);
   const [selectedBoutique, setSelectedBoutique] = useState(null);
@@ -93,7 +95,7 @@ const Reserve = ({ setActiveTab }) => {
     // Check authentication first
     if (!isAuthenticated) {
       showToast('✕ Please sign in to book an appointment');
-      setActiveTab('/auth');
+      navigate('/auth');
       return;
     }
 
@@ -165,7 +167,7 @@ const Reserve = ({ setActiveTab }) => {
             A confirmation has been noted. Your personal stylist will prepare a curated selection ahead of your visit. Complimentary tea service will be arranged.
           </p>
           <button
-            onClick={() => setActiveTab('/')}
+            onClick={() => navigate('/')}
             style={{ padding: '14px 40px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
           >
             Return to Home
@@ -507,3 +509,4 @@ const SummaryRow = ({ label, value, small }) => (
 );
 
 export default Reserve;
+

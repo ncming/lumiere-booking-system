@@ -112,7 +112,11 @@ const TABS = [
   { key: 'accessibility', label: 'Accessibility' },
 ];
 
-const LegalPage = ({ type = 'privacy', setActiveTab }) => {
+const LegalPage = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  // Derive type from URL — matches router.jsx route paths
+  const type = pathname.includes('privacy') ? 'privacy' : pathname.includes('cookies') ? 'cookies' : pathname.includes('accessibility') ? 'accessibility' : 'legal';
   const content = LEGAL_CONTENT[type] || LEGAL_CONTENT.privacy;
 
   return (
@@ -145,7 +149,7 @@ const LegalPage = ({ type = 'privacy', setActiveTab }) => {
           {TABS.map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(`/${tab.key === 'legal' ? 'legal' : tab.key === 'privacy' ? 'privacy-policy' : tab.key === 'cookies' ? 'cookies' : 'accessibility'}`)}
+              onClick={() => navigate(`/${tab.key === 'legal' ? 'legal' : tab.key === 'privacy' ? 'privacy-policy' : tab.key === 'cookies' ? 'cookies' : 'accessibility'}`)}
               style={{
                 padding: '14px clamp(12px, 2vw, 24px)',
                 fontSize: '9px', letterSpacing: '1.5px', textTransform: 'uppercase',
@@ -213,7 +217,7 @@ const LegalPage = ({ type = 'privacy', setActiveTab }) => {
             If you have any questions about our legal policies, please contact our Client Relations team.
           </p>
           <button
-            onClick={() => setActiveTab('/contact')}
+            onClick={() => navigate('/contact')}
             style={{
               padding: '10px 24px', backgroundColor: '#000', color: '#fff',
               border: 'none', fontSize: '9px', letterSpacing: '2px',
@@ -229,3 +233,5 @@ const LegalPage = ({ type = 'privacy', setActiveTab }) => {
 };
 
 export default LegalPage;
+
+

@@ -1,8 +1,10 @@
 // Authentication Page - Login & Register
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
-const Auth = ({ setActiveTab }) => {
+const Auth = () => {
+  const navigate = useNavigate();
   const { login, register, showToast, isAuthLoading } = useApp();
   
   const [mode, setMode] = useState('login'); // 'login' | 'register'
@@ -33,7 +35,7 @@ const Auth = ({ setActiveTab }) => {
 
         await login(formData.email, formData.password);
         showToast('✦ Welcome back');
-        setActiveTab('/'); // Redirect to home
+        navigate('/'); // Redirect to home
       } else {
         // Register
         if (!formData.name || !formData.email || !formData.password) {
@@ -54,7 +56,7 @@ const Auth = ({ setActiveTab }) => {
         });
 
         showToast('✦ Account created successfully');
-        setActiveTab('/'); // Redirect to home
+        navigate('/'); // Redirect to home
       }
     } catch (err) {
       setError(err.message || 'Authentication failed');
@@ -325,7 +327,7 @@ const Auth = ({ setActiveTab }) => {
         {/* Back to Home */}
         <div style={{ textAlign: 'center', marginTop: '24px' }}>
           <button
-            onClick={() => setActiveTab('/')}
+            onClick={() => navigate('/')}
             style={{ 
               background: 'none', 
               border: 'none', 
@@ -345,3 +347,4 @@ const Auth = ({ setActiveTab }) => {
 };
 
 export default Auth;
+

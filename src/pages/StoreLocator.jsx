@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { BOUTIQUES } from '../data/boutiques';
 
-const StoreLocator = ({ setActiveTab }) => {
+const StoreLocator = () => {
+  const navigate = useNavigate();
   return (
     <div style={{ minHeight: '80vh', backgroundColor: '#FFFFFF', paddingTop: '68px', paddingBottom: '80px' }}>
 
@@ -135,7 +137,7 @@ const StoreLocator = ({ setActiveTab }) => {
 
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
-                  onClick={() => setActiveTab('/reserve')}
+                  onClick={() => navigate('/reserve')}
                   style={{
                     flex: 1, padding: '12px',
                     backgroundColor: '#000', color: '#fff',
@@ -190,7 +192,7 @@ const StoreLocator = ({ setActiveTab }) => {
           For our most discerning clients, we offer private shopping evenings, home visits, and bespoke consultations.
         </p>
         <button
-          onClick={() => setActiveTab('/contact')}
+          onClick={() => navigate('/contact')}
           style={{
             padding: '14px 40px', backgroundColor: 'transparent', color: '#fff',
             border: '1px solid rgba(255,255,255,0.4)',
@@ -209,3 +211,4 @@ const StoreLocator = ({ setActiveTab }) => {
 };
 
 export default StoreLocator;
+

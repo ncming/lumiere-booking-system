@@ -1,4 +1,6 @@
-const NotFound = ({ setActiveTab }) => {
+import { useNavigate } from 'react-router-dom';
+const NotFound = () => {
+  const navigate = useNavigate();
   return (
     <div style={{
       minHeight: '80vh',
@@ -59,7 +61,7 @@ const NotFound = ({ setActiveTab }) => {
 
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
         <button
-          onClick={() => setActiveTab('/')}
+          onClick={() => navigate('/')}
           style={{
             padding: '14px 36px',
             backgroundColor: '#000', color: '#fff',
@@ -74,7 +76,7 @@ const NotFound = ({ setActiveTab }) => {
           Return to Home
         </button>
         <button
-          onClick={() => setActiveTab('/explore')}
+          onClick={() => navigate('/explore')}
           style={{
             padding: '14px 36px',
             backgroundColor: '#fff', color: '#000',
@@ -94,3 +96,4 @@ const NotFound = ({ setActiveTab }) => {
 };
 
 export default NotFound;
+

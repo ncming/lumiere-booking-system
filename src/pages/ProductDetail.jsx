@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { PRODUCTS } from '../data/products';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
-const ProductDetail = ({ productId, setActiveTab }) => {
+const ProductDetail = () => {
+  const navigate = useNavigate();
+  const { productId } = useParams();
   const product = PRODUCTS.find(p => p.id === productId);
   const { addToCart, toggleBag, addToWishlist, removeFromWishlist, isInWishlist } = useApp();
   const inWishlist = isInWishlist(product?.id);
@@ -18,7 +21,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '68px' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '11px', letterSpacing: '2px', color: '#757575', marginBottom: '16px' }}>PRODUCT NOT FOUND</div>
-          <button onClick={() => setActiveTab('/explore')} style={{ padding: '12px 28px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}>
+          <button onClick={() => navigate('/explore')} style={{ padding: '12px 28px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}>
             Back to Explore
           </button>
         </div>
@@ -55,7 +58,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
       {/* Breadcrumb */}
       <div style={{ padding: '20px clamp(16px, 4vw, 60px)', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <span
-          onClick={() => setActiveTab('/')}
+          onClick={() => navigate('/')}
           style={{ fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: '#BDBDBD', cursor: 'pointer' }}
           onMouseOver={e => e.target.style.color = '#000'}
           onMouseOut={e => e.target.style.color = '#BDBDBD'}
@@ -64,7 +67,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
         </span>
         <span style={{ fontSize: '9px', color: '#BDBDBD' }}>—</span>
         <span
-          onClick={() => setActiveTab(`/category/${product.category}`)}
+          onClick={() => navigate(`/category/${product.category}`)}
           style={{ fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: '#BDBDBD', cursor: 'pointer' }}
           onMouseOver={e => e.target.style.color = '#000'}
           onMouseOut={e => e.target.style.color = '#BDBDBD'}
@@ -248,7 +251,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
 
           {/* Reserve Appointment */}
           <button
-            onClick={() => setActiveTab('/reserve')}
+            onClick={() => navigate('/reserve')}
             style={{
               width: '100%', padding: '15px',
               backgroundColor: '#FFFFFF', color: '#000', border: '1px solid #E0E0E0',
@@ -341,7 +344,7 @@ const ProductDetail = ({ productId, setActiveTab }) => {
             {lookProducts.map(p => (
               <div
                 key={p.id}
-                onClick={() => setActiveTab(`/product/${p.id}`)}
+                onClick={() => navigate(`/product/${p.id}`)}
                 style={{ cursor: 'pointer' }}
               >
                 <div style={{ width: '100%', aspectRatio: '4/5', backgroundColor: '#F9F9F9', overflow: 'hidden', marginBottom: '12px' }}>
@@ -370,3 +373,4 @@ const ProductDetail = ({ productId, setActiveTab }) => {
 };
 
 export default ProductDetail;
+

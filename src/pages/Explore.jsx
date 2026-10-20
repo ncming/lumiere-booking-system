@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { PRODUCTS } from '../data/products';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
-const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
+const Explore = () => {
+  const navigate = useNavigate();
+  const { categoryName } = useParams();
+  const selectedCategory = categoryName ?? 'ALL';
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalProduct, setActiveModalProduct] = useState(null);
   const [selectedOption, setSelectedOption] = useState('');
@@ -60,7 +64,7 @@ const Explore = ({ selectedCategory = "ALL", setActiveTab }) => {
   const handleViewFullDetails = () => {
     const id = activeModalProduct.id;
     setActiveModalProduct(null);
-    setActiveTab(`/product/${id}`);
+    navigate(`/product/${id}`);
   };
 
   return (

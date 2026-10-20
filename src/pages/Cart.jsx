@@ -1,14 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { formatPrice } from '../utils/format';
 
-const Cart = ({ setActiveTab }) => {
+const Cart = () => {
+  const navigate = useNavigate();
   const { cartItems, cartTotal, removeFromCart, updateQty, showToast, clearCart } = useApp();
 
   const handleCheckout = () => {
     showToast('Purchase confirmed. Your order is on its way.');
     setTimeout(() => {
       clearCart();
-      setActiveTab('/');
+      navigate('/');
     }, 1200);
   };
 
@@ -36,7 +38,7 @@ const Cart = ({ setActiveTab }) => {
             </svg>
             <div style={{ fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>Your bag is empty</div>
             <div style={{ fontSize: '11px', color: '#757575', marginBottom: '28px' }}>Discover our new collections</div>
-            <button onClick={() => setActiveTab('/explore')} style={{ padding: '14px 32px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}>
+            <button onClick={() => navigate('/explore')} style={{ padding: '14px 32px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}>
               Explore Collections
             </button>
           </div>
@@ -103,7 +105,7 @@ const Cart = ({ setActiveTab }) => {
                 <div style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Personal Styling Session</div>
                 <div style={{ fontSize: '10px', color: '#757575', letterSpacing: '0.5px' }}>Book a private appointment at our Flagship Store</div>
               </div>
-              <button onClick={() => setActiveTab('/reserve')} style={{ padding: '10px 16px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '9px', letterSpacing: '1.5px', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              <button onClick={() => navigate('/reserve')} style={{ padding: '10px 16px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '9px', letterSpacing: '1.5px', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                 Book →
               </button>
             </div>

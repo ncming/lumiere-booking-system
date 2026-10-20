@@ -5,9 +5,7 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "config": { "distDir": "dist" }
     },
     {
       "src": "server/index.js",
@@ -24,8 +22,20 @@
       "dest": "/dist/assets/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "^/favicon\\.svg$",
+      "dest": "/dist/favicon.svg"
+    },
+    {
+      "src": "^/icons\\.svg$",
+      "dest": "/dist/icons.svg"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|map))",
       "dest": "/dist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.html"
     }
   ],
   "env": {

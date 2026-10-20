@@ -1,9 +1,11 @@
 // My Orders Page - View user's order history
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../services/api';
 
-const MyOrders = ({ setActiveTab }) => {
+const MyOrders = () => {
+  const navigate = useNavigate();
   const { isAuthenticated, showToast } = useApp();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,12 +25,12 @@ const MyOrders = ({ setActiveTab }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setActiveTab('/auth');
+      navigate('/auth');
       return;
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadOrders();
-  }, [isAuthenticated, setActiveTab, loadOrders]);
+  }, [isAuthenticated, loadOrders]);
 
   const handleCancelOrder = async (orderId) => {
     if (!confirm('Are you sure you want to cancel this order?')) return;
@@ -94,7 +96,7 @@ const MyOrders = ({ setActiveTab }) => {
               Start shopping to see your orders here
             </div>
             <button
-              onClick={() => setActiveTab('/explore')}
+              onClick={() => navigate('/explore')}
               style={{ padding: '14px 40px', backgroundColor: '#000', color: '#fff', border: 'none', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer' }}
             >
               Explore Products
@@ -257,7 +259,7 @@ const MyOrders = ({ setActiveTab }) => {
         {orders.length > 0 && (
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <button
-              onClick={() => setActiveTab('/')}
+              onClick={() => navigate('/')}
               style={{
                 padding: '12px 32px',
                 backgroundColor: '#FFFFFF',
@@ -279,3 +281,4 @@ const MyOrders = ({ setActiveTab }) => {
 };
 
 export default MyOrders;
+

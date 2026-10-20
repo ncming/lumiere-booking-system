@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // ─── Hero data ─────────────────────────────────────────────────────────────
 // Unsplash responsive params:
@@ -90,7 +91,8 @@ const categories = [
   { label: "Beauty",  img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop', path: '/category/Fragrance' },
 ];
 
-const Home = ({ setActiveTab }) => {
+const Home = () => {
+  const navigate = useNavigate();
   // Track which slide index each "layer" shows
   // We use two stacked <img> layers. The top layer fades out to reveal the bottom.
   const [current, setCurrent] = useState(0);
@@ -182,7 +184,7 @@ const Home = ({ setActiveTab }) => {
           </h1>
           <button
             className="hero__cta"
-            onClick={() => setActiveTab('/explore')}
+            onClick={() => navigate('/explore')}
           >
             {heroSlides[current].cta}
           </button>
@@ -223,8 +225,8 @@ const Home = ({ setActiveTab }) => {
               role="button"
               tabIndex={0}
               aria-label={`Browse ${cat.label}`}
-              onClick={() => setActiveTab(cat.path)}
-              onKeyDown={e => e.key === 'Enter' && setActiveTab(cat.path)}
+              onClick={() => navigate(cat.path)}
+              onKeyDown={e => e.key === 'Enter' && navigate(cat.path)}
               onMouseOver={() => setHoveredCat(i)}
               onMouseOut={() => setHoveredCat(null)}
               style={{ cursor: 'pointer' }}
@@ -280,8 +282,8 @@ const Home = ({ setActiveTab }) => {
               role="button"
               tabIndex={0}
               aria-label={`Explore ${item.label}`}
-              onClick={() => setActiveTab(item.path)}
-              onKeyDown={e => e.key === 'Enter' && setActiveTab(item.path)}
+              onClick={() => navigate(item.path)}
+              onKeyDown={e => e.key === 'Enter' && navigate(item.path)}
               style={{ cursor: 'pointer' }}
             >
               <div style={{ width: '100%', aspectRatio: '3/4', overflow: 'hidden', backgroundColor: '#F5F5F5' }}>
@@ -336,7 +338,7 @@ const Home = ({ setActiveTab }) => {
             The Art of<br />Haute Couture
           </h2>
           <button
-            onClick={() => setActiveTab("/category/Women's Ready-To-Wear")}
+            onClick={() => navigate("/category/Women's Ready-To-Wear")}
             style={{
               background: '#fff', border: '1px solid #fff',
               color: '#000', padding: '14px 36px',
@@ -370,7 +372,7 @@ const Home = ({ setActiveTab }) => {
           Experience the world of MITU with a private appointment at your nearest boutique. Our advisors are at your disposal.
         </p>
         <button
-          onClick={() => setActiveTab('/reserve')}
+          onClick={() => navigate('/reserve')}
           style={{
             background: '#000', border: '1px solid #000', color: '#fff',
             padding: '16px 48px', fontSize: '10px', letterSpacing: '3px',

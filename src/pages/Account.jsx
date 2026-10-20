@@ -1,9 +1,11 @@
 // Account Settings Page
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../services/api';
 
-const Account = ({ setActiveTab }) => {
+const Account = () => {
+  const navigate = useNavigate();
   const { user, isAuthenticated, showToast, logout } = useApp();
   const [activeSection, setActiveSection] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
@@ -17,9 +19,9 @@ const Account = ({ setActiveTab }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setActiveTab('/auth');
+      navigate('/auth');
     }
-  }, [isAuthenticated, setActiveTab]);
+  }, [isAuthenticated]);
 
   // Sync formData khi user thay đổi (dùng key prop thay vì setState in effect)
   // formData được khởi tạo trực tiếp từ user
@@ -116,7 +118,7 @@ const Account = ({ setActiveTab }) => {
               <button
                 onClick={() => {
                   logout();
-                  setActiveTab('/');
+                  navigate('/');
                 }}
                 style={{
                   width: '100%',
@@ -491,3 +493,4 @@ const PreferenceToggle = ({ label, description, defaultChecked }) => {
 };
 
 export default Account;
+

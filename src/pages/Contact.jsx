@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
 const SUBJECTS = [
@@ -11,7 +12,8 @@ const SUBJECTS = [
   'Other',
 ];
 
-const Contact = ({ setActiveTab }) => {
+const Contact = () => {
+  const navigate = useNavigate();
   const { showToast } = useApp();
   const [form, setForm] = useState({ name: '', email: '', subject: SUBJECTS[0], message: '' });
   const [errors, setErrors] = useState({});
@@ -156,7 +158,7 @@ const Contact = ({ setActiveTab }) => {
               Our Client Relations team will respond to your enquiry within 24 hours.
             </p>
             <button
-              onClick={() => setActiveTab('/')}
+              onClick={() => navigate('/')}
               style={{
                 padding: '14px 40px', backgroundColor: '#000', color: '#fff',
                 border: 'none', fontSize: '10px', letterSpacing: '2px',
@@ -305,7 +307,7 @@ const Contact = ({ setActiveTab }) => {
         </h2>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
-            onClick={() => setActiveTab('/store-locator')}
+            onClick={() => navigate('/store-locator')}
             style={{
               padding: '12px 32px', backgroundColor: '#000', color: '#fff',
               border: '1px solid #000', fontSize: '10px', letterSpacing: '2px',
@@ -318,7 +320,7 @@ const Contact = ({ setActiveTab }) => {
             Find a Boutique
           </button>
           <button
-            onClick={() => setActiveTab('/reserve')}
+            onClick={() => navigate('/reserve')}
             style={{
               padding: '12px 32px', backgroundColor: '#fff', color: '#000',
               border: '1px solid #E0E0E0', fontSize: '10px', letterSpacing: '2px',
@@ -337,3 +339,4 @@ const Contact = ({ setActiveTab }) => {
 };
 
 export default Contact;
+

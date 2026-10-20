@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { PRODUCTS } from '../data/products';
 
-const Wishlist = ({ setActiveTab }) => {
+const Wishlist = () => {
+  const navigate = useNavigate();
   const { wishlistItems, removeFromWishlist, addToCart, toggleBag } = useApp();
 
   const handleMoveToCart = (item) => {
@@ -56,7 +58,7 @@ const Wishlist = ({ setActiveTab }) => {
             Save your favourite pieces to your wishlist and return to them whenever you like.
           </p>
           <button
-            onClick={() => setActiveTab('/explore')}
+            onClick={() => navigate('/explore')}
             style={{
               padding: '14px 40px', backgroundColor: '#000', color: '#fff',
               border: '1px solid #000', fontSize: '10px', letterSpacing: '2px',
@@ -103,7 +105,7 @@ const Wishlist = ({ setActiveTab }) => {
 
                 {/* Image */}
                 <div
-                  onClick={() => setActiveTab(`/product/${item.id}`)}
+                  onClick={() => navigate(`/product/${item.id}`)}
                   style={{
                     width: '100%', aspectRatio: '4/5',
                     backgroundColor: '#F9F9F9', overflow: 'hidden',
@@ -127,7 +129,7 @@ const Wishlist = ({ setActiveTab }) => {
                     {item.category}
                   </div>
                   <div
-                    onClick={() => setActiveTab(`/product/${item.id}`)}
+                    onClick={() => navigate(`/product/${item.id}`)}
                     style={{ fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase', color: '#000', marginBottom: '4px', cursor: 'pointer' }}
                   >
                     {item.name}
@@ -160,7 +162,7 @@ const Wishlist = ({ setActiveTab }) => {
           {/* Continue Shopping */}
           <div style={{ textAlign: 'center', marginTop: '48px', paddingTop: '40px', borderTop: '1px solid #EEEEEE' }}>
             <button
-              onClick={() => setActiveTab('/explore')}
+              onClick={() => navigate('/explore')}
               style={{
                 padding: '13px 40px', backgroundColor: '#fff', color: '#000',
                 border: '1px solid #E0E0E0', fontSize: '10px', letterSpacing: '2px',
@@ -180,3 +182,4 @@ const Wishlist = ({ setActiveTab }) => {
 };
 
 export default Wishlist;
+
